@@ -1,0 +1,11 @@
+language: android
+android:
+  components:
+    - platform-tools
+    - tools
+    - build-tools-23.0.3
+    - android-23
+    - extra-android-m2repository
+
+notifications:
+  slack: a-maze-team:KQAj0tr2neVDB38uGAQFcuA6
