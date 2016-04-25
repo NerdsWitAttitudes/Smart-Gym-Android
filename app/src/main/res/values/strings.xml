@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Smart Gym</string>
+    <string name="title_activity_sport_schedule">Sport Schema</string>
 </resources>
