@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SmartGym</string>
+    <string name="app_name">PartyPeak</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -16,6 +16,6 @@
     <string name="server_500_message">Something went wrong, please try again later</string>
 
     <!-- strings for in app use -->
-    <string name="preference_file_key">com.nwa.smartgymandroid.secrets</string>
+    <string name="preference_file_key">com.partypeak.partypeak.secrets</string>
     <string name="auth_tkt">auth_tkt</string>
 </resources>
