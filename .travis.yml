@@ -7,8 +7,5 @@ android:
     - android-23
     - extra-android-m2repository
 
-  lintOptions:
-    - abortOnError false
-
 notifications:
   slack: a-maze-team:KQAj0tr2neVDB38uGAQFcuA6
