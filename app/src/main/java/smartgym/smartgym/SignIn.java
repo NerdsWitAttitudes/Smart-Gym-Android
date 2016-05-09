@@ -123,7 +123,7 @@ public class SignIn extends AppCompatActivity  {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            AuthAPI loginService = ServiceGenerator.createPartyPeakService(AuthAPI.class);
+            AuthAPI loginService = ServiceGenerator.createSmartGymService(AuthAPI.class);
             Call<HTTPResponse> call = loginService.logIn(new Login(mEmail, mPassword));
 
 

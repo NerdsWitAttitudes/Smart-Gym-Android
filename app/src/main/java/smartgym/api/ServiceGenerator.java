@@ -23,11 +23,11 @@ public class ServiceGenerator {
                 .baseUrl(baseURL)
                 .addConverterFactory(GsonConverterFactory.create());
 
-    public static <S> S createPartyPeakService(Class<S> serviceClass){
-        return createPartyPeakService(serviceClass, null);
+    public static <S> S createSmartGymService(Class<S> serviceClass){
+        return createSmartGymService(serviceClass, null);
     }
 
-    public static <S> S createPartyPeakService(Class<S> serviceClass, final String authToken){
+    public static <S> S createSmartGymService(Class<S> serviceClass, final String authToken){
         if (authToken != null) {
             httpClient.addInterceptor(new Interceptor() {
                 @Override

@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">SmartGym</string>
 
+    <!-- Strings related to welcome -->
+    <string name="action_sign_up_welcome">Sign up using email</string>
+    <string name="action_log_in_welcome">Or log in instead!</string>
+
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -12,10 +16,37 @@
     </string>
     <string name="log_in_failed">Password or email is incorrect</string>
 
+    <!-- String related to signup -->
+    <string name="prompt_first_name_sign_up">First name</string>
+    <string name="prompt_last_name_sign_up">Last name</string>
+    <string name="prompt_male_radio_sign_up">Male</string>
+    <string name="prompt_female_radio_sign_up">Female</string>
+    <string name="prompt_password_confirm_sign_up">Confirm password</string>
+    <string name="text_birthday_sign_up">Birthday</string>
+    <string name="action_sign_up">Sign up</string>
+    <string name="action_get_started">Get started</string>
+    <string name="text_terms_of_use">By signing up you agree to our terms of use. You also agree
+    to these other legal things I don\'t really know about because I\'m just a programmer.</string>
+
+    <!-- Sign up error messages -->
+    <string name="error_email_required">Email is required.</string>
+    <string name="error_email_invalid">Please enter a valid email address.</string>
+    <string name="error_first_name_required">First name is required.</string>
+    <string name="error_last_name_required">First name is required.</string>
+    <string name="error_pasword_required">Pasword is required.</string>
+    <string name="error_passwords_do_not_match">Password\'s do not match.</string>
+    <string name="error_password_no_letters">Your password must contain at least one letter.</string>
+    <string name="error_password_no_numbers">Your password must contain at least one number.</string>
+    <string name="error_password_contains_spaces">Your password may not contain any whitespaces.</string>
+    <string name="error_password_too_short">Your password must be at least 8 characters long.</string>
+
     <!-- Generic error messages -->
     <string name="server_500_message">Something went wrong, please try again later</string>
 
     <!-- strings for in app use -->
     <string name="preference_file_key">com.nwa.smartgymandroid.secrets</string>
     <string name="auth_tkt">auth_tkt</string>
+    <string name="title_activity_sign_up">SignUp</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_next">Next</string>
 </resources>
