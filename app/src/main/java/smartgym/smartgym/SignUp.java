@@ -9,18 +9,22 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.nwa.smartgym.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import smartgym.api.AuthAPI;
 import smartgym.api.ServiceGenerator;
 import smartgym.lib.DefaultPageAdapter;
+import smartgym.lib.LocaleHelper;
 import smartgym.lib.NonSwipeableViewPager;
 import smartgym.models.HTTPResponse;
 import smartgym.models.SignUpData;
@@ -42,6 +46,7 @@ public class SignUp extends FragmentActivity {
     private static EditText mEmailView;
     private static EditText mFirstNameView;
     private static EditText mLastNameView;
+    private static Spinner mCountryView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,7 +172,9 @@ public class SignUp extends FragmentActivity {
             // Define views
             mFirstNameView = (EditText) rootView.findViewById(R.id.first_name_sign_up_prompt);
             mLastNameView = (EditText) rootView.findViewById(R.id.last_name_sign_up_prompt);
+            mCountryView = (Spinner) rootView.findViewById(R.id.country_spinner_sign_up_prompt);
 
+            populateCountrySpinner(rootView);
             Button getStartedButton = (Button) rootView.findViewById(R.id.next_personal_sign_up_button);
             getStartedButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -179,6 +186,21 @@ public class SignUp extends FragmentActivity {
             });
 
             return rootView;
+        }
+
+        private void populateCountrySpinner(View view) {
+            List<String> countries = LocaleHelper.getCountryNames();
+
+            ArrayAdapter countryAdapter = new ArrayAdapter(
+                    view.getContext(),
+                    R.layout.support_simple_spinner_dropdown_item,
+                    countries);
+            mCountryView.setAdapter(countryAdapter);
+
+            // Set the default selection on the user's default country
+            String defaultCountry = Locale.getDefault().getDisplayCountry();
+            int defaultCountryPosition = countryAdapter.getPosition(defaultCountry);
+            mCountryView.setSelection(defaultCountryPosition);
         }
 
         private Boolean validatePersonalData() {
@@ -284,8 +306,9 @@ public class SignUp extends FragmentActivity {
             String email = mEmailView.getText().toString();
             String firstName = mFirstNameView.getText().toString();
             String lastName = mLastNameView.getText().toString();
+            String country = mCountryView.getSelectedItem().toString();
 
-            return new SignUpData(password, passwordConfirm, email, firstName, lastName);
+            return new SignUpData(password, passwordConfirm, email, firstName, lastName, country);
         }
     }
 }
