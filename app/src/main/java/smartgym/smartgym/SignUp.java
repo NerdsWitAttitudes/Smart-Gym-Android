@@ -11,13 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.nwa.smartgym.R;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -47,6 +52,9 @@ public class SignUp extends FragmentActivity {
     private static EditText mFirstNameView;
     private static EditText mLastNameView;
     private static Spinner mCountryView;
+    private static DatePicker mBirthdayView;
+
+    private static DateTime birthday;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +73,7 @@ public class SignUp extends FragmentActivity {
         fragmentList.add(TermsFragment.newInstance());
         fragmentList.add(EmailFragment.newInstance());
         fragmentList.add(PersonalFragment.newInstance());
+        fragmentList.add(BirthdayFragment.newInstance());
         fragmentList.add(PasswordFragment.newInstance());
         return fragmentList;
     }
@@ -142,7 +151,7 @@ public class SignUp extends FragmentActivity {
                 mPasswordView.setError(getString(R.string.error_pasword_required));
             } else if (password.contains(" ")) {
                 mPasswordView.setError(getString(R.string.error_password_contains_spaces));
-            } else if (!password.matches(".*[\\p{L}]+.*]")) {
+            } else if (!password.matches(".*[a-zA-Z]+.*")) {
                 // Regex checking if the password contains at least one letter.
                 mPasswordView.setError(getString(R.string.error_password_no_letters));
             } else if (!password.matches(".*\\d+.*")) {
@@ -216,6 +225,44 @@ public class SignUp extends FragmentActivity {
             }
 
             return false;
+        }
+    }
+
+    public static class BirthdayFragment extends Fragment {
+        public static BirthdayFragment newInstance() {
+            BirthdayFragment birthdayFragment = new BirthdayFragment();
+            return birthdayFragment;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_sign_up_birthday, container, false);
+
+            // Define views
+            mBirthdayView = (DatePicker) rootView.findViewById(R.id.birthday_date_picker_sign_up);
+
+            // Button listener
+            Button nextButton = (Button) rootView.findViewById(R.id.next_birthday_sign_up_button);
+            nextButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getBirthday();
+                    mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1, true);
+                }
+            });
+
+            return rootView;
+        }
+
+        private DateTime getBirthday() {
+            // To get the correct year you should always substract 1900. This is according to the Android DatePicker documentation.
+            birthday = new DateTime(
+                    mBirthdayView.getYear() - 1900,
+                    mBirthdayView.getMonth(),
+                    mBirthdayView.getDayOfMonth(),
+                    0, 0);
+            return birthday;
         }
     }
 
@@ -308,7 +355,8 @@ public class SignUp extends FragmentActivity {
             String lastName = mLastNameView.getText().toString();
             String country = mCountryView.getSelectedItem().toString();
 
-            return new SignUpData(password, passwordConfirm, email, firstName, lastName, country);
+            return new SignUpData(password, passwordConfirm, email, firstName, lastName, country,
+                    birthday);
         }
     }
 }
