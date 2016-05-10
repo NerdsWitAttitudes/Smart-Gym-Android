@@ -1,4 +1,4 @@
-package smartgym.lib;
+package com.nwa.smartgym.lib;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;

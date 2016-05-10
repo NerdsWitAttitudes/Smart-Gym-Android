@@ -1,4 +1,4 @@
-package smartgym.smartgym;
+package com.nwa.smartgym.activities;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -21,18 +21,16 @@ import com.nwa.smartgym.R;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import smartgym.api.AuthAPI;
-import smartgym.api.ServiceGenerator;
-import smartgym.lib.DefaultPageAdapter;
-import smartgym.lib.LocaleHelper;
-import smartgym.lib.NonSwipeableViewPager;
-import smartgym.models.HTTPResponse;
-import smartgym.models.SignUpData;
+import com.nwa.smartgym.api.AuthAPI;
+import  com.nwa.smartgym.api.ServiceGenerator;
+import  com.nwa.smartgym.lib.DefaultPageAdapter;
+import  com.nwa.smartgym.lib.LocaleHelper;
+import  com.nwa.smartgym.lib.NonSwipeableViewPager;
+import  com.nwa.smartgym.models.HTTPResponse;
+import  com.nwa.smartgym.models.SignUpData;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

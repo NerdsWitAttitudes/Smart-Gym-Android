@@ -1,5 +1,4 @@
-package smartgym.lib;
-
+package com.nwa.smartgym.lib;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;

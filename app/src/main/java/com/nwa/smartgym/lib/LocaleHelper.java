@@ -1,4 +1,4 @@
-package smartgym.lib;
+package com.nwa.smartgym.lib;
 
 import java.util.ArrayList;
 import java.util.List;

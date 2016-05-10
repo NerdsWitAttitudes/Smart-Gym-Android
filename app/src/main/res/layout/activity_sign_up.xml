@@ -6,9 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="smartgym.smartgym.SignUp">
+    tools:context=".activities.SignUp">
 
-    <smartgym.lib.NonSwipeableViewPager
+    <com.nwa.smartgym.lib.NonSwipeableViewPager
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

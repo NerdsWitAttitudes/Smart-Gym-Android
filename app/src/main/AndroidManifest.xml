@@ -16,12 +16,12 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="smartgym.smartgym.SignUp"
+            android:name=".activities.SignUp"
             android:label="@string/title_activity_sign_up"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="smartgym.smartgym.Welcome"
+            android:name=".activities.Welcome"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
