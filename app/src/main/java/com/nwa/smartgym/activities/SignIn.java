@@ -126,7 +126,6 @@ public class SignIn extends AppCompatActivity  {
             AuthAPI loginService = ServiceGenerator.createSmartGymService(AuthAPI.class);
             Call<HTTPResponse> call = loginService.logIn(new Login(mEmail, mPassword));
 
-
             call.enqueue(new Callback<HTTPResponse>() {
 
                 @Override
