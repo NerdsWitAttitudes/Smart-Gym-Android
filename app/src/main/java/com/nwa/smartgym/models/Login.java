@@ -1,4 +1,4 @@
-package smartgym.models;
+package com.nwa.smartgym.models;
 
 /**
  * Created by robin on 19-4-16.

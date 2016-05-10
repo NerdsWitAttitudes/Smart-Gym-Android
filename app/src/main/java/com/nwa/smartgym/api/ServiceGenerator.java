@@ -1,4 +1,4 @@
-package smartgym.api;
+package com.nwa.smartgym.api;
 
 import java.io.IOException;
 

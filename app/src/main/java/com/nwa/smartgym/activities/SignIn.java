@@ -1,4 +1,4 @@
-package smartgym.smartgym;
+package com.nwa.smartgym.activities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -21,10 +21,10 @@ import android.widget.Toast;
 import com.nwa.smartgym.R;
 
 import okhttp3.Headers;
-import smartgym.api.AuthAPI;
-import smartgym.api.ServiceGenerator;
-import smartgym.models.HTTPResponse;
-import smartgym.models.Login;
+import com.nwa.smartgym.api.AuthAPI;
+import com.nwa.smartgym.api.ServiceGenerator;
+import com.nwa.smartgym.models.HTTPResponse;
+import com.nwa.smartgym.models.Login;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

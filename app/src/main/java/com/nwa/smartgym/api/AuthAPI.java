@@ -1,7 +1,7 @@
-package smartgym.api;
+package com.nwa.smartgym.api;
 
-import smartgym.models.HTTPResponse;
-import smartgym.models.Login;
+import com.nwa.smartgym.models.HTTPResponse;
+import com.nwa.smartgym.models.Login;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
