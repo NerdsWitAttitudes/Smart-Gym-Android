@@ -91,8 +91,7 @@ public class SignUp extends FragmentActivity {
 
     public static class TermsFragment extends Fragment {
         public static TermsFragment newInstance() {
-            TermsFragment fragment = new TermsFragment();
-            return fragment;
+            return new TermsFragment();
         }
 
         @Override
@@ -114,8 +113,7 @@ public class SignUp extends FragmentActivity {
 
     public static class PasswordFragment extends Fragment {
         public static PasswordFragment newInstance() {
-            PasswordFragment fragment = new PasswordFragment();
-            return fragment;
+            return new PasswordFragment();
         }
 
         @Override
@@ -145,7 +143,7 @@ public class SignUp extends FragmentActivity {
             String password = mPasswordView.getText().toString();
             String passwordConfirm = mPasswordConfirmView.getText().toString();
 
-            if (password == passwordConfirm) {
+            if (!password.equals(passwordConfirm)) {
                 mPasswordConfirmView.setError(getString(R.string.error_passwords_do_not_match));
             } else if (password.isEmpty()) {
                 mPasswordView.setError(getString(R.string.error_pasword_required));
@@ -169,8 +167,7 @@ public class SignUp extends FragmentActivity {
 
     public static class PersonalFragment extends Fragment {
         public static PersonalFragment newInstance() {
-            PersonalFragment fragment = new PersonalFragment();
-            return fragment;
+            return new PersonalFragment();
         }
 
         @Override
@@ -230,8 +227,7 @@ public class SignUp extends FragmentActivity {
 
     public static class BirthdayFragment extends Fragment {
         public static BirthdayFragment newInstance() {
-            BirthdayFragment birthdayFragment = new BirthdayFragment();
-            return birthdayFragment;
+            return new BirthdayFragment();
         }
 
         @Override
@@ -268,8 +264,7 @@ public class SignUp extends FragmentActivity {
 
     public static class EmailFragment extends Fragment {
         public static EmailFragment newInstance() {
-            EmailFragment fragment = new EmailFragment();
-            return fragment;
+            return new EmailFragment();
         }
 
         @Override

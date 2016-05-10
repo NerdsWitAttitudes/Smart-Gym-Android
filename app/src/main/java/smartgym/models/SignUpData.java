@@ -12,13 +12,13 @@ import java.util.Date;
  * Created by robin on 8-5-16.
  */
 public class SignUpData {
-    String password;
-    String password_confirm;
-    String email;
-    String first_name;
-    String last_name;
-    String country;
-    String date_of_birth;
+    private String password;
+    private String password_confirm;
+    private String email;
+    private String first_name;
+    private String last_name;
+    private String country;
+    private String date_of_birth;
 
     public SignUpData(String password, String password_confirm, String email, String firstname, String lastname, String country, DateTime dateOfBirth) {
         this.password = password;
