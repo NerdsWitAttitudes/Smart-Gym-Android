@@ -48,4 +48,9 @@
     <string name="title_activity_sign_up">SignUp</string>
     <string name="action_settings">Settings</string>
     <string name="action_next">Next</string>
+    <string name="title_activity_main">Main</string>
+
+    <!-- busyness -->
+    <string name="busyness_header_message">Busyness</string>
+    <string name="busyness_date">date</string>
 </resources>

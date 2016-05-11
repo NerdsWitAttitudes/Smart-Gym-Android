@@ -12,28 +12,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/prompt_birthday_sign_up"
-        android:id="@+id/birthday_sign_up_message"
-        android:layout_alignLeft="@+id/birthday_date_picker_sign_up"
-        android:layout_alignStart="@+id/birthday_date_picker_sign_up" />
+        android:text="@string/busyness_header_message"
+        android:id="@+id/busyness_header_message" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/next_birthday_sign_up_button"
-        android:text="@string/action_next"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp"/>
-
-    <DatePicker
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:id="@+id/birthday_date_picker_sign_up"
-        android:layout_below="@id/birthday_sign_up_message" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
 
+        android:id="@+id/busyness_date"
+        android:text="@string/busyness_date"
+        android:layout_below="@id/busyness_header_message" />
 
-
+    <com.jjoe64.graphview.GraphView
+        android:layout_width="match_parent"
+        android:layout_height="300dip"
+        android:id="@+id/busyness_graph"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/busyness_date" />
 
 </RelativeLayout>
