@@ -99,9 +99,9 @@ public class BusynessFragment extends Fragment {
         if(busynessDate.before(today)) {
             call = busynessService.past(busynessDateText);
         } else if (busynessDate.after(today)) {
-            call = busynessService.predict(busynessDateText);
+            call = busynessService.predict(busynessDateText, "af425ccf-3eef-4f19-9e8d-8cb86867824e");
         } else {
-            call = busynessService.today();
+            call = busynessService.today("af425ccf-3eef-4f19-9e8d-8cb86867824e");
         }
 
         call.enqueue(new Callback<ResponseBody>() {
@@ -129,12 +129,13 @@ public class BusynessFragment extends Fragment {
 
     }
 
-    private void updateGraph(JSONObject busynessJSON) {
+    private void updateGraph(JSONObject busynessJSON) throws JSONException {
+        mBusynessGraph.removeAllSeries();
         System.out.println(busynessJSON.length());
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         DataPoint[] dataPointArray = new DataPoint[24];
-        System.out.println("oi");
-        for(int i =0; i < 24; i++) {
+
+        for(int i =0; i < dataPointArray.length; i++) {
             try {
                 dataPointArray[i] = new DataPoint(i, (int) busynessJSON.get(Integer.toString(i)));
             } catch (JSONException e) {
@@ -143,10 +144,8 @@ public class BusynessFragment extends Fragment {
         }
 
         BarGraphSeries<DataPoint> series = new BarGraphSeries<DataPoint>(dataPointArray);
+
         mBusynessGraph.addSeries(series);
-
-        series.setSpacing(50);
-
 
     }
 

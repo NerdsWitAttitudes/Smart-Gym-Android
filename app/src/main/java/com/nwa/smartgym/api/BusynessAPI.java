@@ -9,24 +9,26 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 
 /**
  * Created by robin on 19-4-16.
  */
 public interface BusynessAPI {
-    @GET("busyness/past?date={date}")
+    @GET("busyness/past")
     Call<ResponseBody> past(
-            @Path("date") String busynessDateText
+            @Query("date") String busynessDateText
     );
 
     @GET("busyness/today")
     Call<ResponseBody> today(
-
+            @Query("gym_id") String gym_id
     );
 
-    @GET("busyness/predict?date={date}")
+    @GET("busyness/predict")
     Call<ResponseBody> predict(
-            @Path("date") String busynessDateText
+            @Query("date") String busynessDateText,
+            @Query("gym_id") String gym_id
     );
 }
