@@ -1,4 +1,4 @@
-package smartgym.models;
+package com.nwa.smartgym.models;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;

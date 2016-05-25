@@ -1,4 +1,4 @@
-package smartgym.smartgym;
+package com.nwa.smartgym.activities;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,6 +11,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nwa.smartgym.R;
+import com.nwa.smartgym.api.ServiceGenerator;
+import com.nwa.smartgym.api.SportScheduleAPI;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,8 +21,6 @@ import okhttp3.HttpUrl;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import smartgym.api.ServiceGenerator;
-import smartgym.api.SportScheduleAPI;
 
 public class SportSchedule extends AppCompatActivity {
 
@@ -59,18 +59,18 @@ public class SportSchedule extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            SportScheduleAPI sportScheduleService = ServiceGenerator.createPartyPeakService(SportScheduleAPI.class);
-            Call<List<smartgym.models.SportSchedule>> call = sportScheduleService.getSchedules(userId);
+            SportScheduleAPI sportScheduleService = ServiceGenerator.createSmartGymService(SportScheduleAPI.class);
+            Call<List<com.nwa.smartgym.models.SportSchedule>> call = sportScheduleService.getSchedules(userId);
 
-            call.enqueue(new Callback<List<smartgym.models.SportSchedule>>() {
+            call.enqueue(new Callback<List<com.nwa.smartgym.models.SportSchedule>>() {
                 @Override
-                public void onResponse(Call<List<smartgym.models.SportSchedule>> call, Response<List<smartgym.models.SportSchedule>> response) {
-                    List<smartgym.models.SportSchedule> sportSchedules = response.body();
+                public void onResponse(Call<List<com.nwa.smartgym.models.SportSchedule>> call, Response<List<com.nwa.smartgym.models.SportSchedule>> response) {
+                    List<com.nwa.smartgym.models.SportSchedule> sportSchedules = response.body();
                     textView.setText(sportSchedules.toString());
                 }
 
                 @Override
-                public void onFailure(Call<List<smartgym.models.SportSchedule>> call, Throwable t) {
+                public void onFailure(Call<List<com.nwa.smartgym.models.SportSchedule>> call, Throwable t) {
                     HttpUrl url = call.request().url();
 
                     System.out.println("url : " + url.toString() );

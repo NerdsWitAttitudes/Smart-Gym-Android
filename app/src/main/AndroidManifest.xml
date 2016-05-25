@@ -27,7 +27,7 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="smartgym.smartgym.SportSchedule"
+            android:name=".activities.SportSchedule"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
