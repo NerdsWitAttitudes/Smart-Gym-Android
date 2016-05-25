@@ -1,8 +1,11 @@
 package com.nwa.smartgym.activities;
 
 import android.app.ListActivity;
+import android.app.LoaderManager;
 import android.content.Context;
+import android.content.Loader;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,12 +14,19 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.j256.ormlite.android.apptools.OrmLiteBaseListActivity;
+import com.j256.ormlite.android.apptools.OrmLiteCursorAdapter;
+import com.j256.ormlite.android.apptools.OrmLiteCursorLoader;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.PreparedQuery;
 import com.nwa.smartgym.R;
 import com.nwa.smartgym.api.DeviceAPI;
 import com.nwa.smartgym.api.ServiceGenerator;
@@ -28,6 +38,7 @@ import com.nwa.smartgym.models.HTTPResponse;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,26 +46,103 @@ import retrofit2.Response;
 
 public class Devices extends OrmLiteBaseListActivity<DatabaseHelper>{
 
-    private ArrayAdapter<Device> viewAdapter;
-    private List<Device> devices;
+    private Context context;
+    private OrmLiteCursorAdapter<Device, RelativeLayout> viewAdapter;
+    private LayoutInflater layoutInflater;
+
     private Dao<Device, Integer> deviceDao;
-    
+    private PreparedQuery<Device> preparedListQuery;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_devices);
+        context = getApplicationContext();
+        layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(
+                Context.LAYOUT_INFLATER_SERVICE);
 
         try {
             deviceDao = getHelper().getDeviceDao();
-            listDevices();
+            prepareQueries();
         } catch( SQLException e) {
             Log.e(this.getLocalClassName(), "Unable to access database", e);
         }
 
-        DeviceListTask deviceListTask = new DeviceListTask();
-        deviceListTask.execute((Void) null);
+        viewAdapter = new OrmLiteCursorAdapter<Device, RelativeLayout>(this) {
+            @Override
+            public void bindView(RelativeLayout relativeLayout, Context context, Device device) {
+                TextView title = (TextView) relativeLayout.findViewById(R.id.title_device_list_item);
+                TextView subTitle = (TextView) relativeLayout.findViewById(R.id.subtitle_device_list_item);
+                title.setText(device.getName());
+                subTitle.setText(device.getDeviceAddress());
 
-        viewAdapter = new ArrayAdapter<>(this, R.layout.device_list_item, devices);
+            }
+
+            @Override
+            public View newView(Context context, Cursor cursor, ViewGroup parent) {
+                return layoutInflater.inflate(R.layout.device_list_item, null);
+            }
+        };
+
+        setListAdapter(viewAdapter);
+
+        getLoaderManager().initLoader(0, null, new LoaderManager.LoaderCallbacks<Cursor>() {
+            @Override
+            public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+                fetchDevices();
+                return new OrmLiteCursorLoader<Device>(context, deviceDao, preparedListQuery);
+            }
+
+            @Override
+            public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+                viewAdapter.changeCursor(cursor, ((OrmLiteCursorLoader<Device>) loader).getQuery());
+            }
+
+            @Override
+            public void onLoaderReset(Loader<Cursor> loader) {
+                viewAdapter.changeCursor(null,null);
+            }
+
+            private void fetchDevices() {
+                SecretsHelper secretsHelper = new SecretsHelper(getApplicationContext());
+                DeviceAPI deviceService = ServiceGenerator.createSmartGymService(DeviceAPI.class,
+                        secretsHelper.getAuthToken());
+                Call<List<Device>> call = deviceService.listDevices();
+                call.enqueue(new Callback<List<Device>>() {
+
+                    @Override
+                    public void onResponse(Call<List<Device>> call, Response<List<Device>> response) {
+                        System.out.println(response.code());
+                        if (response.code() == 200) {
+                            for (Device device : response.body()) {
+                                try {
+                                    deviceDao.create(device);
+                                } catch (SQLException e) {
+                                    Log.e(context.getClass().getName(), "Unable to persist device", e);
+                                }
+                            }
+                        } else if (response.code() == 400) {
+                            return;
+                        } else {
+                            System.out.println(response.code());
+                            raiseGenericError();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Device>> call, Throwable t) {
+                        raiseGenericError();
+                    }
+
+                    private void raiseGenericError() {
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                getString(R.string.server_500_message),
+                                Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                });
+            }
+        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add_device);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -65,53 +153,7 @@ public class Devices extends OrmLiteBaseListActivity<DatabaseHelper>{
         });
     }
 
-    private void listDevices() throws SQLException {
-        devices = deviceDao.queryForAll();
-    }
-
-    public class DeviceListTask extends AsyncTask<Void, Void, Boolean> {
-        @Override
-        public Boolean doInBackground(Void... Params) {
-            SecretsHelper secretsHelper = new SecretsHelper(getApplicationContext());
-            DeviceAPI deviceService = ServiceGenerator.createSmartGymService(DeviceAPI.class,
-                    secretsHelper.getAuthToken());
-            Call<List<Device>> call = deviceService.listDevices();
-            call.enqueue(new Callback<List<Device>>() {
-
-                @Override
-                public void onResponse(Call<List<Device>> call, Response<List<Device>> response) {
-                    System.out.println(response.code());
-                    if (response.code() == 200) {
-                        System.out.println("stupidshit");
-                        devices.addAll(response.body());
-                        System.out.println(devices.size());
-                    } else if (response.code() == 400) {
-                        System.out.println("this happened");
-                        return;
-                    } else {
-                        System.out.println("generic");
-                        System.out.println(response.code());
-                        raiseGenericError();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<List<Device>> call, Throwable t) {
-                    System.out.println("sowrong");
-                    System.out.println(t);
-                    raiseGenericError();
-                }
-
-                private void raiseGenericError() {
-                    Toast toast = Toast.makeText(getApplicationContext(),
-                            getString(R.string.server_500_message),
-                            Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-            });
-
-            return true;
-        }
-
+    private void prepareQueries() throws SQLException {
+        preparedListQuery = deviceDao.queryBuilder().prepare();
     }
 }
