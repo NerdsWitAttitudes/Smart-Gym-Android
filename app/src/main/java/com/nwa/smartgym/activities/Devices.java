@@ -10,17 +10,22 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.j256.ormlite.android.apptools.OrmLiteBaseListActivity;
+import com.j256.ormlite.dao.Dao;
 import com.nwa.smartgym.R;
 import com.nwa.smartgym.api.DeviceAPI;
 import com.nwa.smartgym.api.ServiceGenerator;
+import com.nwa.smartgym.lib.DatabaseHelper;
 import com.nwa.smartgym.lib.SecretsHelper;
 import com.nwa.smartgym.models.Device;
 import com.nwa.smartgym.models.HTTPResponse;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,15 +33,24 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Devices extends ListActivity{
+public class Devices extends OrmLiteBaseListActivity<DatabaseHelper>{
 
     private ArrayAdapter<Device> viewAdapter;
     private List<Device> devices;
+    private Dao<Device, Integer> deviceDao;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_devices);
+
+        try {
+            deviceDao = getHelper().getDeviceDao();
+            listDevices();
+        } catch( SQLException e) {
+            Log.e(this.getLocalClassName(), "Unable to access database", e);
+        }
+
         DeviceListTask deviceListTask = new DeviceListTask();
         deviceListTask.execute((Void) null);
 
@@ -49,6 +63,10 @@ public class Devices extends ListActivity{
                 return;
             }
         });
+    }
+
+    private void listDevices() throws SQLException {
+        devices = deviceDao.queryForAll();
     }
 
     public class DeviceListTask extends AsyncTask<Void, Void, Boolean> {
