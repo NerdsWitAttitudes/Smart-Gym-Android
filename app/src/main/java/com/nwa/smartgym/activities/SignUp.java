@@ -252,7 +252,7 @@ public class SignUp extends FragmentActivity {
         private DateTime getBirthday() {
             // To get the correct year you should always substract 1900. This is according to the Android DatePicker documentation.
             birthday = new DateTime(
-                    mBirthdayView.getYear() - 1900,
+                    mBirthdayView.getYear(),
                     mBirthdayView.getMonth(),
                     mBirthdayView.getDayOfMonth(),
                     0, 0);
