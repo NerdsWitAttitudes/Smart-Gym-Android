@@ -1,4 +1,4 @@
-package smartgym.models;
+package com.nwa.smartgym.models;
 
 import java.util.Map;
 

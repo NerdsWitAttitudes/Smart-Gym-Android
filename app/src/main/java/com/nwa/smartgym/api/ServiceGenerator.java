@@ -1,4 +1,4 @@
-package smartgym.api;
+package com.nwa.smartgym.api;
 
 import java.io.IOException;
 
@@ -14,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ServiceGenerator {
 
-    public static final String baseURL = "http://192.168.2.30:6543/";
+    public static final String baseURL = "http://192.168.2.245:6543/";
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
@@ -23,11 +23,11 @@ public class ServiceGenerator {
                 .baseUrl(baseURL)
                 .addConverterFactory(GsonConverterFactory.create());
 
-    public static <S> S createPartyPeakService(Class<S> serviceClass){
-        return createPartyPeakService(serviceClass, null);
+    public static <S> S createSmartGymService(Class<S> serviceClass){
+        return createSmartGymService(serviceClass, null);
     }
 
-    public static <S> S createPartyPeakService(Class<S> serviceClass, final String authToken){
+    public static <S> S createSmartGymService(Class<S> serviceClass, final String authToken){
         if (authToken != null) {
             httpClient.addInterceptor(new Interceptor() {
                 @Override
