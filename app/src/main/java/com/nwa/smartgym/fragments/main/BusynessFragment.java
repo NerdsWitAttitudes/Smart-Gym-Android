@@ -23,14 +23,17 @@ import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.models.HTTPResponse;
 import com.nwa.smartgym.models.Login;
 
+import org.joda.time.DateTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -131,21 +134,27 @@ public class BusynessFragment extends Fragment {
 
     private void updateGraph(JSONObject busynessJSON) throws JSONException {
         mBusynessGraph.removeAllSeries();
-        System.out.println(busynessJSON.length());
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        DataPoint[] dataPointArray = new DataPoint[24];
 
+        // this is the correct ISO format the API uses.
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        Date date = new Date();
+        date.setMinutes(0);
+        date.setSeconds(0);
+
+        DataPoint[] dataPointArray = new DataPoint[24];
         for(int i =0; i < dataPointArray.length; i++) {
             try {
-                dataPointArray[i] = new DataPoint(i, (int) busynessJSON.get(Integer.toString(i)));
+                date.setHours(i);
+                dataPointArray[i] = new DataPoint(i, (int) busynessJSON.get((df.format(date))));
             } catch (JSONException e) {
                 dataPointArray[i] = new DataPoint(i, 0);
             }
         }
 
-        BarGraphSeries<DataPoint> series = new BarGraphSeries<DataPoint>(dataPointArray);
-
+        BarGraphSeries<DataPoint> series = new BarGraphSeries<>(dataPointArray);
         mBusynessGraph.addSeries(series);
+        mBusynessGraph.getViewport().setXAxisBoundsManual(true);
+        mBusynessGraph.getViewport().setMaxX(24);
 
     }
 
