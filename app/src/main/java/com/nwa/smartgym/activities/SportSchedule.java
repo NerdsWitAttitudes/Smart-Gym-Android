@@ -7,7 +7,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.nwa.smartgym.R;
@@ -24,7 +25,7 @@ import retrofit2.Response;
 
 public class SportSchedule extends AppCompatActivity {
 
-    private TextView textView;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,7 @@ public class SportSchedule extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        textView = (TextView) findViewById(R.id.textView);
+        listView = (ListView) findViewById(R.id.listView);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -66,7 +67,12 @@ public class SportSchedule extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<List<com.nwa.smartgym.models.SportSchedule>> call, Response<List<com.nwa.smartgym.models.SportSchedule>> response) {
                     List<com.nwa.smartgym.models.SportSchedule> sportSchedules = response.body();
-                    textView.setText(sportSchedules.toString());
+
+                    ArrayAdapter<com.nwa.smartgym.models.SportSchedule> sportScheduleArrayAdapter = new ArrayAdapter<com.nwa.smartgym.models.SportSchedule>(
+                            getBaseContext(), R.layout.listview_sport_schedule, sportSchedules);
+
+                    listView.setAdapter(sportScheduleArrayAdapter);
+
                 }
 
                 @Override
