@@ -26,4 +26,20 @@ public class SportSchedule {
     public SportSchedule() {
 
     }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getReminderMinutes() {
+        return reminderMinutes;
+    }
 }
