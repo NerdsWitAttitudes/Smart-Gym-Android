@@ -7,11 +7,11 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.nwa.smartgym.R;
+import com.nwa.smartgym.adapter.SportScheduleAdapter;
 import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.api.SportScheduleAPI;
 
@@ -68,11 +68,8 @@ public class SportSchedule extends AppCompatActivity {
                 public void onResponse(Call<List<com.nwa.smartgym.models.SportSchedule>> call, Response<List<com.nwa.smartgym.models.SportSchedule>> response) {
                     List<com.nwa.smartgym.models.SportSchedule> sportSchedules = response.body();
 
-                    ArrayAdapter<com.nwa.smartgym.models.SportSchedule> sportScheduleArrayAdapter = new ArrayAdapter<com.nwa.smartgym.models.SportSchedule>(
-                            getBaseContext(), R.layout.listview_sport_schedule, sportSchedules);
-
-                    listView.setAdapter(sportScheduleArrayAdapter);
-
+                    SportScheduleAdapter sportScheduleAdapter = new SportScheduleAdapter(getBaseContext(), sportSchedules);
+                    listView.setAdapter(sportScheduleAdapter);
                 }
 
                 @Override
