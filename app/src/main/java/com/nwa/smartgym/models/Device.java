@@ -10,11 +10,11 @@ import java.util.UUID;
  */
 @DatabaseTable(tableName = "device")
 public class Device {
-    @DatabaseField(columnName = "_id")
+    @DatabaseField(columnName = "_id", unique = true)
     private UUID id;
 
     @DatabaseField
-    private String deviceAddress;
+    private String device_address;
 
     @DatabaseField
     private String name;
@@ -24,16 +24,16 @@ public class Device {
 
     public Device(UUID id, String device_address, String name) {
         this.id = id;
-        this.deviceAddress = device_address;
+        this.device_address = device_address;
         this.name = name;
     }
 
     public String getDeviceAddress() {
-        return deviceAddress;
+        return device_address;
     }
 
     public void setDeviceAddress(String deviceAddress) {
-        this.deviceAddress = deviceAddress;
+        this.device_address = deviceAddress;
     }
 
     public String getName() {

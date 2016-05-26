@@ -68,7 +68,7 @@ public class Devices extends OrmLiteBaseListActivity<DatabaseHelper>{
             Log.e(this.getLocalClassName(), "Unable to access database", e);
         }
 
-        viewAdapter = new OrmLiteCursorAdapter<Device, RelativeLayout>(this) {
+        viewAdapter = new OrmLiteCursorAdapter<Device, RelativeLayout>(context) {
             @Override
             public void bindView(RelativeLayout relativeLayout, Context context, Device device) {
                 TextView title = (TextView) relativeLayout.findViewById(R.id.title_device_list_item);
@@ -80,7 +80,8 @@ public class Devices extends OrmLiteBaseListActivity<DatabaseHelper>{
 
             @Override
             public View newView(Context context, Cursor cursor, ViewGroup parent) {
-                return layoutInflater.inflate(R.layout.device_list_item, null);
+                RelativeLayout relativeLayout = (RelativeLayout) View.inflate(context, R.layout.device_list_item, null);
+                return relativeLayout;
             }
         };
 
