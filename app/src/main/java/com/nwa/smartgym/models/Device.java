@@ -28,6 +28,10 @@ public class Device {
         this.name = name;
     }
 
+    public UUID getId() { return id;}
+
+    public void setId(UUID id) {this.id = id;}
+
     public String getDeviceAddress() {
         return device_address;
     }

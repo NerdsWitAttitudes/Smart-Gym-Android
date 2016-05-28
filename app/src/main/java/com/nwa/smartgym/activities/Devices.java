@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -70,11 +71,19 @@ public class Devices extends OrmLiteBaseListActivity<DatabaseHelper>{
 
         viewAdapter = new OrmLiteCursorAdapter<Device, RelativeLayout>(context) {
             @Override
-            public void bindView(RelativeLayout relativeLayout, Context context, Device device) {
+            public void bindView(RelativeLayout relativeLayout, Context context, final Device device) {
                 TextView title = (TextView) relativeLayout.findViewById(R.id.title_device_list_item);
                 TextView subTitle = (TextView) relativeLayout.findViewById(R.id.subtitle_device_list_item);
+                ImageView delete = (ImageView) relativeLayout.findViewById(R.id.delete_device_list_item);
+
                 title.setText(device.getName());
                 subTitle.setText(device.getDeviceAddress());
+                delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        deleteDevice(device);
+                    }
+                });
 
             }
 
@@ -150,6 +159,44 @@ public class Devices extends OrmLiteBaseListActivity<DatabaseHelper>{
             @Override
             public void onClick(View view) {
                 return;
+            }
+        });
+    }
+
+    private void deleteDevice(final Device device) {
+        SecretsHelper secretsHelper = new SecretsHelper(getApplicationContext());
+        DeviceAPI deviceService = ServiceGenerator.createSmartGymService(DeviceAPI.class,
+                secretsHelper.getAuthToken());
+        Call<HTTPResponse> call = deviceService.deleteDevice(device.getId());
+        call.enqueue(new Callback<HTTPResponse>() {
+
+            @Override
+            public void onResponse(Call<HTTPResponse> call, Response<HTTPResponse> response) {
+                System.out.println(response.code());
+                if (response.code() == 200) {
+                    try {
+                        deviceDao.delete(device);
+                    } catch (SQLException e) {
+                        Log.e(context.getClass().getName(), "Unable to delete device", e);
+                    }
+                } else if (response.code() == 400) {
+                    return;
+                } else {
+                    System.out.println(response.code());
+                    raiseGenericError();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<HTTPResponse> call, Throwable t) {
+                raiseGenericError();
+            }
+
+            private void raiseGenericError() {
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        getString(R.string.server_500_message),
+                        Toast.LENGTH_SHORT);
+                toast.show();
             }
         });
     }
