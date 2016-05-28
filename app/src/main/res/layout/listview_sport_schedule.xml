@@ -25,16 +25,14 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <TextView
+    <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Reminder"
-        android:id="@+id/tvSportScheduleReminder"
-        android:layout_marginLeft="35dp"
-        android:layout_marginStart="35dp"
-        android:layout_alignBaseline="@+id/tvSportScheduleDateTime"
-        android:layout_alignBottom="@+id/tvSportScheduleDateTime"
-        android:layout_toRightOf="@+id/tvSportScheduleDateTime"
-        android:layout_toEndOf="@+id/tvSportScheduleDateTime" />
+        android:text="@string/reminder"
+        android:id="@+id/switchActive"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp" />
 </RelativeLayout>

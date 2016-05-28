@@ -49,6 +49,7 @@
     <string name="title_activity_sign_up">SignUp</string>
     <string name="action_settings">Settings</string>
     <string name="action_next">Next</string>
-    
+
     <string name="title_activity_sport_schedule">Sport Schema</string>
+    <string name="reminder">Reminder</string>
 </resources>
