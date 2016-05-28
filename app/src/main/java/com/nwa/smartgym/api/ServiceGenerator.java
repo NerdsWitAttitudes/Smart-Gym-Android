@@ -1,6 +1,20 @@
 package com.nwa.smartgym.api;
 
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.io.IOException;
+import java.lang.reflect.Type;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -14,14 +28,30 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ServiceGenerator {
 
-    public static final String baseURL = "http://192.168.2.245:6543/";
+    public static final String baseURL = "http://192.168.1.226:6543/";
+    public static final String dateTimePattern = "yyyy-MM-dd'T'HH:mm:ssZ";
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
     private static Retrofit.Builder builder =
             new Retrofit.Builder()
                 .baseUrl(baseURL)
-                .addConverterFactory(GsonConverterFactory.create());
+                .addConverterFactory(GsonConverterFactory.create(
+                        new GsonBuilder()
+                                .registerTypeAdapter(DateTime.class, new JsonDeserializer<DateTime>() {
+                                    @Override
+                                    public DateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                                        return DateTimeFormat.forPattern(dateTimePattern).parseDateTime(json.getAsString());
+                                    }
+                                })
+                                .registerTypeAdapter(DateTime.class, new JsonSerializer<DateTime>() {
+                                    @Override
+                                    public JsonElement serialize(DateTime src, Type typeOfSrc, JsonSerializationContext context) {
+                                        return new JsonPrimitive(DateTimeFormat.forPattern(dateTimePattern).print(src));
+                                    }
+                                })
+                                .create()
+                ));
 
     public static <S> S createSmartGymService(Class<S> serviceClass){
         return createSmartGymService(serviceClass, null);
