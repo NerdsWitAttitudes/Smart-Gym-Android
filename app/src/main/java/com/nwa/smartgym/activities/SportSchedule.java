@@ -1,24 +1,25 @@
 package com.nwa.smartgym.activities;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.nwa.smartgym.R;
-import com.nwa.smartgym.adapter.SportScheduleAdapter;
 import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.api.SportScheduleAPI;
+import com.nwa.smartgym.lib.SportScheduleAdapter;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
-import okhttp3.HttpUrl;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,18 +38,18 @@ public class SportSchedule extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.listView);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        if (fab != null) {
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getBaseContext(), SportScheduleItem.class));
+                }
+            });
+        }
 
         SportScheduleTask sportScheduleTask = new SportScheduleTask(UUID.fromString("6159c216-a92f-4fdb-b043-baefa82009f1"));
         sportScheduleTask.execute((Void) null);
     }
-
 
     public class SportScheduleTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -70,13 +71,19 @@ public class SportSchedule extends AppCompatActivity {
 
                     SportScheduleAdapter sportScheduleAdapter = new SportScheduleAdapter(getBaseContext(), sportSchedules);
                     listView.setAdapter(sportScheduleAdapter);
+
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            com.nwa.smartgym.models.SportSchedule sportSchedule = (com.nwa.smartgym.models.SportSchedule) parent.getItemAtPosition(position);
+                            startActivity(new Intent(getBaseContext(), SportScheduleItem.class).putExtra("SportSchedule", (Serializable) sportSchedule));
+                        }
+                    });
+
                 }
 
                 @Override
                 public void onFailure(Call<List<com.nwa.smartgym.models.SportSchedule>> call, Throwable t) {
-                    HttpUrl url = call.request().url();
-
-                    System.out.println("url : " + url.toString() );
                     Toast toast = Toast.makeText(getApplicationContext(),
                             getString(R.string.server_500_message),
                             Toast.LENGTH_SHORT);
