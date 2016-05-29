@@ -2,10 +2,10 @@ package com.nwa.smartgym.models;
 
 import com.google.gson.annotations.SerializedName;
 
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
+import java.util.List;
 import java.util.UUID;
 
 public class SportSchedule {
@@ -20,19 +20,23 @@ public class SportSchedule {
     @SerializedName("reminder_minutes")
     private int reminderMinutes;
 
-    @SerializedName("datetime")
-    private DateTime dateTime;
+    @SerializedName("time")
+    private LocalTime dateTime;
+
+    @SerializedName("weekdays")
+    private List<LocalDate.Property> weekdays;
 
     @SerializedName("is_active")
     private boolean isActive;
 
 
-    public SportSchedule(UUID id, UUID userId, String name, int reminderMinutes, DateTime dateTime, boolean isActive) {
+    public SportSchedule(UUID id, UUID userId, String name, int reminderMinutes, LocalTime dateTime, List<LocalDate.Property> weekdays, boolean isActive) {
         this.id = id;
         this.userId = userId;
         this.name = name;
         this.reminderMinutes = reminderMinutes;
         this.dateTime = dateTime;
+        this.weekdays = weekdays;
         this.isActive = isActive;
     }
 
@@ -80,11 +84,19 @@ public class SportSchedule {
         this.isActive = isActive;
     }
 
-    public DateTime getDateTime() {
+    public LocalTime getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(DateTime dateTime) {
+    public void setDateTime(LocalTime dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public List<LocalDate.Property> getWeekdays() {
+        return weekdays;
+    }
+
+    public void setWeekdays(List<LocalDate.Property> weekdays) {
+        this.weekdays = weekdays;
     }
 }
