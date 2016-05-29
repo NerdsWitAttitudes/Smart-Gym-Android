@@ -3,6 +3,7 @@ package com.nwa.smartgym.activities;
 import android.app.ListActivity;
 import android.app.LoaderManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -60,9 +61,10 @@ public class Devices extends OrmLiteBaseListActivity<DatabaseHelper>{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_devices);
-        context = getApplicationContext();
+        context = this;
         layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
+        setFabListener();
 
         try {
             deviceDao = getHelper().getDeviceDao();
@@ -117,17 +119,20 @@ public class Devices extends OrmLiteBaseListActivity<DatabaseHelper>{
                 viewAdapter.changeCursor(null,null);
             }
         });
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add_device);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                return;
-            }
-        });
     }
 
     private void prepareQueries() throws SQLException {
         preparedListQuery = deviceDao.queryBuilder().prepare();
+    }
+
+    private void setFabListener() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add_device);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, AddDeviceActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

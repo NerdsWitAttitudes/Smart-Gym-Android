@@ -9,16 +9,16 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.nwa.smartgym.activities.AddDeviceActivity">
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:layout_above="@id/current_device_list_item"
-        android:id="@android:id/list"/>
-
     <include layout="@layout/device_list_item"
         android:id="@+id/current_device_list_item"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_alignParentBottom="true"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/current_device_list_item"
+        android:id="@android:id/list"/>
 
 </RelativeLayout>
