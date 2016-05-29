@@ -24,8 +24,7 @@
             android:name=".activities.Welcome"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".activities.Devices"
             android:label="@string/title_activity_devices"
@@ -37,6 +36,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.AddDeviceActivity"></activity>
     </application>
 
 </manifest>
