@@ -30,6 +30,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.nwa.smartgym.R;
 import com.nwa.smartgym.api.DeviceAPI;
+import com.nwa.smartgym.api.DeviceAPIInterface;
 import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.lib.DatabaseHelper;
 import com.nwa.smartgym.lib.SecretsHelper;
@@ -53,6 +54,7 @@ public class Devices extends OrmLiteBaseListActivity<DatabaseHelper>{
 
     private Dao<Device, Integer> deviceDao;
     private PreparedQuery<Device> preparedListQuery;
+    private DeviceAPIInterface deviceAPIInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,8 @@ public class Devices extends OrmLiteBaseListActivity<DatabaseHelper>{
             Log.e(this.getLocalClassName(), "Unable to access database", e);
         }
 
+        deviceAPIInterface = new DeviceAPIInterface(context, deviceDao);
+
         viewAdapter = new OrmLiteCursorAdapter<Device, RelativeLayout>(context) {
             @Override
             public void bindView(RelativeLayout relativeLayout, Context context, final Device device) {
@@ -81,7 +85,7 @@ public class Devices extends OrmLiteBaseListActivity<DatabaseHelper>{
                 delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        deleteDevice(device);
+                        deviceAPIInterface.delete(device);
                     }
                 });
 
@@ -99,7 +103,7 @@ public class Devices extends OrmLiteBaseListActivity<DatabaseHelper>{
         getLoaderManager().initLoader(0, null, new LoaderManager.LoaderCallbacks<Cursor>() {
             @Override
             public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-                fetchDevices();
+                deviceAPIInterface.list();
                 return new OrmLiteCursorLoader<Device>(context, deviceDao, preparedListQuery);
             }
 
@@ -112,46 +116,6 @@ public class Devices extends OrmLiteBaseListActivity<DatabaseHelper>{
             public void onLoaderReset(Loader<Cursor> loader) {
                 viewAdapter.changeCursor(null,null);
             }
-
-            private void fetchDevices() {
-                SecretsHelper secretsHelper = new SecretsHelper(getApplicationContext());
-                DeviceAPI deviceService = ServiceGenerator.createSmartGymService(DeviceAPI.class,
-                        secretsHelper.getAuthToken());
-                Call<List<Device>> call = deviceService.listDevices();
-                call.enqueue(new Callback<List<Device>>() {
-
-                    @Override
-                    public void onResponse(Call<List<Device>> call, Response<List<Device>> response) {
-                        System.out.println(response.code());
-                        if (response.code() == 200) {
-                            for (Device device : response.body()) {
-                                try {
-                                    deviceDao.create(device);
-                                } catch (SQLException e) {
-                                    Log.e(context.getClass().getName(), "Unable to persist device", e);
-                                }
-                            }
-                        } else if (response.code() == 400) {
-                            return;
-                        } else {
-                            System.out.println(response.code());
-                            raiseGenericError();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<Device>> call, Throwable t) {
-                        raiseGenericError();
-                    }
-
-                    private void raiseGenericError() {
-                        Toast toast = Toast.makeText(getApplicationContext(),
-                                getString(R.string.server_500_message),
-                                Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
-                });
-            }
         });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add_device);
@@ -159,44 +123,6 @@ public class Devices extends OrmLiteBaseListActivity<DatabaseHelper>{
             @Override
             public void onClick(View view) {
                 return;
-            }
-        });
-    }
-
-    private void deleteDevice(final Device device) {
-        SecretsHelper secretsHelper = new SecretsHelper(getApplicationContext());
-        DeviceAPI deviceService = ServiceGenerator.createSmartGymService(DeviceAPI.class,
-                secretsHelper.getAuthToken());
-        Call<HTTPResponse> call = deviceService.deleteDevice(device.getId());
-        call.enqueue(new Callback<HTTPResponse>() {
-
-            @Override
-            public void onResponse(Call<HTTPResponse> call, Response<HTTPResponse> response) {
-                System.out.println(response.code());
-                if (response.code() == 200) {
-                    try {
-                        deviceDao.delete(device);
-                    } catch (SQLException e) {
-                        Log.e(context.getClass().getName(), "Unable to delete device", e);
-                    }
-                } else if (response.code() == 400) {
-                    return;
-                } else {
-                    System.out.println(response.code());
-                    raiseGenericError();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<HTTPResponse> call, Throwable t) {
-                raiseGenericError();
-            }
-
-            private void raiseGenericError() {
-                Toast toast = Toast.makeText(getApplicationContext(),
-                        getString(R.string.server_500_message),
-                        Toast.LENGTH_SHORT);
-                toast.show();
             }
         });
     }
