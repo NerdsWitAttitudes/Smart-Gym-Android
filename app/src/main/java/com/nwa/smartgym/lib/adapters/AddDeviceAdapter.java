@@ -39,10 +39,18 @@ public class AddDeviceAdapter extends ArrayAdapter<Device> {
         View listItem = layoutInflater.inflate(R.layout.add_device_list_item, null);
         TextView title = (TextView) listItem.findViewById(R.id.title_device_list_item);
         TextView subTitle = (TextView) listItem.findViewById(R.id.subtitle_device_list_item);
-        CheckBox checkbox = (CheckBox) listItem.findViewById(R.id.add_device_checkbox);
+        final CheckBox checkbox = (CheckBox) listItem.findViewById(R.id.add_device_checkbox);
 
         title.setText(device.getName());
         subTitle.setText(device.getDeviceAddress());
+
+        listItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // toggle checkbox for usability purposes
+                checkbox.setChecked(!checkbox.isChecked());
+            }
+        });
 
         checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
