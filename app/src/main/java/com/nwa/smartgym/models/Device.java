@@ -10,7 +10,7 @@ import java.util.UUID;
  */
 @DatabaseTable(tableName = "device")
 public class Device {
-    @DatabaseField(columnName = "_id", unique = true)
+    @DatabaseField(columnName = "_id", id = true, unique = true)
     private UUID id;
 
     @DatabaseField(unique = true)

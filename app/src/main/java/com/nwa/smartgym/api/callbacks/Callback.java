@@ -30,7 +30,7 @@ public abstract class Callback<T> implements retrofit2.Callback<T> {
 
     @Override
     public void onFailure(Call<T> call, Throwable t) {
-        System.out.println("onfailure");
+        System.out.println(t);
         raiseGenericError();
     }
 

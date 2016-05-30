@@ -42,6 +42,7 @@ import com.nwa.smartgym.models.HTTPResponse;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 
 import retrofit2.Call;
@@ -54,7 +55,7 @@ public class Devices extends OrmLiteBaseListActivity<DatabaseHelper>{
     private OrmLiteCursorAdapter<Device, RelativeLayout> viewAdapter;
     private LayoutInflater layoutInflater;
 
-    private Dao<Device, Integer> deviceDao;
+    private Dao<Device, UUID> deviceDao;
     private PreparedQuery<Device> preparedListQuery;
     private DeviceAPIInterface deviceAPIInterface;
 
@@ -73,7 +74,6 @@ public class Devices extends OrmLiteBaseListActivity<DatabaseHelper>{
         }
 
         deviceAPIInterface = new DeviceAPIInterface(context, deviceDao);
-
         viewAdapter = new DeviceAdapter(context, deviceAPIInterface);
 
         setListAdapter(viewAdapter);
@@ -95,6 +95,12 @@ public class Devices extends OrmLiteBaseListActivity<DatabaseHelper>{
                 viewAdapter.changeCursor(null,null);
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        viewAdapter.notifyDataSetChanged();
     }
 
     private void prepareQueries() throws SQLException {

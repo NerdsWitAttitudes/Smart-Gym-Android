@@ -36,6 +36,7 @@ public class DeviceAdapter extends OrmLiteCursorAdapter<Device, RelativeLayout> 
             @Override
             public void onClick(View v) {
                 deviceAPIInterface.delete(device);
+                notifyDataSetChanged();
             }
         });
 

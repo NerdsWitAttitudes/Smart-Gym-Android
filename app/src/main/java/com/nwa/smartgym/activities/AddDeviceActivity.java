@@ -29,12 +29,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 public class AddDeviceActivity extends OrmLiteBaseListActivity<DatabaseHelper> {
 
     private static final int REQUEST_BLUETOOTH = 1;
 
-    private Dao<Device, Integer> deviceDao;
+    private Dao<Device, UUID> deviceDao;
     private DeviceAPIInterface deviceAPIInterface;
 
     private BluetoothAdapter bluetoothAdapter;
@@ -55,8 +56,8 @@ public class AddDeviceActivity extends OrmLiteBaseListActivity<DatabaseHelper> {
         } catch( SQLException e) {
             Log.e(this.getLocalClassName(), "Unable to access database", e);
         }
-        deviceAPIInterface = new DeviceAPIInterface(this, deviceDao);
         bluetoothAdapter = getBluetoothAdapter();
+        deviceAPIInterface = new DeviceAPIInterface(this, deviceDao);
 
         findDevices();
 
@@ -76,6 +77,7 @@ public class AddDeviceActivity extends OrmLiteBaseListActivity<DatabaseHelper> {
     @Override
     public void onResume() {
         super.onResume();
+        deviceAdapter.clear();
         this.registerReceiver(broadcastReceiver, broadcastFilter);
         bluetoothAdapter.startDiscovery();
     }

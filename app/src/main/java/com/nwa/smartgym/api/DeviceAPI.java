@@ -23,7 +23,7 @@ public interface DeviceAPI {
     Call<List<Device>> listDevices();
 
     @POST("device")
-    Call<HTTPResponse> postDevice(
+    Call<Device> postDevice(
             @Body Device device
     );
 
