@@ -1,6 +1,7 @@
 package com.nwa.smartgym.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 
@@ -110,6 +111,11 @@ public class SignIn extends AppCompatActivity  {
         return email.contains("@");
     }
 
+    public void launchMain() {
+                Intent intent = new Intent(this, Main.class);
+                startActivity(intent);
+    }
+
 
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -135,6 +141,7 @@ public class SignIn extends AppCompatActivity  {
                         Headers headers = response.headers();
                         String token = headers.get("Set-Cookie");
                         storeSecurityHeader(token);
+                        launchMain();
                     } else if (response.code() == 400){
                         mPasswordView.setError(getString(R.string.log_in_failed));
                         mPasswordView.requestFocus();
