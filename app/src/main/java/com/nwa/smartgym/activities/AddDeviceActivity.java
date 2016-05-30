@@ -102,10 +102,7 @@ public class AddDeviceActivity extends OrmLiteBaseListActivity<DatabaseHelper> {
         if (deviceAPIInterface.deviceExists(bluetoothAdapter.getAddress())) {
             return;
         }
-        Device device = new Device(
-                bluetoothAdapter.getAddress(),
-                bluetoothAdapter.getName(),
-                bluetoothAdapter.hashCode());
+        Device device = new Device(bluetoothAdapter.getAddress(), bluetoothAdapter.getName());
         deviceList.add(device);
     }
 

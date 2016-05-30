@@ -13,7 +13,7 @@ public class Device {
     @DatabaseField(columnName = "_id", unique = true)
     private UUID id;
 
-    @DatabaseField
+    @DatabaseField(unique = true)
     private String device_address;
 
     @DatabaseField
@@ -36,6 +36,11 @@ public class Device {
         this.device_address = device_address;
         this.name = name;
         this.device_class = device_class;
+    }
+
+    public Device(String device_address, String name) {
+        this.device_address = device_address;
+        this.name = name;
     }
 
     public UUID getId() { return id;}
