@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.UUID;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
+import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 
@@ -19,6 +21,11 @@ import retrofit2.http.Path;
 public interface DeviceAPI {
     @GET("device")
     Call<List<Device>> listDevices();
+
+    @POST("device")
+    Call<HTTPResponse> postDevice(
+            @Body Device device
+    );
 
     @DELETE("device/{id}")
     Call<HTTPResponse> deleteDevice(@Path("id") UUID deviceID);

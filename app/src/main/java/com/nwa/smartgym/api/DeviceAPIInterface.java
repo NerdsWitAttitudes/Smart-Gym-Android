@@ -72,4 +72,23 @@ public class DeviceAPIInterface {
             }
         });
     }
+
+    public void persist(final Device device) {
+        Call<HTTPResponse> call = deviceService.postDevice(device);
+        call.enqueue(new Callback<HTTPResponse>(context) {
+            @Override
+            public void onResponse(Call<HTTPResponse> call, Response<HTTPResponse> response) {
+                System.out.println(response.code());
+                if (response.code() == 200) {
+                    try {
+                        deviceDao.create(device);
+                    } catch (SQLException e) {
+                        Log.e(context.getClass().getName(), "Unable to create device", e);
+                    }
+                } else {
+                    raiseGenericError();
+                }
+            }
+        });
+    }
 }

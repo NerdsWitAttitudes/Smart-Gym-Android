@@ -6,29 +6,39 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 
+import com.j256.ormlite.android.apptools.OrmLiteBaseListActivity;
+import com.j256.ormlite.dao.Dao;
 import com.nwa.smartgym.R;
+import com.nwa.smartgym.api.DeviceAPIInterface;
+import com.nwa.smartgym.lib.DatabaseHelper;
 import com.nwa.smartgym.lib.adapters.AddDeviceAdapter;
 import com.nwa.smartgym.models.Device;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-public class AddDeviceActivity extends AppCompatActivity {
+public class AddDeviceActivity extends OrmLiteBaseListActivity<DatabaseHelper> {
 
     private static final int REQUEST_BLUETOOTH = 1;
+
+    private Dao<Device, Integer> deviceDao;
+    private DeviceAPIInterface deviceAPIInterface;
 
     private BluetoothAdapter bluetoothAdapter;
     private BroadcastReceiver broadcastReceiver;
     private IntentFilter broadcastFilter;
 
     private List<Device> deviceList;
-    private ArrayAdapter<Device> arrayAdapter;
+    private AddDeviceAdapter deviceAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +46,19 @@ public class AddDeviceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_device);
         ListView listView = (ListView) findViewById(android.R.id.list);
 
+        try {
+            deviceDao = getHelper().getDeviceDao();
+        } catch( SQLException e) {
+            Log.e(this.getLocalClassName(), "Unable to access database", e);
+        }
+        deviceAPIInterface = new DeviceAPIInterface(this, deviceDao);
+
         bluetoothAdapter = getBluetoothAdapter();
         findDevices();
-        arrayAdapter = new AddDeviceAdapter(this, deviceList, bluetoothAdapter);
-        listView.setAdapter(arrayAdapter);
+        deviceAdapter = new AddDeviceAdapter(this, deviceList);
+        listView.setAdapter(deviceAdapter);
+
+        createButton();
     }
 
     @Override
@@ -68,8 +87,14 @@ public class AddDeviceActivity extends AppCompatActivity {
 
     private void findDevices() {
         deviceList = new ArrayList<Device>();
+        getCurrentDevice();
         findPairedDevices();
         scanForDevices();
+    }
+
+    private void getCurrentDevice() {
+        Device device = new Device(bluetoothAdapter.getAddress(), bluetoothAdapter.getName());
+        deviceList.add(device);
     }
 
     private void findPairedDevices() {
@@ -89,14 +114,27 @@ public class AddDeviceActivity extends AppCompatActivity {
                 if (BluetoothDevice.ACTION_FOUND.equals(intent.getAction())) {
                     BluetoothDevice bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                     Device device = new Device(bluetoothDevice.getAddress(), bluetoothDevice.getName());
-                    arrayAdapter.add(device);
-                    arrayAdapter.notifyDataSetChanged();
+                    deviceAdapter.add(device);
+                    deviceAdapter.notifyDataSetChanged();
                 }
             }
         };
 
         this.registerReceiver(broadcastReceiver, broadcastFilter);
         bluetoothAdapter.startDiscovery();
+    }
+
+    private void createButton() {
+        final Map<String, Device> devicesToBePersisted = deviceAdapter.getDevicesToBePersisted();
+        Button button = (Button) findViewById(R.id.persist_devices_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (Map.Entry<String, Device> deviceEntry : devicesToBePersisted.entrySet()) {
+                    deviceAPIInterface.persist(deviceEntry.getValue());
+                }
+            }
+        });
     }
 
 
