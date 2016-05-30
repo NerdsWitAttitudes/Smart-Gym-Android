@@ -56,13 +56,15 @@ public class AddDeviceActivity extends OrmLiteBaseListActivity<DatabaseHelper> {
             Log.e(this.getLocalClassName(), "Unable to access database", e);
         }
         deviceAPIInterface = new DeviceAPIInterface(this, deviceDao);
-
         bluetoothAdapter = getBluetoothAdapter();
-        findDevices();
-        deviceAdapter = new AddDeviceAdapter(this, deviceList);
-        listView.setAdapter(deviceAdapter);
 
-        createButton();
+        findDevices();
+
+        Button createButton = (Button) findViewById(R.id.persist_devices_button);
+        deviceAdapter = new AddDeviceAdapter(this, deviceList, createButton);
+        assignButton(createButton);
+
+        listView.setAdapter(deviceAdapter);
     }
 
     @Override
@@ -146,12 +148,14 @@ public class AddDeviceActivity extends OrmLiteBaseListActivity<DatabaseHelper> {
         bluetoothAdapter.startDiscovery();
     }
 
-    private void createButton() {
+    private void assignButton(Button button) {
         final Map<String, Device> devicesToBePersisted = deviceAdapter.getDevicesToBePersisted();
-        Button button = (Button) findViewById(R.id.persist_devices_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (devicesToBePersisted.size() == 0) {
+                    finish();
+                }
                 for (Map.Entry<String, Device> deviceEntry : devicesToBePersisted.entrySet()) {
                     deviceAPIInterface.persist(deviceEntry.getValue());
                 }

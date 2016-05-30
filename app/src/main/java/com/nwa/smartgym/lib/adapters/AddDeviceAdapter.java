@@ -23,10 +23,12 @@ import java.util.Map;
  */
 public class AddDeviceAdapter extends ArrayAdapter<Device> {
     private Map<String, Device> devicesToBePersisted;
+    private Button createButton;
 
-    public AddDeviceAdapter(Context context, List<Device> objects) {
+    public AddDeviceAdapter(Context context, List<Device> objects, Button createButton) {
         super(context, R.layout.add_device_list_item, objects);
         this.devicesToBePersisted = new HashMap<>();
+        this.createButton = createButton;
     }
 
     public View getView(int position, View view, ViewGroup parent) {
@@ -49,6 +51,15 @@ public class AddDeviceAdapter extends ArrayAdapter<Device> {
                     devicesToBePersisted.put(device.getDeviceAddress(), device);
                 } else {
                     devicesToBePersisted.remove(device.getDeviceAddress());
+                }
+
+                // set the correct text and listener on the button
+                if (devicesToBePersisted.size() == 0) {
+                    createButton.setText(R.string.action_cancel);
+                } else if (devicesToBePersisted.size() == 1) {
+                    createButton.setText(R.string.action_persist_device);
+                } else {
+                    createButton.setText(R.string.action_persist_devices);
                 }
             }
         });
