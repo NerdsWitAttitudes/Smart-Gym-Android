@@ -4,6 +4,9 @@ import android.content.Context;
 import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.PreparedQuery;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
 import com.nwa.smartgym.activities.Devices;
 import com.nwa.smartgym.api.callbacks.Callback;
 import com.nwa.smartgym.lib.SecretsHelper;
@@ -23,6 +26,9 @@ public class DeviceAPIInterface {
     private Context context;
     private DeviceAPI deviceService;
     private Dao<Device, Integer> deviceDao;
+    private PreparedQuery<Device> getDeviceByDeviceAddress;
+
+    private static final String DEVICE_ADDRESS_FIELD = "device_address";
 
     public DeviceAPIInterface(Context context, Dao<Device, Integer> dao) {
         this.context = context;
@@ -90,5 +96,19 @@ public class DeviceAPIInterface {
                 }
             }
         });
+    }
+
+    public boolean deviceExists(String deviceAddress) {
+        try {
+            QueryBuilder queryBuilder = deviceDao.queryBuilder();
+            Where whereClause = queryBuilder.where();
+            whereClause.eq(DEVICE_ADDRESS_FIELD, deviceAddress);
+            if (queryBuilder.queryForFirst() != null) {
+                return true;
+            }
+        } catch (SQLException e) {
+            Log.e(this.getClass().getName(), "Failed to get device by device address");
+        }
+        return false;
     }
 }

@@ -19,18 +19,23 @@ public class Device {
     @DatabaseField
     private String name;
 
+    @DatabaseField
+    private int device_class;
+
     // For ORMLite use
     Device(){};
 
-    public Device(UUID id, String device_address, String name) {
+    public Device(UUID id, String device_address, String name, int device_class) {
         this.id = id;
         this.device_address = device_address;
         this.name = name;
+        this.device_class = device_class;
     }
 
-    public Device(String device_address, String name) {
+    public Device(String device_address, String name, int device_class) {
         this.device_address = device_address;
         this.name = name;
+        this.device_class = device_class;
     }
 
     public UUID getId() { return id;}
