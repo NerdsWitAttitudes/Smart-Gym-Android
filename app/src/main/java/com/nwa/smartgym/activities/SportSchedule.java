@@ -27,6 +27,8 @@ import retrofit2.Response;
 
 public class SportSchedule extends AppCompatActivity {
 
+    UUID userId = UUID.fromString("6159c216-a92f-4fdb-b043-baefa82009f1");
+
     private ListView listView;
     private ProgressDialog progressDialog;
 
@@ -44,13 +46,13 @@ public class SportSchedule extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(getBaseContext(), SportScheduleItem.class));
+                    startActivity(new Intent(getBaseContext(), SportScheduleItem.class).putExtra("user_id", userId));
                 }
             });
         }
 
         progressDialog = ProgressDialog.show(this, "Loading", "Loading Sport Schedules");
-        SportScheduleTask sportScheduleTask = new SportScheduleTask(UUID.fromString("6159c216-a92f-4fdb-b043-baefa82009f1"));
+        SportScheduleTask sportScheduleTask = new SportScheduleTask(userId);
         sportScheduleTask.execute((Void) null);
     }
 

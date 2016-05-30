@@ -1,8 +1,8 @@
 package com.nwa.smartgym.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.nwa.smartgym.R;
 import com.nwa.smartgym.api.ServiceGenerator;
@@ -22,6 +23,7 @@ import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,20 +31,38 @@ import retrofit2.Response;
 
 public class SportScheduleItem extends AppCompatActivity {
 
+    private UUID userId;
     private SportSchedule sportSchedule;
 
     private EditText sportScheduleName;
     private EditText sportScheduleReminder;
-    private TimePicker sportScheduleTime;
 
+    private TimePicker sportScheduleTime;
     private TableLayout tableLayout;
+
     private Button save;
+
+    private Callback<SportSchedule> callback = new Callback<SportSchedule>() {
+        @Override
+        public void onResponse(Call<SportSchedule> call, Response<SportSchedule> response) {
+            startActivity(new Intent(getBaseContext(), com.nwa.smartgym.activities.SportSchedule.class));
+        }
+
+        @Override
+        public void onFailure(Call<SportSchedule> call, Throwable t) {
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    getString(R.string.server_500_message),
+                    Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sport_schedule_item);
         sportSchedule = (SportSchedule) getIntent().getSerializableExtra("SportSchedule");
+        userId = (UUID) getIntent().getExtras().get("user_id");
 
         sportScheduleName = (EditText) findViewById(R.id.etSportScheduleName);
         sportScheduleReminder = (EditText) findViewById(R.id.etSportScheduleReminder);
@@ -53,8 +73,16 @@ public class SportScheduleItem extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sportSchedule = setSportScheduleFields(sportSchedule);
-                saveSportSchedule(sportSchedule);
+                if (sportSchedule == null) {
+                    sportSchedule = new SportSchedule();
+                    sportSchedule.setUserId(userId);
+                    sportSchedule.setIsActive(true);
+                    sportSchedule = setSportScheduleFields(sportSchedule);
+                    createSportSchedule(sportSchedule);
+                } else {
+                    sportSchedule = setSportScheduleFields(sportSchedule);
+                    saveSportSchedule(sportSchedule);
+                }
             }
         });
 
@@ -65,18 +93,13 @@ public class SportScheduleItem extends AppCompatActivity {
     private void saveSportSchedule(SportSchedule sportSchedule) {
         SportScheduleAPI smartGymService = ServiceGenerator.createSmartGymService(SportScheduleAPI.class);
         Call<SportSchedule> sportScheduleCall = smartGymService.updateSportSchedule(sportSchedule.getId(), sportSchedule);
+        sportScheduleCall.enqueue(callback);
+    }
 
-        sportScheduleCall.enqueue(new Callback<SportSchedule>() {
-            @Override
-            public void onResponse(Call<SportSchedule> call, Response<SportSchedule> response) {
-                finish();
-            }
-
-            @Override
-            public void onFailure(Call<SportSchedule> call, Throwable t) {
-
-            }
-        });
+    private void createSportSchedule(SportSchedule sportSchedule) {
+        SportScheduleAPI smartGymService = ServiceGenerator.createSmartGymService(SportScheduleAPI.class);
+        Call<SportSchedule> sportScheduleCall = smartGymService.createSportSchedule(sportSchedule);
+        sportScheduleCall.enqueue(callback);
     }
 
     private void setFields(SportSchedule sportSchedule) {
@@ -113,11 +136,15 @@ public class SportScheduleItem extends AppCompatActivity {
     }
 
     public SportSchedule setSportScheduleFields(SportSchedule sportSchedule) {
-        Editable text = sportScheduleName.getText();
-        sportSchedule.setName(text.toString());
-        String string = sportScheduleReminder.getText().toString();
-        Integer integer = Integer.parseInt(string);
-        sportSchedule.setReminderMinutes(integer);
+        sportSchedule.setName(sportScheduleName.getText().toString());
+
+        String reminderString = sportScheduleReminder.getText().toString();
+        if ("".equals(reminderString)) {
+            sportSchedule.setReminderMinutes(0);
+        } else {
+            sportSchedule.setReminderMinutes(Integer.parseInt(reminderString));
+        }
+
         sportSchedule.setTime(new LocalTime(sportScheduleTime.getCurrentHour(), sportScheduleTime.getCurrentMinute()));
 
         List<LocalDate.Property> weekdays = new ArrayList<>();
