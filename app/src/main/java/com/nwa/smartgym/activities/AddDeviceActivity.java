@@ -125,6 +125,7 @@ public class AddDeviceActivity extends OrmLiteBaseListActivity<DatabaseHelper> {
     }
 
     private void scanForDevices() {
+        final List<String> foundAddresses = new ArrayList<>();
         broadcastFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         broadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -138,6 +139,11 @@ public class AddDeviceActivity extends OrmLiteBaseListActivity<DatabaseHelper> {
                             bluetoothDevice.getAddress(),
                             bluetoothDevice.getName(),
                             bluetoothDevice.getBluetoothClass().hashCode());
+                    if (foundAddresses.contains(device.getDeviceAddress())) {
+                        // devices sometimes show up as duplicate during scanning.
+                        return;
+                    }
+                    foundAddresses.add(device.getDeviceAddress());
                     deviceAdapter.add(device);
                     deviceAdapter.notifyDataSetChanged();
                 }
@@ -160,7 +166,4 @@ public class AddDeviceActivity extends OrmLiteBaseListActivity<DatabaseHelper> {
             }
         });
     }
-
-
-
 }
