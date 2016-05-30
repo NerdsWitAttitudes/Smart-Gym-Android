@@ -1,6 +1,7 @@
 package com.nwa.smartgym.lib;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,11 @@ import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.api.SportScheduleAPI;
 import com.nwa.smartgym.models.SportSchedule;
 
+import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -40,12 +43,22 @@ public class SportScheduleAdapter extends ArrayAdapter<SportSchedule> {
 
         TextView tvName = (TextView) convertView.findViewById(R.id.tvSportScheduleTitle);
         TextView tvDateTime = (TextView) convertView.findViewById(R.id.tvSportScheduleDateTime);
+        TextView tvDaysOfWeek = (TextView) convertView.findViewById(R.id.tvDaysOfWeek);
         final Switch switchActive = (Switch) convertView.findViewById(R.id.switchActive);
 
         tvName.setText(sportSchedule.getName());
 
-        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("HH:mm dd-MM-yyyy");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("HH:mm");
         tvDateTime.setText(dateTimeFormatter.print(sportSchedule.getDateTime()));
+
+        if (sportSchedule.getWeekdays() != null) {
+            List<String> weekDays = new ArrayList<>();
+            for (LocalDate.Property property : sportSchedule.getWeekdays()) {
+                weekDays.add(property.getAsShortText());
+            }
+
+            tvDaysOfWeek.setText(TextUtils.join(", ", weekDays));
+        }
 
         switchActive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

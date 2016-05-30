@@ -5,10 +5,11 @@ import com.google.gson.annotations.SerializedName;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
-public class SportSchedule {
+public class SportSchedule implements Serializable {
 
     private UUID id;
 
