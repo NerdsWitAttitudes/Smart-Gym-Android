@@ -35,6 +35,7 @@ import com.nwa.smartgym.api.DeviceAPIInterface;
 import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.lib.DatabaseHelper;
 import com.nwa.smartgym.lib.SecretsHelper;
+import com.nwa.smartgym.lib.adapters.DeviceAdapter;
 import com.nwa.smartgym.models.Device;
 import com.nwa.smartgym.models.HTTPResponse;
 
@@ -62,8 +63,6 @@ public class Devices extends OrmLiteBaseListActivity<DatabaseHelper>{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_devices);
         context = this;
-        layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(
-                Context.LAYOUT_INFLATER_SERVICE);
         setFabListener();
 
         try {
@@ -75,30 +74,7 @@ public class Devices extends OrmLiteBaseListActivity<DatabaseHelper>{
 
         deviceAPIInterface = new DeviceAPIInterface(context, deviceDao);
 
-        viewAdapter = new OrmLiteCursorAdapter<Device, RelativeLayout>(context) {
-            @Override
-            public void bindView(RelativeLayout relativeLayout, Context context, final Device device) {
-                TextView title = (TextView) relativeLayout.findViewById(R.id.title_device_list_item);
-                TextView subTitle = (TextView) relativeLayout.findViewById(R.id.subtitle_device_list_item);
-                ImageView delete = (ImageView) relativeLayout.findViewById(R.id.delete_device_list_item);
-
-                title.setText(device.getName());
-                subTitle.setText(device.getDeviceAddress());
-                delete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        deviceAPIInterface.delete(device);
-                    }
-                });
-
-            }
-
-            @Override
-            public View newView(Context context, Cursor cursor, ViewGroup parent) {
-                RelativeLayout relativeLayout = (RelativeLayout) View.inflate(context, R.layout.device_list_item, null);
-                return relativeLayout;
-            }
-        };
+        viewAdapter = new DeviceAdapter(context, deviceAPIInterface);
 
         setListAdapter(viewAdapter);
 
@@ -106,7 +82,7 @@ public class Devices extends OrmLiteBaseListActivity<DatabaseHelper>{
             @Override
             public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
                 deviceAPIInterface.list();
-                return new OrmLiteCursorLoader<Device>(context, deviceDao, preparedListQuery);
+                return new OrmLiteCursorLoader<>(context, deviceDao, preparedListQuery);
             }
 
             @Override
