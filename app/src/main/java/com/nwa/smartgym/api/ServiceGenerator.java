@@ -56,8 +56,7 @@ public class ServiceGenerator {
             .registerTypeAdapter(LocalDate.Property.class, new JsonSerializer<LocalDate.Property>() {
                 @Override
                 public JsonElement serialize(LocalDate.Property src, Type typeOfSrc, JsonSerializationContext context) {
-                    int string = src.getLocalDate().getDayOfWeek();
-                    return new JsonPrimitive(string);
+                    return new JsonPrimitive(src.getLocalDate().getDayOfWeek());
                 }
             }).create();
 

@@ -1,5 +1,6 @@
 package com.nwa.smartgym.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import retrofit2.Response;
 public class SportSchedule extends AppCompatActivity {
 
     private ListView listView;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,7 @@ public class SportSchedule extends AppCompatActivity {
             });
         }
 
+        progressDialog = ProgressDialog.show(this, "Loading", "Loading Sport Schedules");
         SportScheduleTask sportScheduleTask = new SportScheduleTask(UUID.fromString("6159c216-a92f-4fdb-b043-baefa82009f1"));
         sportScheduleTask.execute((Void) null);
     }
@@ -67,6 +70,7 @@ public class SportSchedule extends AppCompatActivity {
             call.enqueue(new Callback<List<com.nwa.smartgym.models.SportSchedule>>() {
                 @Override
                 public void onResponse(Call<List<com.nwa.smartgym.models.SportSchedule>> call, Response<List<com.nwa.smartgym.models.SportSchedule>> response) {
+                    progressDialog.dismiss();
                     List<com.nwa.smartgym.models.SportSchedule> sportSchedules = response.body();
 
                     SportScheduleAdapter sportScheduleAdapter = new SportScheduleAdapter(getBaseContext(), sportSchedules);
@@ -84,6 +88,7 @@ public class SportSchedule extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<List<com.nwa.smartgym.models.SportSchedule>> call, Throwable t) {
+                    progressDialog.dismiss();
                     Toast toast = Toast.makeText(getApplicationContext(),
                             getString(R.string.server_500_message),
                             Toast.LENGTH_SHORT);

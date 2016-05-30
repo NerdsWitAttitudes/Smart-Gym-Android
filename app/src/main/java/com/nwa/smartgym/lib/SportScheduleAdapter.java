@@ -49,7 +49,7 @@ public class SportScheduleAdapter extends ArrayAdapter<SportSchedule> {
         tvName.setText(sportSchedule.getName());
 
         DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("HH:mm");
-        tvDateTime.setText(dateTimeFormatter.print(sportSchedule.getDateTime()));
+        tvDateTime.setText(dateTimeFormatter.print(sportSchedule.getTime()));
 
         if (sportSchedule.getWeekdays() != null) {
             List<String> weekDays = new ArrayList<>();

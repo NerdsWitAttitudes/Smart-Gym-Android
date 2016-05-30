@@ -22,7 +22,7 @@ public class SportSchedule implements Serializable {
     private int reminderMinutes;
 
     @SerializedName("time")
-    private LocalTime dateTime;
+    private LocalTime time;
 
     @SerializedName("weekdays")
     private List<LocalDate.Property> weekdays;
@@ -31,12 +31,12 @@ public class SportSchedule implements Serializable {
     private boolean isActive;
 
 
-    public SportSchedule(UUID id, UUID userId, String name, int reminderMinutes, LocalTime dateTime, List<LocalDate.Property> weekdays, boolean isActive) {
+    public SportSchedule(UUID id, UUID userId, String name, int reminderMinutes, LocalTime time, List<LocalDate.Property> weekdays, boolean isActive) {
         this.id = id;
         this.userId = userId;
         this.name = name;
         this.reminderMinutes = reminderMinutes;
-        this.dateTime = dateTime;
+        this.time = time;
         this.weekdays = weekdays;
         this.isActive = isActive;
     }
@@ -85,12 +85,12 @@ public class SportSchedule implements Serializable {
         this.isActive = isActive;
     }
 
-    public LocalTime getDateTime() {
-        return dateTime;
+    public LocalTime getTime() {
+        return time;
     }
 
-    public void setDateTime(LocalTime dateTime) {
-        this.dateTime = dateTime;
+    public void setTime(LocalTime time) {
+        this.time = time;
     }
 
     public List<LocalDate.Property> getWeekdays() {

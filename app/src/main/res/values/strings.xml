@@ -52,4 +52,7 @@
 
     <string name="title_activity_sport_schedule">Sport Schema</string>
     <string name="reminder">Reminder</string>
+    <string name="prompt_sport_schedule_name">Sport Schedule Name</string>
+    <string name="prompt_reminder_minutes">Reminder in minutes</string>
+    <string name="save_sport_schedule">Save sport schedule</string>
 </resources>
