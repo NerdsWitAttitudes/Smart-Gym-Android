@@ -153,12 +153,10 @@ public class AddDeviceActivity extends OrmLiteBaseListActivity<DatabaseHelper> {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (devicesToBePersisted.size() == 0) {
-                    finish();
-                }
                 for (Map.Entry<String, Device> deviceEntry : devicesToBePersisted.entrySet()) {
                     deviceAPIInterface.persist(deviceEntry.getValue());
                 }
+                finish();
             }
         });
     }
