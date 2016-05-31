@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.BaseAdapter;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.misc.SqlExceptionUtil;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 import com.nwa.smartgym.api.callbacks.Callback;
@@ -49,10 +50,11 @@ public class DeviceAPIInterface {
                     for (Device device : response.body()) {
                         try {
                             deviceDao.create(device);
-                        } catch (SQLiteConstraintException e) {
-                            // Meaning the device already exists and does not have to be added
-                            continue;
                         } catch (SQLException e) {
+                            if (e.getCause() instanceof SQLiteConstraintException) {
+                                // The device is already found and does not need to be persisted
+                                continue;
+                            }
                             Log.e(context.getClass().getName(), "Unable to persist device", e);
                         }
                     }
