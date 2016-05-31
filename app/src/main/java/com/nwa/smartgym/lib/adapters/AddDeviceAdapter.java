@@ -31,6 +31,12 @@ public class AddDeviceAdapter extends ArrayAdapter<Device> {
         this.createButton = createButton;
     }
 
+    public AddDeviceAdapter(Context context, Button createButton) {
+        super(context, R.layout.add_device_list_item);
+        this.devicesToBePersisted = new HashMap<>();
+        this.createButton = createButton;
+    }
+
     public View getView(int position, View view, ViewGroup parent) {
         final Device device = (Device) getItem(position);
 

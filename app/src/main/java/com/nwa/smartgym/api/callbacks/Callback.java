@@ -6,6 +6,7 @@ import android.widget.Toast;
 import com.nwa.smartgym.R;
 import com.nwa.smartgym.api.DeviceAPI;
 import com.nwa.smartgym.api.ServiceGenerator;
+import com.nwa.smartgym.lib.ErrorHelper;
 import com.nwa.smartgym.lib.SecretsHelper;
 
 import retrofit2.Call;
@@ -24,20 +25,13 @@ public abstract class Callback<T> implements retrofit2.Callback<T> {
     @Override
     public void onResponse(Call<T> call, Response<T> response) {
         if (response.code() != 200 && response.code() != 400) {
-            raiseGenericError();
+            ErrorHelper.raiseGenericError(context);
         }
     }
 
     @Override
     public void onFailure(Call<T> call, Throwable t) {
         System.out.println(t);
-        raiseGenericError();
-    }
-
-    public static void raiseGenericError() {
-        Toast toast = Toast.makeText(context,
-                context.getString(R.string.server_500_message),
-                Toast.LENGTH_SHORT);
-        toast.show();
+        ErrorHelper.raiseGenericError(context);
     }
 }

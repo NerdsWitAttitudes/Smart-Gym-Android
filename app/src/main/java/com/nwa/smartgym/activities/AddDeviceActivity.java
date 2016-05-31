@@ -59,10 +59,8 @@ public class AddDeviceActivity extends OrmLiteBaseListActivity<DatabaseHelper> {
         bluetoothAdapter = getBluetoothAdapter();
         deviceAPIInterface = new DeviceAPIInterface(this, deviceDao);
 
-        findDevices();
-
         Button createButton = (Button) findViewById(R.id.persist_devices_button);
-        deviceAdapter = new AddDeviceAdapter(this, deviceList, createButton);
+        deviceAdapter = new AddDeviceAdapter(this, createButton);
         assignButton(createButton);
 
         listView.setAdapter(deviceAdapter);
@@ -71,6 +69,7 @@ public class AddDeviceActivity extends OrmLiteBaseListActivity<DatabaseHelper> {
     @Override
     public void onPause() {
         super.onPause();
+        bluetoothAdapter.cancelDiscovery();
         this.unregisterReceiver(broadcastReceiver);
     }
 
@@ -78,8 +77,8 @@ public class AddDeviceActivity extends OrmLiteBaseListActivity<DatabaseHelper> {
     public void onResume() {
         super.onResume();
         deviceAdapter.clear();
+        findDevices();
         this.registerReceiver(broadcastReceiver, broadcastFilter);
-        bluetoothAdapter.startDiscovery();
     }
 
     private BluetoothAdapter getBluetoothAdapter() {
@@ -105,7 +104,8 @@ public class AddDeviceActivity extends OrmLiteBaseListActivity<DatabaseHelper> {
             return;
         }
         Device device = new Device(bluetoothAdapter.getAddress(), bluetoothAdapter.getName());
-        deviceList.add(device);
+        deviceAdapter.add(device);
+        deviceAdapter.notifyDataSetChanged();
     }
 
     private void findPairedDevices() {
@@ -119,7 +119,8 @@ public class AddDeviceActivity extends OrmLiteBaseListActivity<DatabaseHelper> {
                     bluetoothDevice.getAddress(),
                     bluetoothDevice.getName(),
                     bluetoothDevice.hashCode());
-            deviceList.add(device);
+            deviceAdapter.add(device);
+            deviceAdapter.notifyDataSetChanged();
         }
     }
 
