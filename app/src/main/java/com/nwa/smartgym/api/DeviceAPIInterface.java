@@ -9,6 +9,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 import com.nwa.smartgym.api.callbacks.Callback;
+import com.nwa.smartgym.lib.ErrorHelper;
 import com.nwa.smartgym.lib.SecretsHelper;
 import com.nwa.smartgym.models.Device;
 import com.nwa.smartgym.models.HTTPResponse;
@@ -56,7 +57,7 @@ public class DeviceAPIInterface {
                         }
                     }
                 } else {
-                    raiseGenericError();
+                    ErrorHelper.raiseGenericError(context);
                 }
             }
         });
@@ -68,7 +69,6 @@ public class DeviceAPIInterface {
 
             @Override
             public void onResponse(Call<HTTPResponse> call, Response<HTTPResponse> response) {
-                System.out.println(response.code());
                 if (response.code() == 200) {
                     try {
                         deviceDao.deleteById(device.getId());
@@ -76,7 +76,7 @@ public class DeviceAPIInterface {
                         Log.e(context.getClass().getName(), "Unable to delete device", e);
                     }
                 } else {
-                    raiseGenericError();
+                    ErrorHelper.raiseGenericError(context);
                 }
             }
         });
@@ -89,13 +89,12 @@ public class DeviceAPIInterface {
             public void onResponse(Call<Device> call, Response<Device> response) {
                 if (response.code() == 201) {
                     try {
-                        System.out.println(response.body().getName());
                         deviceDao.create(response.body());
                     } catch (SQLException e) {
                         Log.e(context.getClass().getName(), "Unable to create device", e);
                     }
                 } else {
-                    raiseGenericError();
+                    ErrorHelper.raiseGenericError(context);
                 }
             }
         });
