@@ -36,7 +36,7 @@ dependencies {
     compile 'com.android.support:design:23.3.0'
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
-    compile name : 'ormlite-core-4.49-SNAPSHOT'
-    compile name : 'ormlite-android-4.49-SNAPSHOT'
+    compile 'com.j256.ormlite:ormlite-core:4.49-SNAPSHOT'
+    compile 'com.j256.ormlite:ormlite-android:4.49-SNAPSHOT'
     compile 'joda-time:joda-time:2.9.2'
 }
