@@ -51,10 +51,6 @@ public class DeviceAPIInterface {
                         try {
                             deviceDao.create(device);
                         } catch (SQLException e) {
-                            if (e.getCause() instanceof SQLiteConstraintException) {
-                                // The device is already found and does not need to be persisted
-                                continue;
-                            }
                             Log.e(context.getClass().getName(), "Unable to persist device", e);
                         }
                     }
