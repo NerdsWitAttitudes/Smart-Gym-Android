@@ -14,8 +14,12 @@ import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.fitness.Fitness;
 import com.google.android.gms.fitness.FitnessActivities;
+import com.google.android.gms.fitness.data.DataPoint;
+import com.google.android.gms.fitness.data.DataSet;
 import com.google.android.gms.fitness.data.DataType;
+import com.google.android.gms.fitness.data.Field;
 import com.google.android.gms.fitness.data.Session;
+import com.google.android.gms.fitness.data.Value;
 import com.google.android.gms.fitness.request.SessionReadRequest;
 import com.google.android.gms.fitness.result.SessionReadResult;
 import com.google.android.gms.fitness.result.SessionStopResult;
@@ -153,7 +157,21 @@ public class GoogleFitService implements GoogleApiClient.ConnectionCallbacks, Go
         sessionReadResultPendingResult.setResultCallback(new ResultCallback<SessionReadResult>() {
             @Override
             public void onResult(@NonNull SessionReadResult sessionReadResult) {
-                // veel dingen hier
+                if (sessionReadResult.getStatus().isSuccess()) {
+
+                    List<Session> sessions = sessionReadResult.getSessions();
+                    for (Session session : sessions) {
+                        for (DataSet dataSet : sessionReadResult.getDataSet(session)) {
+                            for (DataPoint dataPoint : dataSet.getDataPoints()) {
+                                for (Field field : dataPoint.getDataType().getFields()) {
+                                    Value value = dataPoint.getValue(field);
+
+                                    Log.i("NWA", "Field: " + field.getName() + " Value: " + value.toString());
+                                }
+                            }
+                        }
+                    }
+                }
             }
         });
     }
