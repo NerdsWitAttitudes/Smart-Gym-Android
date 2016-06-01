@@ -45,7 +45,7 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private final String SESSION_NAME = "S6";
+    private final String SESSION_NAME = "S7";
     private final String tag = "NWA";
 
     private long startTime;
@@ -76,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 //
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Fitness.SESSIONS_API)
-                .addApi(Fitness.HISTORY_API)
                 .addScope(new Scope(Scopes.FITNESS_LOCATION_READ_WRITE))
                 .addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ_WRITE))
                 .addConnectionCallbacks(this)
@@ -178,69 +177,96 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     .read(dataType)
                     .build();
 
-            SessionReadResult sessionReadResult = Fitness.SessionsApi.readSession(mGoogleApiClient, sessionReadRequest).await(3, TimeUnit.MINUTES);
+            PendingResult<SessionReadResult> sessionReadResult = Fitness.SessionsApi.readSession(mGoogleApiClient, sessionReadRequest);
 
-            if (sessionReadResult.getStatus().isSuccess()) {
-                for (Session session : sessionReadResult.getSessions()) {
-                    for (DataSet dataSet : sessionReadResult.getDataSet(session)) {
-                        for (DataPoint dataPoint : dataSet.getDataPoints()) {
-                            for (Field field : dataPoint.getDataType().getFields()) {
-                                Value value = dataPoint.getValue(field);
-                                MainActivity.this.data.put(field, value);
+            sessionReadResult.setResultCallback(new ResultCallback<SessionReadResult>() {
+                @Override
+                public void onResult(@NonNull SessionReadResult sessionReadResult) {
+                    Log.i(tag, " on result called!~");
+
+                    if (sessionReadResult.getStatus().isSuccess()) {
+                        List<Session> sessions = sessionReadResult.getSessions();
+                        for (Session session : sessions) {
+                            for (DataSet dataSet : sessionReadResult.getDataSet(session)) {
+                                for (DataPoint dataPoint : dataSet.getDataPoints()) {
+                                    for (Field field : dataPoint.getDataType().getFields()) {
+                                        Value value = dataPoint.getValue(field);
+                                        MainActivity.this.data.put(field, value);
+                                    }
+                                }
                             }
                         }
                     }
+
+                    Log.i(tag, String.valueOf(MainActivity.this.data));
+
+                    TextView viewById = (TextView) findViewById(R.id.textView3);
+                    if (viewById != null) {
+                        viewById.setText(String.valueOf(MainActivity.this.data));
+                    }
                 }
-            }
+            });
+
         }
+
+
+
 
         return data;
     }
 
     @OnClick(R.id.btn_read_session)
     public void readSession() {
-        final List<DataType> dataTypes = Arrays.asList(DataType.TYPE_CALORIES_EXPENDED, DataType.TYPE_DISTANCE_DELTA);
+        final List<DataType> dataTypes = Arrays.asList(DataType.TYPE_DISTANCE_DELTA);
 
         long start = System.currentTimeMillis();
 
 
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Map<Field, Value> field = getField(dataTypes);
 
-        FutureTask<Map<Field, Value>> future =
-                new FutureTask<>(new Callable<Map<Field, Value>>() {
-                    public Map<Field, Value> call() {
-                        Map<Field, Value> field = getField(dataTypes);
-
-
-                        TextView viewById = (TextView) findViewById(R.id.textView3);
-                        if (viewById != null) {
-                            viewById.setText(String.valueOf(field));
-                        }
-                        return field;
-                    }
-                });
-
-
-        executorService.execute(future);
-
-
-
-        try {
-            Map<Field, Value> values = future.get();
-
-            TextView viewById = (TextView) findViewById(R.id.textView3);
-            if (viewById != null) {
-                viewById.setText(String.valueOf(values));
-            }
-
-            Log.i(tag, "2 "+ String.valueOf(values));
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-
-
+        Log.i(tag, "in de read knop " + String.valueOf(field));
 
         Log.i(tag, String.valueOf(System.currentTimeMillis() - start));
+
+
+
+
+//        ExecutorService executorService = Executors.newSingleThreadExecutor();
+//
+//        FutureTask<Map<Field, Value>> future =
+//                new FutureTask<>(new Callable<Map<Field, Value>>() {
+//                    public Map<Field, Value> call() {
+//                        Map<Field, Value> field = getField(dataTypes);
+//
+//
+//                        TextView viewById = (TextView) findViewById(R.id.textView3);
+//                        if (viewById != null) {
+//                            viewById.setText(String.valueOf(field));
+//                        }
+//                        return field;
+//                    }
+//                });
+//
+//
+//        executorService.execute(future);
+//
+//
+//
+//        try {
+//            Map<Field, Value> values = future.get();
+//
+//            TextView viewById = (TextView) findViewById(R.id.textView3);
+//            if (viewById != null) {
+//                viewById.setText(String.valueOf(values));
+//            }
+//
+//            Log.i(tag, "2 "+ String.valueOf(values));
+//        } catch (InterruptedException | ExecutionException e) {
+//            e.printStackTrace();
+//        }
+
+
+
 
 
 //        Set<DataType> aggregateInputTypes = DataType.AGGREGATE_INPUT_TYPES;
