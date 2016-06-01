@@ -13,10 +13,8 @@ public class ErrorHelper {
         showToastError(context, context.getString(R.string.server_500_message));
     }
 
-    public static void showToastError(Context context, String string) {
-        Toast toast = Toast.makeText(context,
-                context.getString(R.string.server_500_message),
-                Toast.LENGTH_SHORT);
+    public static void showToastError(Context context, String message) {
+        Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
         toast.show();
     }
 }

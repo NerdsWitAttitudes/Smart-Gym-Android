@@ -24,7 +24,7 @@ public abstract class Callback<T> implements retrofit2.Callback<T> {
 
     @Override
     public void onResponse(Call<T> call, Response<T> response) {
-        if (response.code() != 200 && response.code() != 400) {
+        if (!response.isSuccessful()) {
             ErrorHelper.raiseGenericError(context);
         }
     }

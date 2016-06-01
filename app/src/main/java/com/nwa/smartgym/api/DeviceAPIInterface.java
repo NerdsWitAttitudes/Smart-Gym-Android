@@ -46,6 +46,7 @@ public class DeviceAPIInterface {
         call.enqueue(new Callback<List<Device>>(context) {
             @Override
             public void onResponse(Call<List<Device>> call, Response<List<Device>> response) {
+                super.onResponse(call, response);
                 if (response.code() == 200) {
                     for (Device device : response.body()) {
                         try {
@@ -54,8 +55,6 @@ public class DeviceAPIInterface {
                             Log.e(context.getClass().getName(), "Unable to persist device", e);
                         }
                     }
-                } else {
-                    ErrorHelper.raiseGenericError(context);
                 }
             }
         });
@@ -67,14 +66,13 @@ public class DeviceAPIInterface {
 
             @Override
             public void onResponse(Call<HTTPResponse> call, Response<HTTPResponse> response) {
-                if (response.code() == 200) {
+                super.onResponse(call, response);
+                if (response.code() == 204) {
                     try {
                         deviceDao.deleteById(device.getId());
                     } catch (SQLException e) {
                         Log.e(context.getClass().getName(), "Unable to delete device", e);
                     }
-                } else {
-                    ErrorHelper.raiseGenericError(context);
                 }
             }
         });
@@ -85,14 +83,13 @@ public class DeviceAPIInterface {
         call.enqueue(new Callback<Device>(context) {
             @Override
             public void onResponse(Call<Device> call, Response<Device> response) {
+                super.onResponse(call, response);
                 if (response.code() == 201) {
                     try {
                         deviceDao.create(response.body());
                     } catch (SQLException e) {
                         Log.e(context.getClass().getName(), "Unable to create device", e);
                     }
-                } else {
-                    ErrorHelper.raiseGenericError(context);
                 }
             }
         });
