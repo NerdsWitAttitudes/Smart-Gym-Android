@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Smart Gym</string>
+    <string name="app_name">SmartGym</string>
 
     <!-- Strings related to welcome -->
     <string name="action_sign_up_welcome">Sign up using email</string>
@@ -27,6 +27,10 @@
     <string name="text_terms_of_use">By signing up you agree to our terms of use. You also agree
     to these other legal things I don\'t really know about because I\'m just a programmer.</string>
 
+    <!-- Strings related to devices -->
+    <string name="action_persist_devices">Add devices</string>
+    <string name="action_persist_device">Add device</string>
+
     <!-- Sign up error messages -->
     <string name="error_email_required">Email is required.</string>
     <string name="error_email_invalid">Please enter a valid email address.</string>
@@ -49,6 +53,8 @@
     <string name="title_activity_sign_up">SignUp</string>
     <string name="action_settings">Settings</string>
     <string name="action_next">Next</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="title_activity_devices">Devices</string>
 
     <string name="title_activity_sport_schedule">Sport Schema</string>
     <string name="reminder">Reminder</string>
