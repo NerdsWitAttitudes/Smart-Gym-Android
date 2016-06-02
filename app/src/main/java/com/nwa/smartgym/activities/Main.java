@@ -64,7 +64,7 @@ public class Main extends AppCompatActivity {
                 new Intent(this, Devices.class)));
 
         drawerItems.add(new DrawerItem(
-                null,
+                getResources().getDrawable(R.drawable.ic_date_range_black_24dp),
                 "Manage Sport Schedules",
                 new Intent(this, SportSchedule.class)
         ));

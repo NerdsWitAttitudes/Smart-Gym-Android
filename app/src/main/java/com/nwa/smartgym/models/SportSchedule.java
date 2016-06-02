@@ -42,7 +42,7 @@ public class SportSchedule implements Serializable {
     }
 
     public SportSchedule() {
-
+        this.isActive = true;
     }
 
     public UUID getId() {

@@ -10,11 +10,12 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.nwa.smartgym.R;
 import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.api.SportScheduleAPI;
+import com.nwa.smartgym.lib.ErrorHelper;
+import com.nwa.smartgym.lib.SecretsHelper;
 import com.nwa.smartgym.models.SportSchedule;
 
 import org.joda.time.DateTimeConstants;
@@ -23,7 +24,6 @@ import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,16 +31,14 @@ import retrofit2.Response;
 
 public class SportScheduleItem extends AppCompatActivity {
 
-    private UUID userId;
     private SportSchedule sportSchedule;
+    private SecretsHelper secretsHelper;
 
     private EditText sportScheduleName;
     private EditText sportScheduleReminder;
 
     private TimePicker sportScheduleTime;
     private TableLayout tableLayout;
-
-    private Button save;
 
     private Callback<SportSchedule> callback = new Callback<SportSchedule>() {
         @Override
@@ -50,10 +48,7 @@ public class SportScheduleItem extends AppCompatActivity {
 
         @Override
         public void onFailure(Call<SportSchedule> call, Throwable t) {
-            Toast toast = Toast.makeText(getApplicationContext(),
-                    getString(R.string.server_500_message),
-                    Toast.LENGTH_SHORT);
-            toast.show();
+            ErrorHelper.raiseGenericError(getBaseContext());
         }
     };
 
@@ -61,66 +56,67 @@ public class SportScheduleItem extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sport_schedule_item);
+
         sportSchedule = (SportSchedule) getIntent().getSerializableExtra("SportSchedule");
-        userId = (UUID) getIntent().getExtras().get("user_id");
+        secretsHelper = new SecretsHelper(this);
 
         sportScheduleName = (EditText) findViewById(R.id.etSportScheduleName);
         sportScheduleReminder = (EditText) findViewById(R.id.etSportScheduleReminder);
         sportScheduleTime = (TimePicker) findViewById(R.id.tpSportScheduleTime);
         tableLayout = (TableLayout) findViewById(R.id.tlSportScheduleWeekdays);
 
-        save = (Button) findViewById(R.id.btn_sav_sport_schedule);
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (sportSchedule == null) {
-                    sportSchedule = new SportSchedule();
-                    sportSchedule.setUserId(userId);
-                    sportSchedule.setIsActive(true);
-                    sportSchedule = setSportScheduleFields(sportSchedule);
-                    createSportSchedule(sportSchedule);
-                } else {
-                    sportSchedule = setSportScheduleFields(sportSchedule);
-                    saveSportSchedule(sportSchedule);
+        Button save = (Button) findViewById(R.id.btn_sav_sport_schedule);
+        if (save != null) {
+            save.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (sportSchedule == null) {
+                        createSportSchedule(
+                                setSportScheduleFields(new SportSchedule())
+                        );
+                    } else {
+                        saveSportSchedule(setSportScheduleFields(sportSchedule));
+                    }
                 }
-            }
-        });
+            });
+        }
 
-        setWeekdays(sportSchedule);
-        setFields(sportSchedule);
+        createWeekDayCheckboxes(sportSchedule);
+
+        if (sportSchedule != null) {
+            fillFields(sportSchedule);
+        }
     }
 
     private void saveSportSchedule(SportSchedule sportSchedule) {
-        SportScheduleAPI smartGymService = ServiceGenerator.createSmartGymService(SportScheduleAPI.class);
+        SportScheduleAPI smartGymService = ServiceGenerator.createSmartGymService(SportScheduleAPI.class, secretsHelper.getAuthToken());
         Call<SportSchedule> sportScheduleCall = smartGymService.updateSportSchedule(sportSchedule.getId(), sportSchedule);
         sportScheduleCall.enqueue(callback);
     }
 
     private void createSportSchedule(SportSchedule sportSchedule) {
-        SportScheduleAPI smartGymService = ServiceGenerator.createSmartGymService(SportScheduleAPI.class);
+        SportScheduleAPI smartGymService = ServiceGenerator.createSmartGymService(SportScheduleAPI.class, secretsHelper.getAuthToken());
         Call<SportSchedule> sportScheduleCall = smartGymService.createSportSchedule(sportSchedule);
         sportScheduleCall.enqueue(callback);
     }
 
-    private void setFields(SportSchedule sportSchedule) {
+    private void fillFields(SportSchedule sportSchedule) {
         sportScheduleTime.setIs24HourView(true);
 
-        if (sportSchedule != null) {
-            sportScheduleName.setText(sportSchedule.getName());
-            sportScheduleReminder.setText(String.valueOf(sportSchedule.getReminderMinutes()));
-            sportScheduleTime.setCurrentHour(sportSchedule.getTime().getHourOfDay());
-            sportScheduleTime.setCurrentMinute(sportSchedule.getTime().getMinuteOfHour());
-        }
+        sportScheduleName.setText(sportSchedule.getName());
+        sportScheduleReminder.setText(String.valueOf(sportSchedule.getReminderMinutes()));
+        sportScheduleTime.setCurrentHour(sportSchedule.getTime().getHourOfDay());
+        sportScheduleTime.setCurrentMinute(sportSchedule.getTime().getMinuteOfHour());
     }
 
-    private void setWeekdays(SportSchedule sportSchedule) {
+    private void createWeekDayCheckboxes(SportSchedule sportSchedule) {
         for (int day = 1; day <= DateTimeConstants.DAYS_PER_WEEK; day++) {
-            String dayString = new LocalDate().withDayOfWeek(day).dayOfWeek().getAsText();
+            String dayOfTheWeek = new LocalDate().withDayOfWeek(day).dayOfWeek().getAsText();
 
             TableRow tableRow = new TableRow(this);
 
             CheckBox checkBox = new CheckBox(this);
-            checkBox.setText(dayString);
+            checkBox.setText(dayOfTheWeek);
 
             if (sportSchedule != null) {
                 for (LocalDate.Property property : sportSchedule.getWeekdays()) {

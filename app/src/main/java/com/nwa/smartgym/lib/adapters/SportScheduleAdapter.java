@@ -1,4 +1,4 @@
-package com.nwa.smartgym.lib;
+package com.nwa.smartgym.lib.adapters;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.nwa.smartgym.R;
 import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.api.SportScheduleAPI;
+import com.nwa.smartgym.lib.ErrorHelper;
 import com.nwa.smartgym.models.SportSchedule;
 
 import org.joda.time.LocalDate;
@@ -72,10 +73,14 @@ public class SportScheduleAdapter extends ArrayAdapter<SportSchedule> {
                     sportScheduleCall.enqueue(new Callback<SportSchedule>() {
                         @Override
                         public void onResponse(Call<SportSchedule> call, Response<SportSchedule> response) {
-                            Toast toast = Toast.makeText(getContext(),
-                                    "Sport schema notifications changed",
-                                    Toast.LENGTH_SHORT);
-                            toast.show();
+                            if (response.code() == 200) {
+                                Toast toast = Toast.makeText(getContext(),
+                                        R.string.sport_schedule_changed,
+                                        Toast.LENGTH_SHORT);
+                                toast.show();
+                            } else {
+                                ErrorHelper.raiseGenericError(getContext());
+                            }
                         }
 
                         @Override
@@ -83,10 +88,7 @@ public class SportScheduleAdapter extends ArrayAdapter<SportSchedule> {
                             sportSchedule.setIsActive(!isChecked);
                             switchActive.setChecked(!isChecked);
 
-                            Toast toast = Toast.makeText(getContext(),
-                                    getContext().getString(R.string.server_500_message),
-                                    Toast.LENGTH_SHORT);
-                            toast.show();
+                            ErrorHelper.raiseGenericError(getContext());
                         }
                     });
                 }
