@@ -3,6 +3,7 @@ package com.nwa.smartgym.api;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -25,8 +26,11 @@ import com.google.android.gms.fitness.result.SessionReadResult;
 import com.google.android.gms.fitness.result.SessionStopResult;
 import com.nwa.smartgym.models.CardioActivity;
 
+import org.joda.time.DateTimeZone;
+
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
@@ -48,6 +52,7 @@ public class GoogleFitService implements GoogleApiClient.ConnectionCallbacks, Go
                 .addScope(new Scope(Scopes.FITNESS_LOCATION_READ_WRITE))
                 .addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ_WRITE))
                 .addConnectionCallbacks(this)
+                .enableAutoManage((AppCompatActivity) context, this)
                 .build();
         this.smartGymService = smartGymService;
     }
@@ -68,20 +73,23 @@ public class GoogleFitService implements GoogleApiClient.ConnectionCallbacks, Go
     }
 
     public void getCurrentSession(final String activityType) {
-        Call<List<CardioActivity>> sessionsCall = smartGymService.getSessions();
+        Call<List<CardioActivity>> sessionsCall = smartGymService.getSessions(UUID.fromString("3c6e46c0-3894-42af-bff9-9b4caf3a8674"));
         sessionsCall.enqueue(new Callback<List<CardioActivity>>() {
             @Override
             public void onResponse(Call<List<CardioActivity>> call, Response<List<CardioActivity>> response) {
                 Log.i("NWA", "get sessions ");
 
-                for (CardioActivity cardioActivity : response.body()) {
-                    if (cardioActivity.isActive()) {
-                        currentCardioActivity = cardioActivity;
-                        startSession(currentCardioActivity, activityType);
-                        return;
+                List<CardioActivity> body = response.body();
+                if (body != null) {
+                    for (CardioActivity cardioActivity : body) {
+                        if (cardioActivity.isActive()) {
+                            currentCardioActivity = cardioActivity;
+                            long millis = cardioActivity.getStartDate().toDateTime(DateTimeZone.UTC).getMillis();
+                            startSession(currentCardioActivity, activityType);
+                            return;
+                        }
                     }
                 }
-
             }
 
             @Override
@@ -95,7 +103,7 @@ public class GoogleFitService implements GoogleApiClient.ConnectionCallbacks, Go
         if (currentSession == null) {
             currentSession = new Session.Builder()
                     .setIdentifier(String.valueOf(cardioActivity.getId()))
-                    .setStartTime(cardioActivity.getStartDate().getMillis(), TimeUnit.MILLISECONDS)
+//                    .setStartTime(cardioActivity.getStartDate().getMillis(), TimeUnit.MILLISECONDS)
                     .setActivity(FitnessActivities.RUNNING_TREADMILL)
                     .build();
 
@@ -129,7 +137,7 @@ public class GoogleFitService implements GoogleApiClient.ConnectionCallbacks, Go
                     String message = "JAH JAH GOEDZO GESTOPT";
                     Log.i("NWA", message);
 
-                    writeSessionData();
+                    writeSessionDataType(DataType.TYPE_CALORIES_EXPENDED);
                 } else {
                     String message = "AND YOU FAILED";
                     Log.i("NWA", message + " " + sessionStopResult.getStatus().getStatusMessage());
@@ -149,6 +157,10 @@ public class GoogleFitService implements GoogleApiClient.ConnectionCallbacks, Go
     private void writeSessionDataType(DataType dataType) {
         final SessionReadRequest sessionReadRequest = new SessionReadRequest.Builder()
                 .setSessionId(currentSession.getIdentifier())
+                .setTimeInterval(
+                        currentSession.getStartTime(TimeUnit.MILLISECONDS),
+                        currentSession.getEndTime(TimeUnit.MILLISECONDS),
+                        TimeUnit.MILLISECONDS)
                 .read(dataType)
                 .build();
 

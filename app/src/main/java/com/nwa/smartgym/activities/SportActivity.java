@@ -2,6 +2,7 @@ package com.nwa.smartgym.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,7 +20,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SportActivity extends Activity {
+public class SportActivity extends AppCompatActivity {
 
     UUID activityId = UUID.fromString("3c6e46c0-3894-42af-bff9-9b4caf3a8674");
 
@@ -48,7 +49,7 @@ public class SportActivity extends Activity {
             });
         }
 
-        if (stopTreadmill != null && currentCardioActivity != null) {
+        if (stopTreadmill != null) {
             stopTreadmill.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
