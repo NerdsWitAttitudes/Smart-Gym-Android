@@ -17,7 +17,7 @@ public interface SportScheduleAPI {
     Call<SportSchedule> getSchedule(@Path("id") UUID userID);
 
     @GET("/sport_schedule")
-    Call<List<SportSchedule>> getSchedules(@Query("user_id") UUID userID);
+    Call<List<SportSchedule>> getSchedules();
 
     @POST("/sport_schedule")
     Call<SportSchedule> createSportSchedule(@Body SportSchedule sportSchedule);

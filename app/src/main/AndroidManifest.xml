@@ -48,6 +48,10 @@
         <activity
             android:name=".activities.AddDeviceActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activities.SportScheduleItem"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activities.SportSchedule"/>
     </application>
 
 </manifest>

@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.nwa.smartgym.R;
 import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.api.SportScheduleAPI;
+import com.nwa.smartgym.lib.SecretsHelper;
 import com.nwa.smartgym.lib.SportScheduleAdapter;
 
 import java.io.Serializable;
@@ -66,8 +67,10 @@ public class SportSchedule extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            SportScheduleAPI sportScheduleService = ServiceGenerator.createSmartGymService(SportScheduleAPI.class);
-            Call<List<com.nwa.smartgym.models.SportSchedule>> call = sportScheduleService.getSchedules(userId);
+            SecretsHelper secretsHelper = new SecretsHelper(getBaseContext());
+
+            SportScheduleAPI sportScheduleService = ServiceGenerator.createSmartGymService(SportScheduleAPI.class, secretsHelper.getAuthToken());
+            Call<List<com.nwa.smartgym.models.SportSchedule>> call = sportScheduleService.getSchedules();
 
             call.enqueue(new Callback<List<com.nwa.smartgym.models.SportSchedule>>() {
                 @Override

@@ -29,7 +29,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ServiceGenerator {
 
-    public static final String baseURL = "http://192.168.2.245:6543/";
+    public static final String baseURL = "http://192.168.1.226:6543/";
+    public static final String timePattern = "HH:mm:ssZ";
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
@@ -62,7 +63,7 @@ public class ServiceGenerator {
     private static Retrofit.Builder builder =
             new Retrofit.Builder()
                 .baseUrl(baseURL)
-                .addConverterFactory(GsonConverterFactory.create(gson));
+                    .addConverterFactory(GsonConverterFactory.create(gson));
 
     public static <S> S createSmartGymService(Class<S> serviceClass){
         return createSmartGymService(serviceClass, null);
