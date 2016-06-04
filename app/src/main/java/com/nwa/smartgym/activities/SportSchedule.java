@@ -48,7 +48,7 @@ public class SportSchedule extends AppCompatActivity {
     }
 
     private void showSportSchedules() {
-        ProgressDialog progressDialog = ProgressDialog.show(this, "Loading", "Loading Sport Schedules");
+        ProgressDialog progressDialog = ProgressDialog.show(this, getString(R.string.loading), getString(R.string.sport_schedule_loading));
 
         SecretsHelper secretsHelper = new SecretsHelper(this);
         SportScheduleAPI sportScheduleService = ServiceGenerator.createSmartGymService(SportScheduleAPI.class, secretsHelper.getAuthToken());

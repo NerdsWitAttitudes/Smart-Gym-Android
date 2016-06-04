@@ -63,4 +63,6 @@
     <string name="save_sport_schedule">Save sport schedule</string>
     <string name="sport_schedule_changed">Sport schema notifications changed</string>
     <string name="sport_schedule_make_one">You don\'t have any sport schedules, make one!</string>
+    <string name="loading">Loading</string>
+    <string name="sport_schedule_loading">Loading Sport Schedules</string>
 </resources>
