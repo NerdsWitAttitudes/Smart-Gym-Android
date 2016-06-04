@@ -53,12 +53,12 @@
 
     <!-- Strings related to Sport Schedule -->
     <string name="sport_schedule_loading">Loading Sport Schedules</string>
-    <string name="title_activity_sport_schedule">Sport Schema</string>
+    <string name="title_activity_sport_schedule">Sport Schedule</string>
     <string name="reminder">Reminder</string>
     <string name="prompt_sport_schedule_name">Sport Schedule Name</string>
     <string name="prompt_reminder_minutes">Reminder in minutes</string>
     <string name="save_sport_schedule">Save sport schedule</string>
-    <string name="sport_schedule_changed">Sport schema notifications changed</string>
+    <string name="sport_schedule_changed">Sport schedule notifications changed</string>
     <string name="sport_schedule_make_one">You don\'t have any sport schedules, make one!</string>
 
     <string name="title_activity_sign_up">SignUp</string>
