@@ -14,6 +14,7 @@ import android.widget.TimePicker;
 import com.nwa.smartgym.R;
 import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.api.SportScheduleAPI;
+import com.nwa.smartgym.api.callbacks.Callback;
 import com.nwa.smartgym.lib.ErrorHelper;
 import com.nwa.smartgym.lib.SecretsHelper;
 import com.nwa.smartgym.models.SportSchedule;
@@ -26,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SportScheduleItem extends AppCompatActivity {
@@ -40,15 +40,18 @@ public class SportScheduleItem extends AppCompatActivity {
     private TimePicker sportScheduleTime;
     private TableLayout tableLayout;
 
-    private Callback<SportSchedule> callback = new Callback<SportSchedule>() {
+    private SportScheduleAPI smartGymService;
+
+    private Callback<SportSchedule> callback = new Callback<SportSchedule>(this) {
         @Override
         public void onResponse(Call<SportSchedule> call, Response<SportSchedule> response) {
-            startActivity(new Intent(getBaseContext(), com.nwa.smartgym.activities.SportSchedule.class));
-        }
+            super.onResponse(call, response);
 
-        @Override
-        public void onFailure(Call<SportSchedule> call, Throwable t) {
-            ErrorHelper.raiseGenericError(getBaseContext());
+            if (response.code() == 200) {
+                startActivity(new Intent(getBaseContext(), com.nwa.smartgym.activities.SportSchedule.class));
+            } else {
+                super.onFailure(call, new Throwable(getResources().getString(R.string.server_500_message)));
+            }
         }
     };
 
@@ -58,7 +61,9 @@ public class SportScheduleItem extends AppCompatActivity {
         setContentView(R.layout.activity_sport_schedule_item);
 
         sportSchedule = (SportSchedule) getIntent().getSerializableExtra("SportSchedule");
+
         secretsHelper = new SecretsHelper(this);
+        smartGymService = ServiceGenerator.createSmartGymService(SportScheduleAPI.class, secretsHelper.getAuthToken());
 
         sportScheduleName = (EditText) findViewById(R.id.etSportScheduleName);
         sportScheduleReminder = (EditText) findViewById(R.id.etSportScheduleReminder);
@@ -71,11 +76,12 @@ public class SportScheduleItem extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (sportSchedule == null) {
-                        createSportSchedule(
-                                setSportScheduleFields(new SportSchedule())
-                        );
+                        smartGymService.createSportSchedule(setSportScheduleFields(new SportSchedule()))
+                                .enqueue(callback);
                     } else {
-                        saveSportSchedule(setSportScheduleFields(sportSchedule));
+                        sportSchedule = setSportScheduleFields(sportSchedule);
+                        smartGymService.updateSportSchedule(sportSchedule.getId(), sportSchedule)
+                                .enqueue(callback);
                     }
                 }
             });
@@ -86,18 +92,6 @@ public class SportScheduleItem extends AppCompatActivity {
         if (sportSchedule != null) {
             fillFields(sportSchedule);
         }
-    }
-
-    private void saveSportSchedule(SportSchedule sportSchedule) {
-        SportScheduleAPI smartGymService = ServiceGenerator.createSmartGymService(SportScheduleAPI.class, secretsHelper.getAuthToken());
-        Call<SportSchedule> sportScheduleCall = smartGymService.updateSportSchedule(sportSchedule.getId(), sportSchedule);
-        sportScheduleCall.enqueue(callback);
-    }
-
-    private void createSportSchedule(SportSchedule sportSchedule) {
-        SportScheduleAPI smartGymService = ServiceGenerator.createSmartGymService(SportScheduleAPI.class, secretsHelper.getAuthToken());
-        Call<SportSchedule> sportScheduleCall = smartGymService.createSportSchedule(sportSchedule);
-        sportScheduleCall.enqueue(callback);
     }
 
     private void fillFields(SportSchedule sportSchedule) {
