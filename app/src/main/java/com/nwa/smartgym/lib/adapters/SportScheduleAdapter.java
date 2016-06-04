@@ -14,7 +14,9 @@ import android.widget.Toast;
 import com.nwa.smartgym.R;
 import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.api.SportScheduleAPI;
+import com.nwa.smartgym.api.callbacks.Callback;
 import com.nwa.smartgym.lib.ErrorHelper;
+import com.nwa.smartgym.lib.SecretsHelper;
 import com.nwa.smartgym.models.SportSchedule;
 
 import org.joda.time.LocalDate;
@@ -25,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SportScheduleAdapter extends ArrayAdapter<SportSchedule> {
@@ -67,18 +68,22 @@ public class SportScheduleAdapter extends ArrayAdapter<SportSchedule> {
                 if (sportSchedule.isActive() != isChecked) {
                     sportSchedule.setIsActive(isChecked);
 
-                    SportScheduleAPI sportScheduleService = ServiceGenerator.createSmartGymService(SportScheduleAPI.class);
-                    Call<SportSchedule> sportScheduleCall = sportScheduleService.updateSportSchedule(sportSchedule.getId(), sportSchedule);
+                    Call<SportSchedule> sportScheduleCall = ServiceGenerator.createSmartGymService(SportScheduleAPI.class, new SecretsHelper(getContext()).getAuthToken())
+                            .updateSportSchedule(sportSchedule.getId(), sportSchedule);
 
-                    sportScheduleCall.enqueue(new Callback<SportSchedule>() {
+                    sportScheduleCall.enqueue(new Callback<SportSchedule>(getContext()) {
                         @Override
                         public void onResponse(Call<SportSchedule> call, Response<SportSchedule> response) {
+                            super.onResponse(call, response);
+
                             if (response.code() == 200) {
-                                Toast toast = Toast.makeText(getContext(),
+                                Toast.makeText(
+                                        getContext(),
                                         R.string.sport_schedule_changed,
-                                        Toast.LENGTH_SHORT);
-                                toast.show();
+                                        Toast.LENGTH_SHORT)
+                                        .show();
                             } else {
+                                sportSchedule.setIsActive(!isChecked);
                                 ErrorHelper.raiseGenericError(getContext());
                             }
                         }
@@ -86,8 +91,6 @@ public class SportScheduleAdapter extends ArrayAdapter<SportSchedule> {
                         @Override
                         public void onFailure(Call<SportSchedule> call, Throwable t) {
                             sportSchedule.setIsActive(!isChecked);
-                            switchActive.setChecked(!isChecked);
-
                             ErrorHelper.raiseGenericError(getContext());
                         }
                     });
