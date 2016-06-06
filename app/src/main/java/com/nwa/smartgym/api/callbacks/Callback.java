@@ -30,7 +30,6 @@ public abstract class Callback<T> implements retrofit2.Callback<T> {
             if (response.code() == 401) {
                 handleUnauthenticatedUser();
             } else {
-                System.out.println();
                 ErrorHelper.raiseGenericError(context);
             }
         }
@@ -38,12 +37,12 @@ public abstract class Callback<T> implements retrofit2.Callback<T> {
 
     @Override
     public void onFailure(Call<T> call, Throwable t) {
-        System.out.println(t.toString());
         ErrorHelper.raiseGenericError(context);
     }
 
     private void handleUnauthenticatedUser() {
         Intent intent = new Intent(context, Welcome.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 }
