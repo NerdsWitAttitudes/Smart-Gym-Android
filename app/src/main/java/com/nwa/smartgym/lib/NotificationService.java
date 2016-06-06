@@ -9,25 +9,30 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.RingtoneManager;
-import android.os.SystemClock;
-import android.util.Log;
 
 import com.nwa.smartgym.R;
+import com.nwa.smartgym.models.SportSchedule;
 
+import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
+import org.joda.time.LocalDate;
 
 public class NotificationService extends BroadcastReceiver {
 
-    public static final String NOTIFICATION_ID = "notification-id";
-    public static final String NOTIFICATION = "notification";
+    private static final String NOTIFICATION_ID = "notification_id";
+    private static final String NOTIFICATION = "notification";
+    private static final int REQUEST_CODE = 0;
 
     private Context context;
+    private Intent notificationIntent;
+    private AlarmManager alarmManager;
 
     public NotificationService() {
     }
 
     public NotificationService(Context context) {
         this.context = context;
+        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 
     private Notification getNotification(String title, String contentText) {
@@ -41,35 +46,39 @@ public class NotificationService extends BroadcastReceiver {
                 .build();
     }
 
-    public void scheduleNotifications() {
-        Notification notification = getNotification("Ga sporte", "Bij Smart Gym");
+    public void scheduleNotifications(SportSchedule sportSchedule) {
+        Notification notification = getNotification(sportSchedule.getName(), context.getResources().getString(R.string.app_name));
 
-        Intent notificationIntent = new Intent(context, NotificationService.class);
+        for (LocalDate.Property weekday : sportSchedule.getWeekdays()) {
+            notificationIntent = new Intent(context, NotificationService.class);
+            notificationIntent.putExtra(NotificationService.NOTIFICATION_ID, weekday.getLocalDate().getDayOfWeek());
+            notificationIntent.putExtra(NotificationService.NOTIFICATION, notification);
 
-        notificationIntent.putExtra(NotificationService.NOTIFICATION_ID, 1);
-        notificationIntent.putExtra(NotificationService.NOTIFICATION, notification);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, NotificationService.REQUEST_CODE, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            DateTime scheduleDateTime = new DateTime()
+                    .withDate(weekday.getLocalDate())
+                    .withTime(sportSchedule.getTime())
+                    .minusMinutes(sportSchedule.getReminderMinutes());
 
-        long futureInMillis = SystemClock.elapsedRealtime() + 10000;
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
+                    scheduleDateTime.getMillis(),
+                    AlarmManager.INTERVAL_DAY * DateTimeConstants.DAYS_PER_WEEK,
+                    pendingIntent
+            );
+        }
+    }
 
-        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                futureInMillis,
-                AlarmManager.INTERVAL_DAY * DateTimeConstants.DAYS_PER_WEEK,
-                pendingIntent
-        );
+    public void cancelScheduledNotifications() {
+        PendingIntent sender = PendingIntent.getBroadcast(context, NotificationService.REQUEST_CODE, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        alarmManager.cancel(sender);
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i("NWA", "FSDFWEFWFSFFE RECEIVED");
-
-        NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Notification notification = intent.getParcelableExtra(NOTIFICATION);
-
-        int id = intent.getIntExtra(NOTIFICATION_ID, 0);
-        notificationManager.notify(id, notification);
+        notificationManager.notify(intent.getIntExtra(NOTIFICATION_ID, NotificationService.REQUEST_CODE), notification);
     }
 }
