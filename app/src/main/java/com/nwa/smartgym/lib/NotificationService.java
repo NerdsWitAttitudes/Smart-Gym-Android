@@ -41,7 +41,7 @@ public class NotificationService extends BroadcastReceiver {
         return new Notification.Builder(context)
                 .setContentTitle(title)
                 .setContentText(contentText)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.mipmap.ic_smartgym)
                 .setVibrate(new long[]{500, 500, 500, 500, 500})
                 .setLights(Color.WHITE, 3000, 3000)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
