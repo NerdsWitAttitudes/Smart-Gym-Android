@@ -52,6 +52,7 @@
     <string name="loading">Loading</string>
 
     <!-- Strings related to Sport Schedule -->
+    <string name="action_sport_schedule">Manage Sport Schedules</string>
     <string name="sport_schedule_loading">Loading Sport Schedules</string>
     <string name="title_activity_sport_schedule">Sport Schedule</string>
     <string name="reminder">Reminder</string>
