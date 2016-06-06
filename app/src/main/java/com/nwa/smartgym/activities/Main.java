@@ -16,10 +16,16 @@ import com.nwa.smartgym.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
 import  com.nwa.smartgym.lib.DefaultPageAdapter;
 import  com.nwa.smartgym.lib.NonSwipeableViewPager;
+import com.nwa.smartgym.lib.NotificationService;
 import com.nwa.smartgym.lib.adapters.DrawerAdapter;
 import com.nwa.smartgym.models.DrawerItem;
+
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
 public class Main extends AppCompatActivity {
 
@@ -43,6 +49,16 @@ public class Main extends AppCompatActivity {
         mViewPager.setAdapter(mPageAdapter);
 
         setupDrawer();
+
+        List<LocalDate.Property> properties = new ArrayList<>();
+        properties.add(new LocalDate().withDayOfWeek(1).dayOfWeek());
+        properties.add(new LocalDate().withDayOfWeek(2).dayOfWeek());
+        com.nwa.smartgym.models.SportSchedule hardgaan = new com.nwa.smartgym.models.SportSchedule(UUID.randomUUID(), UUID.randomUUID(), "Hardgaan", 0, LocalTime.now().plusSeconds(5), properties, true);
+        NotificationService notificationService = new NotificationService(this);
+        notificationService.scheduleNotifications(hardgaan);
+        notificationService.cancelScheduledNotifications();
+        hardgaan.setTime(LocalTime.now().plusSeconds(120));
+        notificationService.scheduleNotifications(hardgaan);
     }
 
     private List<Fragment> listFragments() {
@@ -62,6 +78,13 @@ public class Main extends AppCompatActivity {
                 getResources().getDrawable(R.drawable.bluetooth),
                 getString(R.string.action_persist_device),
                 new Intent(this, Devices.class)));
+
+        drawerItems.add(new DrawerItem(
+                getResources().getDrawable(R.drawable.ic_date_range_black_24dp),
+                "Manage Sport Schedules",
+                new Intent(this, SportSchedule.class)
+        ));
+
         return drawerItems;
     }
 }

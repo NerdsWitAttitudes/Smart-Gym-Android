@@ -47,6 +47,14 @@
         <activity
             android:name=".activities.AddDeviceActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activities.SportSchedule"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activities.Main" />
+        <activity
+            android:name=".activities.SportScheduleItem"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activities.SportSchedule"/>
         <receiver
             android:name=".lib.NotificationService" />
     </application>
