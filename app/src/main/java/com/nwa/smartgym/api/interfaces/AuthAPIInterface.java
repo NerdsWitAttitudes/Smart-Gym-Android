@@ -1,5 +1,6 @@
 package com.nwa.smartgym.api.interfaces;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,6 +9,7 @@ import android.widget.EditText;
 
 import com.nwa.smartgym.R;
 import com.nwa.smartgym.activities.Main;
+import com.nwa.smartgym.activities.Welcome;
 import com.nwa.smartgym.api.AuthAPI;
 import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.api.callbacks.Callback;
@@ -69,10 +71,27 @@ public class AuthAPIInterface {
 
             public void launchMain() {
                 Intent intent = new Intent(context, Main.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
 
+        });
+    }
+
+    public void logout() {
+        Call<HTTPResponse> call = this.authService.logOut();
+        call.enqueue(new Callback<HTTPResponse>(context){
+            @Override
+            public void onResponse(Call<HTTPResponse> call, Response<HTTPResponse> response) {
+                super.onResponse(call, response);
+                launchWelcome();
+            }
+
+            public void launchWelcome() {
+                Intent intent = new Intent(context, Welcome.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            }
         });
     }
 }

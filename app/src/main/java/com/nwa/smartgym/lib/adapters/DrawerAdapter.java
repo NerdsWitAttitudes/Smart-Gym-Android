@@ -25,7 +25,19 @@ public class DrawerAdapter extends ArrayAdapter<DrawerItem> {
     public View getView(final int position, View view, ViewGroup parent) {
         final DrawerItem drawerItem = (DrawerItem) getItem(position);
 
-        // define views
+        View listItem = inflateDrawerItem(drawerItem);
+
+        listItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getItem(position).executeDrawerAction(getContext());
+            }
+        });
+
+        return listItem;
+    }
+
+    public View inflateDrawerItem(DrawerItem drawerItem) {
         LayoutInflater layoutInflater = (LayoutInflater) this.getContext().getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         View listItem = layoutInflater.inflate(R.layout.drawer_list_item, null);
@@ -35,13 +47,6 @@ public class DrawerAdapter extends ArrayAdapter<DrawerItem> {
 
         name.setText(drawerItem.getName());
         image.setImageDrawable(drawerItem.getIcon());
-
-        listItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getContext().startActivity(getItem(position).getIntent());
-            }
-        });
 
         return listItem;
     }

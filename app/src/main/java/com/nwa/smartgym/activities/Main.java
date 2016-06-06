@@ -16,6 +16,8 @@ import com.nwa.smartgym.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.nwa.smartgym.api.interfaces.AuthAPIInterface;
 import  com.nwa.smartgym.lib.DefaultPageAdapter;
 import  com.nwa.smartgym.lib.NonSwipeableViewPager;
 import com.nwa.smartgym.lib.SecretsHelper;
@@ -71,8 +73,23 @@ public class Main extends AppCompatActivity {
                 getString(R.string.action_sport_schedule),
                 new Intent(this, SportSchedule.class)
         ));
+        drawerItems.add(getLoginDrawerItem());
+
 
         return drawerItems;
+    }
+
+    private DrawerItem getLoginDrawerItem() {
+       DrawerItem loginDrawerItem = new DrawerItem(
+                getResources().getDrawable(R.drawable.logout),
+                getString(R.string.logout)) {
+            @Override
+            public void executeDrawerAction(Context context) {
+                AuthAPIInterface authAPIInterface = new AuthAPIInterface(context);
+                authAPIInterface.logout();
+            }
+        };
+        return loginDrawerItem;
     }
 
     private void checkAuthCookieExists() {

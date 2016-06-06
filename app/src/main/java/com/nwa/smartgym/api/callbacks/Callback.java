@@ -1,5 +1,6 @@
 package com.nwa.smartgym.api.callbacks;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
@@ -42,7 +43,7 @@ public abstract class Callback<T> implements retrofit2.Callback<T> {
 
     private void handleUnauthenticatedUser() {
         Intent intent = new Intent(context, Welcome.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 }
