@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import  com.nwa.smartgym.lib.DefaultPageAdapter;
 import  com.nwa.smartgym.lib.NonSwipeableViewPager;
+import com.nwa.smartgym.lib.SecretsHelper;
 import com.nwa.smartgym.lib.adapters.DrawerAdapter;
 import com.nwa.smartgym.models.DrawerItem;
 
@@ -34,6 +35,8 @@ public class Main extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        checkAuthCookieExists();
+
         setContentView(R.layout.activity_main);
         List<Fragment> fragments = listFragments();
         mPageAdapter = new DefaultPageAdapter(getSupportFragmentManager(), fragments);
@@ -70,5 +73,14 @@ public class Main extends AppCompatActivity {
         ));
 
         return drawerItems;
+    }
+
+    private void checkAuthCookieExists() {
+        SecretsHelper secretsHelper = new SecretsHelper(this);
+        if (secretsHelper.getAuthToken() == null) {
+            Intent intent = new Intent(this, Welcome.class);
+            startActivity(intent);
+            finish(); // Finish to prevent the user simply backing into this activity again.
+        }
     }
 }

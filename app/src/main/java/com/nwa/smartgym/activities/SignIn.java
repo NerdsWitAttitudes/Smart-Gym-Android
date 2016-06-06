@@ -153,6 +153,7 @@ public class SignIn extends AppCompatActivity  {
 
                 @Override
                 public void onFailure(Call<HTTPResponse> call, Throwable t){
+                    System.out.println(t.toString());
                     raiseGenericError();
                 }
 
