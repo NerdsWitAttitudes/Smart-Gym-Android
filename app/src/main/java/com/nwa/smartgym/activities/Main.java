@@ -62,6 +62,13 @@ public class Main extends AppCompatActivity {
                 getResources().getDrawable(R.drawable.bluetooth),
                 getString(R.string.action_persist_device),
                 new Intent(this, Devices.class)));
+
+        drawerItems.add(new DrawerItem(
+                getResources().getDrawable(R.drawable.ic_date_range_black_24dp),
+                getString(R.string.action_sport_schedule),
+                new Intent(this, SportSchedule.class)
+        ));
+
         return drawerItems;
     }
 }
