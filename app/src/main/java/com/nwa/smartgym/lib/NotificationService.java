@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.RingtoneManager;
+import android.util.Log;
 
 import com.nwa.smartgym.R;
 import com.nwa.smartgym.models.SportSchedule;
@@ -33,6 +34,7 @@ public class NotificationService extends BroadcastReceiver {
     public NotificationService(Context context) {
         this.context = context;
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        notificationIntent = new Intent(context, NotificationService.class);
     }
 
     private Notification getNotification(String title, String contentText) {
@@ -50,7 +52,6 @@ public class NotificationService extends BroadcastReceiver {
         Notification notification = getNotification(sportSchedule.getName(), context.getResources().getString(R.string.app_name));
 
         for (LocalDate.Property weekday : sportSchedule.getWeekdays()) {
-            notificationIntent = new Intent(context, NotificationService.class);
             notificationIntent.putExtra(NotificationService.NOTIFICATION_ID, weekday.getLocalDate().getDayOfWeek());
             notificationIntent.putExtra(NotificationService.NOTIFICATION, notification);
 
