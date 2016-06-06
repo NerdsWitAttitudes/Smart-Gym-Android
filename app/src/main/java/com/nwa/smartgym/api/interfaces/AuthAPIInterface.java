@@ -69,7 +69,7 @@ public class AuthAPIInterface {
                 editor.apply();
             }
 
-            public void launchMain() {
+            private void launchMain() {
                 Intent intent = new Intent(context, Main.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
@@ -84,13 +84,23 @@ public class AuthAPIInterface {
             @Override
             public void onResponse(Call<HTTPResponse> call, Response<HTTPResponse> response) {
                 super.onResponse(call, response);
+                removeSecurityHeader();
                 launchWelcome();
             }
 
-            public void launchWelcome() {
+            private void launchWelcome() {
                 Intent intent = new Intent(context, Welcome.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
+            }
+
+            private void removeSecurityHeader() {
+                SharedPreferences secrets = context.getSharedPreferences(
+                        context.getString(R.string.preference_file_key), Context.MODE_PRIVATE
+                );
+                SharedPreferences.Editor editor = secrets.edit();
+                editor.remove(context.getString(R.string.auth_tkt));
+                editor.apply();
             }
         });
     }
