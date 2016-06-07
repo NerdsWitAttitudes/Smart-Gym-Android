@@ -4,17 +4,14 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.fitness.Fitness;
-import com.google.android.gms.fitness.FitnessActivities;
 import com.google.android.gms.fitness.data.DataPoint;
 import com.google.android.gms.fitness.data.DataSet;
 import com.google.android.gms.fitness.data.DataType;
@@ -24,20 +21,24 @@ import com.google.android.gms.fitness.data.Value;
 import com.google.android.gms.fitness.request.SessionReadRequest;
 import com.google.android.gms.fitness.result.SessionReadResult;
 import com.google.android.gms.fitness.result.SessionStopResult;
+import com.nwa.smartgym.R;
+import com.nwa.smartgym.api.callbacks.GoogleFitCallback;
+import com.nwa.smartgym.lib.ErrorHelper;
 import com.nwa.smartgym.models.CardioActivity;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class GoogleFitService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+    private static final DataType[] DataTypes = { DataType.TYPE_CALORIES_EXPENDED };
+
     private final Context context;
+
     private GoogleApiClient googleApiClient;
     private CardioActivityAPI smartGymService;
 
@@ -75,54 +76,23 @@ public class GoogleFitService implements GoogleApiClient.ConnectionCallbacks, Go
 
     }
 
-    public void startSession(CardioActivity cardioActivity) {
+    public void addCardioActivity(CardioActivity cardioActivity, final String fitnessActivity) {
         Call<CardioActivity> session = smartGymService.createSession(cardioActivity);
-        session.enqueue(new Callback<CardioActivity>() {
+        session.enqueue(new com.nwa.smartgym.api.callbacks.Callback<CardioActivity>(context) {
             @Override
             public void onResponse(Call<CardioActivity> call, Response<CardioActivity> response) {
-                Log.i("NWA", " added cardio session to db code: " + response.code());
+                super.onResponse(call, response);
 
                 if (response.code() == 201) {
-                    CardioActivity cardioActivityResult = response.body();
-                    startSession(cardioActivityResult, FitnessActivities.RUNNING_TREADMILL);
+                    currentCardioActivity = response.body();
+                    startGoogleFitSession(currentCardioActivity, fitnessActivity);
+                    ErrorHelper.showToastError(context, "Started " + fitnessActivity + " activity successfully");
                 }
-            }
-
-            @Override
-            public void onFailure(Call<CardioActivity> call, Throwable t) {
-                Log.i("NWA", " failed!!! to add session to db");
             }
         });
     }
 
-    public void getCurrentSession(final String activityType) {
-        Call<List<CardioActivity>> sessionsCall = smartGymService.getSessions();
-        sessionsCall.enqueue(new com.nwa.smartgym.api.callbacks.Callback<List<CardioActivity>>(context) {
-            @Override
-            public void onResponse(Call<List<CardioActivity>> call, Response<List<CardioActivity>> response) {
-                super.onResponse(call, response);
-                Log.i("NWA", "get sessions ");
-
-                List<CardioActivity> body = response.body();
-                if (body != null) {
-                    for (CardioActivity cardioActivity : body) {
-                        if (cardioActivity.isActive()) {
-                            currentCardioActivity = cardioActivity;
-                            startSession(currentCardioActivity, activityType);
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<CardioActivity>> call, Throwable t) {
-                super.onFailure(call, t);
-                Log.i("NWA", "FAIL active session getting");
-            }
-        });
-    }
-
-    private void startSession(CardioActivity cardioActivity, String activityType) {
+    private void startGoogleFitSession(CardioActivity cardioActivity, String activityType) {
         if (currentSession == null) {
             currentSession = new Session.Builder()
                     .setIdentifier(String.valueOf(cardioActivity.getId()))
@@ -132,14 +102,10 @@ public class GoogleFitService implements GoogleApiClient.ConnectionCallbacks, Go
 
             PendingResult<Status> pendingResult = Fitness.SessionsApi.startSession(googleApiClient, currentSession);
 
-            pendingResult.setResultCallback(new ResultCallback<Status>() {
+            pendingResult.setResultCallback(new GoogleFitCallback<Status>(context) {
                 @Override
-                public void onResult(@NonNull Status status) {
-                    if (status.isSuccess()) {
-                        Log.i("NWA", "JAWEL GESTART");
-                    } else {
-                        Log.i("NWA", "NEE NEE GEFAALT" + " " + status.getStatusMessage());
-                    }
+                public void onResult(@NonNull Status result) {
+                    super.onResult(result);
                 }
             });
         }
@@ -147,29 +113,29 @@ public class GoogleFitService implements GoogleApiClient.ConnectionCallbacks, Go
 
     public void stopSession() {
         if (currentCardioActivity == null || currentSession == null) {
-            Log.i("NWA", "Er was niks actief ofzo");
+            ErrorHelper.raiseGenericError(context);
             return;
         }
 
         PendingResult<SessionStopResult> pendingResult = Fitness.SessionsApi.stopSession(googleApiClient, currentSession.getIdentifier());
 
-        pendingResult.setResultCallback(new ResultCallback<SessionStopResult>() {
+        pendingResult.setResultCallback(new GoogleFitCallback<SessionStopResult>(context) {
             @Override
-            public void onResult(@NonNull SessionStopResult sessionStopResult) {
-                if (sessionStopResult.getStatus().isSuccess()) {
-                    String message = "JAH JAH GOEDZO GESTOPT";
-                    Log.i("NWA", message);
+            public void onResult(@NonNull SessionStopResult result) {
+                super.onResult(result);
 
-                    writeSessionDataType(DataType.TYPE_CALORIES_EXPENDED);
-                } else {
-                    String message = "AND YOU FAILED";
-                    Log.i("NWA", message + " " + sessionStopResult.getStatus().getStatusMessage());
+                for (DataType dataType : DataTypes) {
+                    try {
+                        setSessionResult(dataType);
+                    } catch (Exception e) {
+                        ErrorHelper.raiseGenericError(context);
+                    }
                 }
             }
         });
     }
 
-    private void writeSessionDataType(DataType dataType) {
+    private void setSessionResult(DataType dataType) {
         final SessionReadRequest sessionReadRequest = new SessionReadRequest.Builder()
                 .setSessionId(currentSession.getIdentifier())
                 .setTimeInterval(
@@ -181,13 +147,13 @@ public class GoogleFitService implements GoogleApiClient.ConnectionCallbacks, Go
 
         PendingResult<SessionReadResult> sessionReadResultPendingResult = Fitness.SessionsApi.readSession(googleApiClient, sessionReadRequest);
 
-        sessionReadResultPendingResult.setResultCallback(new ResultCallback<SessionReadResult>() {
+        sessionReadResultPendingResult.setResultCallback(new GoogleFitCallback<SessionReadResult>(context) {
             @Override
             public void onResult(@NonNull SessionReadResult sessionReadResult) {
-                if (sessionReadResult.getStatus().isSuccess()) {
+                super.onResult(sessionReadResult);
 
-                    List<Session> sessions = sessionReadResult.getSessions();
-                    for (Session session : sessions) {
+                if (sessionReadResult.getStatus().isSuccess()) {
+                    for (Session session : sessionReadResult.getSessions()) {
                         for (DataSet dataSet : sessionReadResult.getDataSet(session)) {
                             for (DataPoint dataPoint : dataSet.getDataPoints()) {
                                 for (Field field : dataPoint.getDataType().getFields()) {
@@ -220,12 +186,7 @@ public class GoogleFitService implements GoogleApiClient.ConnectionCallbacks, Go
             @Override
             public void onResponse(Call<CardioActivity> call, Response<CardioActivity> response) {
                 super.onResponse(call, response);
-            }
-
-            @Override
-            public void onFailure(Call<CardioActivity> call, Throwable t) {
-                super.onFailure(call, t);
-                Log.i("NWA", "failed sving to api");
+                ErrorHelper.showToastError(context, context.getResources().getString(R.string.cardio_activity_stopped_successfully));
             }
         });
     }

@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.android.gms.fitness.FitnessActivities;
 import com.nwa.smartgym.R;
 import com.nwa.smartgym.api.CardioActivityAPI;
 import com.nwa.smartgym.api.GoogleFitService;
@@ -33,17 +34,15 @@ public class SportActivity extends AppCompatActivity {
         Button startTreadmill = (Button) findViewById(R.id.btn_start_treadmill);
         Button stopTreadmill = (Button) findViewById(R.id.btn_stop_treadmill);
 
-        if (startTreadmill != null && currentCardioActivity == null) {
+        if (startTreadmill != null && stopTreadmill != null) {
             startTreadmill.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     currentCardioActivity = new CardioActivity(activityId);
-                    googleFitService.startSession(currentCardioActivity);
+                    googleFitService.addCardioActivity(currentCardioActivity, FitnessActivities.RUNNING_TREADMILL);
                 }
             });
-        }
 
-        if (stopTreadmill != null) {
             stopTreadmill.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
