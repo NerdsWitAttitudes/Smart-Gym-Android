@@ -10,6 +10,7 @@ import com.nwa.smartgym.R;
 import com.nwa.smartgym.api.CardioActivityAPI;
 import com.nwa.smartgym.api.GoogleFitService;
 import com.nwa.smartgym.api.ServiceGenerator;
+import com.nwa.smartgym.lib.ErrorHelper;
 import com.nwa.smartgym.lib.SecretsHelper;
 import com.nwa.smartgym.models.CardioActivity;
 
@@ -38,12 +39,41 @@ public class SportActivity extends AppCompatActivity {
             startTreadmill.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    currentCardioActivity = new CardioActivity(activityId, FitnessActivities.RUNNING_TREADMILL);
-                    googleFitService.addCardioActivity(currentCardioActivity);
+                    if (currentCardioActivity == null) {
+                        currentCardioActivity = new CardioActivity(activityId, FitnessActivities.RUNNING_TREADMILL);
+                        googleFitService.addCardioActivity(currentCardioActivity);
+                    } else {
+                        ErrorHelper.raiseGenericError(getBaseContext());
+                    }
                 }
             });
 
             stopTreadmill.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    googleFitService.stopSession();
+                    currentCardioActivity = null;
+                }
+            });
+        }
+
+        Button startCycling = (Button) findViewById(R.id.btn_start_cycling);
+        Button stopCycling = (Button) findViewById(R.id.btn_stop_cycling);
+
+        if (startCycling != null && stopCycling != null) {
+            startCycling.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (currentCardioActivity == null) {
+                        currentCardioActivity = new CardioActivity(activityId, FitnessActivities.BIKING_SPINNING);
+                        googleFitService.addCardioActivity(currentCardioActivity);
+                    } else {
+                        ErrorHelper.raiseGenericError(getBaseContext());
+                    }
+                }
+            });
+
+            stopCycling.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     googleFitService.stopSession();

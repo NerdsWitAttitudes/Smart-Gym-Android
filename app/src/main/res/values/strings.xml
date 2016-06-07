@@ -70,4 +70,6 @@
 
     <!-- Strings related to cardio activity -->
     <string name="cardio_activity_stopped_successfully">Started activity successfully</string>
+    <string name="sport_activity_start_session">Start a session</string>
+    <string name="sport_activity_stop_session">Stop a session</string>
 </resources>

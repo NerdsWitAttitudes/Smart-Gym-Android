@@ -41,8 +41,9 @@ public class CardioActivity {
         this.active = active;
     }
 
-    public CardioActivity(UUID activityId, String runningTreadmill) {
+    public CardioActivity(UUID activityId, String cardioType) {
         this.activityId = activityId;
+        this.cardioType = cardioType;
     }
 
     public UUID getId() {
