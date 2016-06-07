@@ -20,19 +20,19 @@ public class CardioActivity {
     private DateTime endDate;
 
     private Double calories;
-    private Double ditsance;
+    private Double distance;
     private Double speed;
 
     @SerializedName("is_active")
     private boolean active;
 
-    public CardioActivity(UUID id, UUID activityId, DateTime startDate, DateTime endDate, Double calories, Double ditsance, Double speed, boolean active) {
+    public CardioActivity(UUID id, UUID activityId, DateTime startDate, DateTime endDate, Double calories, Double distance, Double speed, boolean active) {
         this.id = id;
         this.activityId = activityId;
         this.startDate = startDate;
         this.endDate = endDate;
         this.calories = calories;
-        this.ditsance = ditsance;
+        this.distance = distance;
         this.speed = speed;
         this.active = active;
     }
@@ -81,12 +81,12 @@ public class CardioActivity {
         this.calories = calories;
     }
 
-    public Double getDitsance() {
-        return ditsance;
+    public Double getDistance() {
+        return distance;
     }
 
-    public void setDitsance(Double ditsance) {
-        this.ditsance = ditsance;
+    public void setDistance(Double distance) {
+        this.distance = distance;
     }
 
     public Double getSpeed() {

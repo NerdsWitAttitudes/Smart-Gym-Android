@@ -53,6 +53,10 @@
             android:name=".activities.SportScheduleItem"
             android:screenOrientation="portrait"
             android:parentActivityName=".activities.SportSchedule"/>
+        <activity
+            android:name=".activities.SportActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activities.Main" />
     </application>
 
 </manifest>
