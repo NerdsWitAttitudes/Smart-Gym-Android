@@ -39,5 +39,5 @@ dependencies {
     compile 'com.j256.ormlite:ormlite-core:4.49-SNAPSHOT'
     compile 'com.j256.ormlite:ormlite-android:4.49-SNAPSHOT'
     compile 'joda-time:joda-time:2.9.2'
-    compile 'com.google.android.gms:play-services-fitness:8.4.0'
+    compile 'com.google.android.gms:play-services-fitness:9.0.1'
 }
