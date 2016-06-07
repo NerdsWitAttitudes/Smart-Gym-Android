@@ -19,6 +19,9 @@ public class CardioActivity {
     @SerializedName("end_date")
     private DateTime endDate;
 
+    @SerializedName("cardio_type")
+    private String cardioType;
+
     private Double calories;
     private Double distance;
     private Double speed;
@@ -26,18 +29,19 @@ public class CardioActivity {
     @SerializedName("is_active")
     private boolean active;
 
-    public CardioActivity(UUID id, UUID activityId, DateTime startDate, DateTime endDate, Double calories, Double distance, Double speed, boolean active) {
+    public CardioActivity(UUID id, UUID activityId, DateTime startDate, DateTime endDate, String cardioType, Double calories, Double distance, Double speed, boolean active) {
         this.id = id;
         this.activityId = activityId;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.cardioType = cardioType;
         this.calories = calories;
         this.distance = distance;
         this.speed = speed;
         this.active = active;
     }
 
-    public CardioActivity(UUID activityId) {
+    public CardioActivity(UUID activityId, String runningTreadmill) {
         this.activityId = activityId;
     }
 
@@ -103,5 +107,13 @@ public class CardioActivity {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public String getCardioType() {
+        return cardioType;
+    }
+
+    public void setCardioType(String cardioType) {
+        this.cardioType = cardioType;
     }
 }

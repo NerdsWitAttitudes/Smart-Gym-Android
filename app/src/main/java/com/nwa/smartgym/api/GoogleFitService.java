@@ -76,7 +76,7 @@ public class GoogleFitService implements GoogleApiClient.ConnectionCallbacks, Go
 
     }
 
-    public void addCardioActivity(CardioActivity cardioActivity, final String fitnessActivity) {
+    public void addCardioActivity(final CardioActivity cardioActivity) {
         Call<CardioActivity> session = smartGymService.createSession(cardioActivity);
         session.enqueue(new com.nwa.smartgym.api.callbacks.Callback<CardioActivity>(context) {
             @Override
@@ -85,8 +85,8 @@ public class GoogleFitService implements GoogleApiClient.ConnectionCallbacks, Go
 
                 if (response.code() == 201) {
                     currentCardioActivity = response.body();
-                    startGoogleFitSession(currentCardioActivity, fitnessActivity);
-                    ErrorHelper.showToastError(context, "Started " + fitnessActivity + " activity successfully");
+                    startGoogleFitSession(currentCardioActivity, cardioActivity.getCardioType());
+                    ErrorHelper.showToastError(context, "Started " + cardioActivity.getCardioType() + " activity successfully");
                 }
             }
         });

@@ -38,8 +38,8 @@ public class SportActivity extends AppCompatActivity {
             startTreadmill.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    currentCardioActivity = new CardioActivity(activityId);
-                    googleFitService.addCardioActivity(currentCardioActivity, FitnessActivities.RUNNING_TREADMILL);
+                    currentCardioActivity = new CardioActivity(activityId, FitnessActivities.RUNNING_TREADMILL);
+                    googleFitService.addCardioActivity(currentCardioActivity);
                 }
             });
 
@@ -52,7 +52,4 @@ public class SportActivity extends AppCompatActivity {
             });
         }
      }
-
-
-
 }
