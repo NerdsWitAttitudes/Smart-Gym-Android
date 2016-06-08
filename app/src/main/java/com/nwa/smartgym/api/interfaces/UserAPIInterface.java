@@ -11,6 +11,8 @@ import com.nwa.smartgym.models.HTTPResponse;
 import com.nwa.smartgym.models.Login;
 import com.nwa.smartgym.models.User;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -42,6 +44,19 @@ public class UserAPIInterface {
                 // when the user is successfully created we can log in
                 Login loginData = new Login(user.getEmail(), user.getPassword());
                 authAPIInterface.login(loginData);
+            }
+        });
+    }
+
+    public void getBuddies() {
+        Call<List<User>> call = this.userService.getBuddies();
+
+        call.enqueue(new Callback<List<User>>(context) {
+            @Override
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                super.onResponse(call, response);
+
+                List<User> buddies = response.body();
             }
         });
     }

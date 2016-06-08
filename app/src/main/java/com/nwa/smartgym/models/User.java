@@ -1,33 +1,42 @@
 package com.nwa.smartgym.models;
 
 
+import com.google.gson.annotations.SerializedName;
+
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by robin on 8-5-16.
  */
 public class User {
     private String password;
-    private String password_confirm;
-    private String email;
-    private String first_name;
-    private String last_name;
-    private String country;
-    private String date_of_birth;
 
-    public User(String password, String password_confirm, String email, String firstname, String lastname, String country, DateTime dateOfBirth) {
+    @SerializedName("passwordConfirm")
+    private String passwordConfirm;
+
+    private String email;
+
+    @SerializedName("first_name")
+    private String firstName;
+
+    @SerializedName("last_name")
+    private String lastName;
+
+    private String country;
+
+    @SerializedName("date_of_birth")
+    private String dateOfBirth;
+
+    public User(String password, String passwordConfirm, String email, String firstName, String lastName, String country, DateTime dateOfBirth) {
         this.password = password;
-        this.password_confirm = password_confirm;
+        this.passwordConfirm = passwordConfirm;
         this.email = email;
-        this.first_name = firstname;
-        this.last_name = lastname;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.country = country;
-        this.date_of_birth = formatDate(dateOfBirth);
+        this.dateOfBirth = formatDate(dateOfBirth);
     }
 
     private String formatDate(DateTime date) {
