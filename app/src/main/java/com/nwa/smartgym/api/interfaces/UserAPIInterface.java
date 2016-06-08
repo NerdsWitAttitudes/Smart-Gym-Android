@@ -7,6 +7,7 @@ import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.api.UserAPI;
 import com.nwa.smartgym.api.callbacks.Callback;
 import com.nwa.smartgym.lib.SecretsHelper;
+import com.nwa.smartgym.models.Buddy;
 import com.nwa.smartgym.models.HTTPResponse;
 import com.nwa.smartgym.models.Login;
 import com.nwa.smartgym.models.User;
@@ -49,14 +50,14 @@ public class UserAPIInterface {
     }
 
     public void getBuddies() {
-        Call<List<User>> call = this.userService.getBuddies();
+        Call<List<Buddy>> call = this.userService.getBuddies();
 
-        call.enqueue(new Callback<List<User>>(context) {
+        call.enqueue(new Callback<List<Buddy>>(context) {
             @Override
-            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+            public void onResponse(Call<List<Buddy>> call, Response<List<Buddy>> response) {
                 super.onResponse(call, response);
 
-                List<User> buddies = response.body();
+                List<Buddy> buddies = response.body();
             }
         });
     }

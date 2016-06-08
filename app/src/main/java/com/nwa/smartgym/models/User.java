@@ -30,15 +30,18 @@ public class User {
     private String dateOfBirth;
 
     public User(String password, String passwordConfirm, String email, String firstName, String lastName, String country, DateTime dateOfBirth) {
+        this(email, firstName, lastName, country, dateOfBirth);
         this.password = password;
         this.passwordConfirm = passwordConfirm;
+    }
+
+    public User(String email, String firstName, String lastName, String country, DateTime dateOfBirth) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.country = country;
         this.dateOfBirth = formatDate(dateOfBirth);
     }
-
     private String formatDate(DateTime date) {
         // format string for serialization into a Python, UTC compatible date
         DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ");

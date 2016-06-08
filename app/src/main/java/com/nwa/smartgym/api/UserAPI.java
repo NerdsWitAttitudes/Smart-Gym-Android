@@ -1,5 +1,6 @@
 package com.nwa.smartgym.api;
 
+import com.nwa.smartgym.models.Buddy;
 import com.nwa.smartgym.models.HTTPResponse;
 import com.nwa.smartgym.models.User;
 
@@ -20,5 +21,5 @@ public interface UserAPI {
     );
 
     @GET("user/buddies")
-    Call<List<User>> getBuddies();
+    Call<List<Buddy>> getBuddies();
 }

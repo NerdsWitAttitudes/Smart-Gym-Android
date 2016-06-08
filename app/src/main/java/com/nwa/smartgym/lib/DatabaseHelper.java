@@ -9,7 +9,9 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.nwa.smartgym.R;
+import com.nwa.smartgym.models.Buddy;
 import com.nwa.smartgym.models.Device;
+import com.nwa.smartgym.models.User;
 
 import java.sql.SQLException;
 import java.util.UUID;
@@ -21,6 +23,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private static final String DATABASE_NAME = "smartgym.db";
     private static final int DATABASE_VERSION = 1;
 
+    private Dao<Buddy, UUID> buddyDao;
     private Dao<Device, UUID> deviceDao;
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -31,6 +34,14 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             deviceDao = getDao(Device.class);
         }
         return deviceDao;
+    }
+
+    public Dao<Buddy, UUID> getBuddyDao() throws SQLException {
+        if (buddyDao == null) {
+            buddyDao = getDao(Buddy.class);
+        }
+
+        return buddyDao;
     }
 
     @Override
