@@ -11,7 +11,7 @@ import java.util.Date;
 /**
  * Created by robin on 8-5-16.
  */
-public class SignUpData {
+public class User {
     private String password;
     private String password_confirm;
     private String email;
@@ -20,7 +20,7 @@ public class SignUpData {
     private String country;
     private String date_of_birth;
 
-    public SignUpData(String password, String password_confirm, String email, String firstname, String lastname, String country, DateTime dateOfBirth) {
+    public User(String password, String password_confirm, String email, String firstname, String lastname, String country, DateTime dateOfBirth) {
         this.password = password;
         this.password_confirm = password_confirm;
         this.email = email;
@@ -34,5 +34,13 @@ public class SignUpData {
         // format string for serialization into a Python, UTC compatible date
         DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ");
         return date.toString(dateTimeFormatter);
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }
