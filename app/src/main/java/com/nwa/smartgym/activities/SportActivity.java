@@ -34,38 +34,20 @@ public class SportActivity extends AppCompatActivity {
 
         Button startTreadmill = (Button) findViewById(R.id.btn_start_treadmill);
         Button stopTreadmill = (Button) findViewById(R.id.btn_stop_treadmill);
-
-        if (startTreadmill != null && stopTreadmill != null) {
-            startTreadmill.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (currentCardioActivity == null) {
-                        currentCardioActivity = new CardioActivity(activityId, FitnessActivities.RUNNING_TREADMILL);
-                        googleFitService.addCardioActivity(currentCardioActivity);
-                    } else {
-                        ErrorHelper.raiseGenericError(getBaseContext());
-                    }
-                }
-            });
-
-            stopTreadmill.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    googleFitService.stopSession();
-                    currentCardioActivity = null;
-                }
-            });
-        }
+        setButtonOnClick(startTreadmill, stopTreadmill, FitnessActivities.RUNNING_TREADMILL);
 
         Button startCycling = (Button) findViewById(R.id.btn_start_cycling);
         Button stopCycling = (Button) findViewById(R.id.btn_stop_cycling);
+        setButtonOnClick(startCycling, stopCycling, FitnessActivities.BIKING_SPINNING);
+    }
 
-        if (startCycling != null && stopCycling != null) {
-            startCycling.setOnClickListener(new View.OnClickListener() {
+    private void setButtonOnClick(Button btnStart, Button btnStop, final String activityType) {
+        if (btnStart != null && btnStop != null) {
+            btnStart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (currentCardioActivity == null) {
-                        currentCardioActivity = new CardioActivity(activityId, FitnessActivities.BIKING_SPINNING);
+                        currentCardioActivity = new CardioActivity(activityId, activityType);
                         googleFitService.addCardioActivity(currentCardioActivity);
                     } else {
                         ErrorHelper.raiseGenericError(getBaseContext());
@@ -73,7 +55,7 @@ public class SportActivity extends AppCompatActivity {
                 }
             });
 
-            stopCycling.setOnClickListener(new View.OnClickListener() {
+            btnStop.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     googleFitService.stopSession();
@@ -81,5 +63,5 @@ public class SportActivity extends AppCompatActivity {
                 }
             });
         }
-     }
+    }
 }
