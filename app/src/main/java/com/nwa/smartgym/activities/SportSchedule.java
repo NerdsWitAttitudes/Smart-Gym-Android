@@ -69,7 +69,7 @@ public class SportSchedule extends AppCompatActivity {
                     if (sportSchedules.isEmpty()) {
                         Snackbar.make(listView, R.string.sport_schedule_make_one, Snackbar.LENGTH_INDEFINITE).show();
                     } else {
-                        setNotification(sportSchedules);
+                        setNotifications(sportSchedules);
                     }
 
                     SportScheduleAdapter sportScheduleAdapter = new SportScheduleAdapter(SportSchedule.this, sportSchedules);
@@ -89,7 +89,7 @@ public class SportSchedule extends AppCompatActivity {
         progressDialog.dismiss();
     }
 
-    private void setNotification(List<com.nwa.smartgym.models.SportSchedule> sportSchedules) {
+    private void setNotifications(List<com.nwa.smartgym.models.SportSchedule> sportSchedules) {
         notificationService.cancelScheduledNotifications();
 
         for (com.nwa.smartgym.models.SportSchedule sportSchedule : sportSchedules) {
