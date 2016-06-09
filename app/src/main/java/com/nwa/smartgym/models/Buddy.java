@@ -17,8 +17,8 @@ public class Buddy extends User {
     // For ORMLite use
     Buddy(){};
 
-    public Buddy(String email, String firstName, String lastName, String country, DateTime dateOfBirth) {
-        super(email, firstName, lastName, country, dateOfBirth);
+    public Buddy(UUID id, String email, String firstName, String lastName, String country, DateTime dateOfBirth) {
+        super(id, email, firstName, lastName, country, dateOfBirth);
     }
 
     public void setUser(UUID buddy_of_user_id) {

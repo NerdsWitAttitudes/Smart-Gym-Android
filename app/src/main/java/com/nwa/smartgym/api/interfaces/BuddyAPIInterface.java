@@ -2,6 +2,7 @@ package com.nwa.smartgym.api.interfaces;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Adapter;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.PreparedQuery;
@@ -17,8 +18,12 @@ import com.nwa.smartgym.models.HTTPResponse;
 import com.nwa.smartgym.models.Login;
 import com.nwa.smartgym.models.User;
 
+import org.json.JSONObject;
+
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import retrofit2.Call;
@@ -32,8 +37,6 @@ public class BuddyAPIInterface {
     private BuddyAPI buddyService;
     private PreparedQuery<Buddy> preparedListQuery;
     private Dao<Buddy, UUID> buddyDao;
-    private AuthAPIInterface authAPIInterface;
-
     public BuddyAPIInterface(Context context, Dao<Buddy, UUID> buddyDao) {
         this.context = context;
         this.buddyDao = buddyDao;
@@ -42,7 +45,6 @@ public class BuddyAPIInterface {
         SecretsHelper secretsHelper = new SecretsHelper(context);
         this.buddyService = ServiceGenerator.createSmartGymService(BuddyAPI.class,
                 secretsHelper.getAuthToken());
-        this.authAPIInterface = new AuthAPIInterface(context);
     }
 
     public void list() {
@@ -53,9 +55,39 @@ public class BuddyAPIInterface {
             public void onResponse(Call<List<Buddy>> call, Response<List<Buddy>> response) {
                 super.onResponse(call, response);
 
-                List<Buddy> buddies = response.body();
+                if (response.code() == 200) {
+                    for (Buddy buddy : response.body()) {
+                        try {
+                            buddyDao.create(buddy);
+                        } catch (SQLException e) {
+                            Log.e(context.getClass().getName(), "Unable to create buddy", e);
+                        }
+                    }
+                }
             }
         });
+    }
+
+    public void put(UUID newBuddyId) {
+        // The api endpoint expects a key value pair specifying the user id of the new buddy
+        Map<String, UUID> requestBody = new HashMap<>();
+        requestBody.put("user_id", newBuddyId);
+
+        Call<Buddy> call = this.buddyService.put(requestBody);
+
+        call.enqueue(new Callback<Buddy>(context) {
+            @Override
+            public void onResponse(Call<Buddy> call, Response<Buddy> response) {
+                super.onResponse(call, response);
+
+                try {
+                    buddyDao.create(response.body());
+                } catch (SQLException e) {
+                    Log.e(context.getClass().getName(), "Unable to create buddy", e);
+                }
+            }
+        });
+
     }
 
     private void prepareQueries() {

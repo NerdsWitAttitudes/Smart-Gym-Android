@@ -44,12 +44,13 @@ public class User {
     User(){};
 
     public User(String password, String passwordConfirm, String email, String firstName, String lastName, String country, DateTime dateOfBirth) {
-        this(email, firstName, lastName, country, dateOfBirth);
+        this(null, email, firstName, lastName, country, dateOfBirth);
         this.password = password;
         this.passwordConfirm = passwordConfirm;
     }
 
-    public User(String email, String firstName, String lastName, String country, DateTime dateOfBirth) {
+    public User(UUID id, String email, String firstName, String lastName, String country, DateTime dateOfBirth) {
+        this.id = id;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -70,5 +71,7 @@ public class User {
         return email;
     }
 
-    public String getFullName() {return firstName + lastName;}
+    public String getFullName() {return firstName + " " + lastName;}
+
+    public UUID getId() {return id;}
 }
