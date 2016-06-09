@@ -1,9 +1,12 @@
 package com.nwa.smartgym.activities;
 
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
+import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.j256.ormlite.android.apptools.OrmLiteBaseListActivity;
@@ -24,14 +27,11 @@ public class Buddies extends OrmLiteBaseListActivity<DatabaseHelper> {
     private OrmLiteCursorAdapter<Buddy, RelativeLayout> viewAdapter;
     private BuddyAPIInterface buddyAPIInterface;
 
-    public Buddies() {
-        // Required empty public constructor
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buddies);
+        setFabListener();
 
         try {
             buddyDao = getHelper().getBuddyDao();
@@ -58,6 +58,17 @@ public class Buddies extends OrmLiteBaseListActivity<DatabaseHelper> {
             @Override
             public void onLoaderReset(Loader<Cursor> loader) {
                 viewAdapter.changeCursor(null,null);
+            }
+        });
+    }
+
+    private void setFabListener() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add_buddy);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getBaseContext(), ListUsersActivity.class);
+                startActivity(intent);
             }
         });
     }

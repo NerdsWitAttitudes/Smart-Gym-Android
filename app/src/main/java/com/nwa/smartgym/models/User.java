@@ -33,6 +33,8 @@ public class User {
     @SerializedName("last_name")
     private String lastName;
 
+    private String fullName = firstName + lastName;
+
     @DatabaseField
     private String country;
 
@@ -69,4 +71,6 @@ public class User {
     public String getEmail() {
         return email;
     }
+
+    public String getFullName() {return fullName;}
 }

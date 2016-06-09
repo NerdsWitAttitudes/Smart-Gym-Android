@@ -4,7 +4,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OrmLiteCursorAdapter;
 import com.nwa.smartgym.R;
@@ -24,7 +26,18 @@ public class BuddyAdapter extends OrmLiteCursorAdapter<Buddy, RelativeLayout> {
 
 
     @Override
-    public void bindView(RelativeLayout relativeLayout, Context context, final Buddy buddy) {}
+    public void bindView(RelativeLayout relativeLayout, Context context, final Buddy buddy) {
+        TextView name = (TextView) relativeLayout.findViewById(R.id.name_buddy_list_item);
+        ImageView delete = (ImageView) relativeLayout.findViewById(R.id.delete_buddy_list_item);
+
+        name.setText(buddy.getFullName());
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+    }
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
