@@ -20,6 +20,10 @@ public class UserAdapter extends ArrayAdapter {
         super(context, 0, users);
     }
 
+    public UserAdapter(Context context) {
+        super(context, 0);
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         User user = (User) getItem(position);
@@ -29,6 +33,7 @@ public class UserAdapter extends ArrayAdapter {
         }
 
         TextView name = (TextView) convertView.findViewById(R.id.name_user_list_item);
+        name.setText(user.getFullName());
 
         return convertView;
     }

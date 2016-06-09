@@ -19,4 +19,7 @@ public interface UserAPI {
     Call<HTTPResponse> post(
             @Body User user
     );
+
+    @GET("user")
+    Call<List<User>> list();
 }

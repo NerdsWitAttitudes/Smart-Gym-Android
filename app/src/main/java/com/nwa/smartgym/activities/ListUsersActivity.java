@@ -22,9 +22,9 @@ public class ListUsersActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_users);
 
-        userAPIInterface = new UserAPIInterface(this);
-        List<User> users = new ArrayList<>();
-        UserAdapter userAdapter = new UserAdapter(this, users);
+        UserAdapter userAdapter = new UserAdapter(this);
+        userAPIInterface = new UserAPIInterface(this, userAdapter);
+        userAPIInterface.list();
 
         setListAdapter(userAdapter);
     }
