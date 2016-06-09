@@ -9,14 +9,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OrmLiteBaseListActivity;
+import com.j256.ormlite.dao.Dao;
 import com.nwa.smartgym.R;
 import com.nwa.smartgym.api.interfaces.BuddyAPIInterface;
 import com.nwa.smartgym.lib.DatabaseHelper;
 import com.nwa.smartgym.lib.ErrorHelper;
+import com.nwa.smartgym.lib.SecretsHelper;
 import com.nwa.smartgym.models.User;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 
 /**
@@ -25,11 +28,14 @@ import java.util.List;
 public class UserAdapter extends ArrayAdapter {
     private BuddyAPIInterface buddyAPIInterface;
     private OrmLiteBaseListActivity<DatabaseHelper> ormLiteBaseListActivity;
+    private SecretsHelper secretsHelper;
 
-    public UserAdapter(OrmLiteBaseListActivity<DatabaseHelper> ormLiteBaseListActivity, List<User> users) {
+    public UserAdapter(OrmLiteBaseListActivity<DatabaseHelper> ormLiteBaseListActivity,
+                       List<User> users) {
         super(ormLiteBaseListActivity, 0, users);
 
         this.ormLiteBaseListActivity = ormLiteBaseListActivity;
+        this.secretsHelper = new SecretsHelper(ormLiteBaseListActivity);
         setBuddyAPIInterface();
     }
 
@@ -37,12 +43,18 @@ public class UserAdapter extends ArrayAdapter {
         super(ormLiteBaseListActivity, 0);
 
         this.ormLiteBaseListActivity = ormLiteBaseListActivity;
+        this.secretsHelper = new SecretsHelper(ormLiteBaseListActivity);
         setBuddyAPIInterface();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final User user = (User) getItem(position);
+        final UUID currentUserID = secretsHelper.getCurrentUserID();
+
+        if (currentUserID == user.getId()) {
+            return null; // We don't want to show the user him or herself.
+        }
 
         if (convertView == null) {
             convertView = View.inflate(getContext(), R.layout.user_list_item, null);
@@ -52,6 +64,14 @@ public class UserAdapter extends ArrayAdapter {
         final ImageView addBuddy = (ImageView) convertView.findViewById(R.id.add_buddy_list_item);
 
         name.setText(user.getFullName());
+        System.out.println(currentUserID);
+        System.out.println(user.getBuddyIDs());
+
+        if (user.getBuddyIDs().contains(currentUserID)) {
+            // Make it visually obvious that the user is a buddy and return early.
+            addBuddy.setImageDrawable(getContext().getResources().getDrawable(R.drawable.checkmark));
+            return convertView;
+        }
 
         addBuddy.setOnClickListener(new View.OnClickListener() {
             @Override

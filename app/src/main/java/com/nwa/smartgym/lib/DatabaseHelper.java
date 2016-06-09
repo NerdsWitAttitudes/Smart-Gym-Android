@@ -30,6 +30,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     private Dao<Buddy, UUID> buddyDao;
     private Dao<Device, UUID> deviceDao;
+    private Dao<User, UUID> userDao;
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -48,6 +49,14 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
         return buddyDao;
     }
+    public Dao<User, UUID> getUserDao() throws SQLException {
+        if (userDao == null) {
+            userDao = getDao(User.class);
+        }
+
+        return userDao;
+    }
+
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource) {

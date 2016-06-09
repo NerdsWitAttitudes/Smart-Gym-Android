@@ -2,19 +2,18 @@ package com.nwa.smartgym.api.interfaces;
 
 import android.content.Context;
 
-import com.nwa.smartgym.api.AuthAPI;
+import com.j256.ormlite.dao.Dao;
 import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.api.UserAPI;
 import com.nwa.smartgym.api.callbacks.Callback;
 import com.nwa.smartgym.lib.SecretsHelper;
 import com.nwa.smartgym.lib.adapters.UserAdapter;
-import com.nwa.smartgym.models.Buddy;
 import com.nwa.smartgym.models.HTTPResponse;
 import com.nwa.smartgym.models.Login;
 import com.nwa.smartgym.models.User;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -57,7 +56,7 @@ public class UserAPIInterface {
         });
     }
 
-    public void list(){
+    public void list() {
         if (userAdapter == null) {
             return;
         }
@@ -70,6 +69,19 @@ public class UserAPIInterface {
                 super.onResponse(call, response);
                 userAdapter.addAll(response.body());
                 userAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    public void persistCurrentUserLocally() {
+        Call<User> call = this.userService.getMe();
+
+        call.enqueue(new Callback<User>(context) {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                super.onResponse(call, response);
+                SecretsHelper secretsHelper = new SecretsHelper(context);
+                secretsHelper.setCurrentUserID(response.body().getId());
             }
         });
     }

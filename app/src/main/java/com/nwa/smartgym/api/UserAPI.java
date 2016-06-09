@@ -20,6 +20,9 @@ public interface UserAPI {
             @Body User user
     );
 
+    @GET("user/me")
+    Call<User> getMe();
+
     @GET("user")
     Call<List<User>> list();
 }

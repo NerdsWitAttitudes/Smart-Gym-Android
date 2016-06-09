@@ -8,6 +8,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -19,7 +20,7 @@ public class User {
 
     private String password;
 
-    @SerializedName("passwordConfirm")
+    @SerializedName("password_confirm")
     private String passwordConfirm;
 
     @DatabaseField(unique = true)
@@ -40,22 +41,26 @@ public class User {
     @SerializedName("date_of_birth")
     private String dateOfBirth;
 
+    @SerializedName("buddy_ids")
+    private List<UUID> buddyIDs;
+
     // For ORMLite use
     User(){};
 
     public User(String password, String passwordConfirm, String email, String firstName, String lastName, String country, DateTime dateOfBirth) {
-        this(null, email, firstName, lastName, country, dateOfBirth);
+        this(null, email, firstName, lastName, country, dateOfBirth, null);
         this.password = password;
         this.passwordConfirm = passwordConfirm;
     }
 
-    public User(UUID id, String email, String firstName, String lastName, String country, DateTime dateOfBirth) {
+    public User(UUID id, String email, String firstName, String lastName, String country, DateTime dateOfBirth, List<UUID> buddyIDs) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.country = country;
         this.dateOfBirth = formatDate(dateOfBirth);
+        this.buddyIDs = buddyIDs;
     }
     private String formatDate(DateTime date) {
         // format string for serialization into a Python, UTC compatible date
@@ -74,4 +79,8 @@ public class User {
     public String getFullName() {return firstName + " " + lastName;}
 
     public UUID getId() {return id;}
+
+    public List<UUID> getBuddyIDs() {
+        return buddyIDs;
+    }
 }
