@@ -12,9 +12,11 @@ import java.util.UUID;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Path;
 
 /**
  * Created by robin on 6-6-16.
@@ -27,4 +29,7 @@ public interface BuddyAPI {
     Call<Buddy> put(
             @Body Map<String, UUID> requestBody
     );
+
+    @DELETE("user/buddies/{id}")
+    Call<HTTPResponse> delete(@Path("id") UUID buddyID);
 }

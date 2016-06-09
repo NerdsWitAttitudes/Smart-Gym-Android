@@ -90,6 +90,24 @@ public class BuddyAPIInterface {
 
     }
 
+    public void delete(final Buddy buddy) {
+        Call<HTTPResponse> call = buddyService.delete(buddy.getId());
+        call.enqueue(new Callback<HTTPResponse>(context) {
+
+            @Override
+            public void onResponse(Call<HTTPResponse> call, Response<HTTPResponse> response) {
+                super.onResponse(call, response);
+                if (response.code() == 204) {
+                    try {
+                        buddyDao.deleteById(buddy.getId());
+                    } catch (SQLException e) {
+                        Log.e(context.getClass().getName(), "Unable to delete buddy", e);
+                    }
+                }
+            }
+        });
+    }
+
     private void prepareQueries() {
         try {
             preparedListQuery = buddyDao.queryBuilder().prepare();

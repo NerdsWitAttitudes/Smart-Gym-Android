@@ -34,7 +34,8 @@ public class BuddyAdapter extends OrmLiteCursorAdapter<Buddy, RelativeLayout> {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                buddyAPIInterface.delete(buddy);
+                notifyDataSetChanged();
             }
         });
     }
