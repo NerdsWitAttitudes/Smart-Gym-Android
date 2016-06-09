@@ -3,6 +3,7 @@ package com.nwa.smartgym.api.callbacks;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.nwa.smartgym.R;
@@ -38,6 +39,7 @@ public abstract class Callback<T> implements retrofit2.Callback<T> {
 
     @Override
     public void onFailure(Call<T> call, Throwable t) {
+        Log.e(this.getClass().getName(), t.toString());
         ErrorHelper.raiseGenericError(context);
     }
 

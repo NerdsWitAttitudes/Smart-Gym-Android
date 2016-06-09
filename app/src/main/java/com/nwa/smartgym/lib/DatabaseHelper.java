@@ -21,7 +21,7 @@ import java.util.UUID;
  */
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private static final String DATABASE_NAME = "smartgym.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     private Dao<Buddy, UUID> buddyDao;
     private Dao<Device, UUID> deviceDao;
@@ -48,6 +48,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource) {
         try {
             TableUtils.createTable(connectionSource, Device.class);
+            TableUtils.createTable(connectionSource, Buddy.class);
+            TableUtils.createTable(connectionSource, User.class);
         } catch (SQLException e) {
             Log.e(DatabaseHelper.class.getName(), "Error creating the database", e);
         }
@@ -55,5 +57,15 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource,
-                          int oldVersion, int newVersion) {}
+                          int oldVersion, int newVersion) {
+        try {
+            if (newVersion == 2 && oldVersion == 1) {
+                TableUtils.createTable(connectionSource, Buddy.class);
+                TableUtils.createTable(connectionSource, User.class);
+            }
+        } catch (SQLException e) {
+            Log.e(DatabaseHelper.class.getName(), "Error updating version " +
+                    oldVersion + " to version " + newVersion);
+        }
+    }
 }

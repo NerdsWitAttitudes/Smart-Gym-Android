@@ -2,32 +2,46 @@ package com.nwa.smartgym.models;
 
 
 import com.google.gson.annotations.SerializedName;
+import com.j256.ormlite.field.DatabaseField;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.util.UUID;
+
 /**
  * Created by robin on 8-5-16.
  */
 public class User {
+    @DatabaseField(columnName = "_id", id = true, unique = true)
+    private UUID id;
+
     private String password;
 
     @SerializedName("passwordConfirm")
     private String passwordConfirm;
 
+    @DatabaseField(unique = true)
     private String email;
 
+    @DatabaseField
     @SerializedName("first_name")
     private String firstName;
 
+    @DatabaseField
     @SerializedName("last_name")
     private String lastName;
 
+    @DatabaseField
     private String country;
 
+    @DatabaseField
     @SerializedName("date_of_birth")
     private String dateOfBirth;
+
+    // For ORMLite use
+    User(){};
 
     public User(String password, String passwordConfirm, String email, String firstName, String lastName, String country, DateTime dateOfBirth) {
         this(email, firstName, lastName, country, dateOfBirth);

@@ -68,4 +68,7 @@
     <string name="action_next">Next</string>
     <string name="action_cancel">Cancel</string>
     <string name="title_activity_devices">Devices</string>
+
+    <!-- String realted to buddies -->
+    <string name="buddies">Buddies</string>
 </resources>

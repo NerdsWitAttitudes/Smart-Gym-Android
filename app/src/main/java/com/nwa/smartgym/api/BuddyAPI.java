@@ -11,5 +11,5 @@ import retrofit2.http.GET;
  */
 public interface BuddyAPI {
     @GET("user/buddies")
-    Call<List<Buddy>> getBuddies();
+    Call<List<Buddy>> list();
 }

@@ -48,17 +48,4 @@ public class UserAPIInterface {
             }
         });
     }
-
-    public void getBuddies() {
-        Call<List<Buddy>> call = this.userService.getBuddies();
-
-        call.enqueue(new Callback<List<Buddy>>(context) {
-            @Override
-            public void onResponse(Call<List<Buddy>> call, Response<List<Buddy>> response) {
-                super.onResponse(call, response);
-
-                List<Buddy> buddies = response.body();
-            }
-        });
-    }
 }
