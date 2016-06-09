@@ -49,7 +49,7 @@ public class UserAdapter extends ArrayAdapter {
         }
 
         TextView name = (TextView) convertView.findViewById(R.id.name_user_list_item);
-        ImageView addBuddy = (ImageView) convertView.findViewById(R.id.add_buddy_list_item);
+        final ImageView addBuddy = (ImageView) convertView.findViewById(R.id.add_buddy_list_item);
 
         name.setText(user.getFullName());
 
@@ -68,6 +68,12 @@ public class UserAdapter extends ArrayAdapter {
                 }
 
                 buddyAPIInterface.put(user.getId());
+
+                // Make it visually obvious that the user is added as a buddy and prevent the user
+                // from making the request again.
+                addBuddy.setImageDrawable(getContext().getResources().getDrawable(R.drawable.checkmark));
+
+                addBuddy.setOnClickListener(null);
             }
         });
 

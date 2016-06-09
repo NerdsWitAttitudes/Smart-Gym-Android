@@ -10,6 +10,7 @@ import com.nwa.smartgym.R;
 import com.nwa.smartgym.activities.Welcome;
 import com.nwa.smartgym.api.DeviceAPI;
 import com.nwa.smartgym.api.ServiceGenerator;
+import com.nwa.smartgym.lib.AuthHelper;
 import com.nwa.smartgym.lib.ErrorHelper;
 import com.nwa.smartgym.lib.SecretsHelper;
 
@@ -44,8 +45,7 @@ public abstract class Callback<T> implements retrofit2.Callback<T> {
     }
 
     private void handleUnauthenticatedUser() {
-        Intent intent = new Intent(context, Welcome.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
+        AuthHelper authHelper = new AuthHelper(context);
+        authHelper.logOut();
     }
 }

@@ -13,6 +13,7 @@ import com.nwa.smartgym.activities.Welcome;
 import com.nwa.smartgym.api.AuthAPI;
 import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.api.callbacks.Callback;
+import com.nwa.smartgym.lib.AuthHelper;
 import com.nwa.smartgym.lib.ErrorHelper;
 import com.nwa.smartgym.lib.SecretsHelper;
 import com.nwa.smartgym.models.HTTPResponse;
@@ -84,23 +85,8 @@ public class AuthAPIInterface {
             @Override
             public void onResponse(Call<HTTPResponse> call, Response<HTTPResponse> response) {
                 super.onResponse(call, response);
-                removeSecurityHeader();
-                launchWelcome();
-            }
-
-            private void launchWelcome() {
-                Intent intent = new Intent(context, Welcome.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
-            }
-
-            private void removeSecurityHeader() {
-                SharedPreferences secrets = context.getSharedPreferences(
-                        context.getString(R.string.preference_file_key), Context.MODE_PRIVATE
-                );
-                SharedPreferences.Editor editor = secrets.edit();
-                editor.remove(context.getString(R.string.auth_tkt));
-                editor.apply();
+                AuthHelper authHelper = new AuthHelper(context);
+                authHelper.logOut();
             }
         });
     }
