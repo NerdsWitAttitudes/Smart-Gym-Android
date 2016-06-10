@@ -40,7 +40,7 @@ public class SignIn extends AppCompatActivity  {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private View mMainView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +70,6 @@ public class SignIn extends AppCompatActivity  {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-        mMainView = findViewById(R.id.main_container);
     }
 
     private void attemptLogin() {
@@ -112,10 +111,11 @@ public class SignIn extends AppCompatActivity  {
         return email.contains("@");
     }
 
-    public void launchMain(View view) {
+    public void launchMain() {
         Intent intent = new Intent(this, Main.class);
         startActivity(intent);
     }
+
 
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -141,7 +141,7 @@ public class SignIn extends AppCompatActivity  {
                         Headers headers = response.headers();
                         String token = headers.get("Set-Cookie");
                         storeSecurityHeader(token);
-                        launchMain(mMainView);
+                        launchMain();
                     } else if (response.code() == 400){
                         mPasswordView.setError(getString(R.string.log_in_failed));
                         mPasswordView.requestFocus();
@@ -186,7 +186,4 @@ public class SignIn extends AppCompatActivity  {
             mAuthTask = null;
         }
     }
-
-
 }
-

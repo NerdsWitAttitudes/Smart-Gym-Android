@@ -15,11 +15,12 @@
         android:text="@string/busyness_header_message"
         android:id="@+id/busyness_header_message" />
 
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
+        android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge"
 
         android:id="@+id/busyness_date"
@@ -32,5 +33,13 @@
         android:id="@+id/busyness_graph"
         android:layout_marginTop="20dp"
         android:layout_below="@id/busyness_date" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/busyness_graph"></LinearLayout>
 
 </RelativeLayout>
