@@ -58,7 +58,9 @@ public class BuddyAPIInterface {
                 if (response.code() == 200) {
                     for (Buddy buddy : response.body()) {
                         try {
-                            buddyDao.create(buddy);
+                            if (!buddyDao.idExists(buddy.getId())) {
+                                buddyDao.create(buddy);
+                            }
                         } catch (SQLException e) {
                             Log.e(context.getClass().getName(), "Unable to create buddy", e);
                         }

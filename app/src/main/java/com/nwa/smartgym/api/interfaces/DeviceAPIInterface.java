@@ -52,7 +52,9 @@ public class DeviceAPIInterface {
                 if (response.code() == 200) {
                     for (Device device : response.body()) {
                         try {
-                            deviceDao.create(device);
+                            if (!deviceDao.idExists(device.getId())) {
+                                deviceDao.create(device);
+                            }
                         } catch (SQLException e) {
                             Log.e(context.getClass().getName(), "Unable to persist device", e);
                         }

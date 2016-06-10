@@ -31,6 +31,7 @@
     <!-- Strings related to devices -->
     <string name="action_persist_devices">Add devices</string>
     <string name="action_persist_device">Add device</string>
+    <string name="error_bluetooth_not_supported">Your device does not support bluetooth.</string>
 
     <!-- Sign up error messages -->
     <string name="error_email_required">Email is required.</string>
