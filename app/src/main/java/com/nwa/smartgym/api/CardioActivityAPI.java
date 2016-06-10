@@ -1,6 +1,7 @@
 package com.nwa.smartgym.api;
 
 import com.nwa.smartgym.models.CardioActivity;
+import com.nwa.smartgym.models.UserActivity;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,5 +25,8 @@ public interface CardioActivityAPI {
 
     @PUT(baseUrl + "/{id}")
     Call<CardioActivity> endSession(@Path("id") UUID cardioActivityId, @Body CardioActivity cardioActivity);
+
+    @GET("/user_activity")
+    Call<List<UserActivity>> getUserActivities();
 
 }

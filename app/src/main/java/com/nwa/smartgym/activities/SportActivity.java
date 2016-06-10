@@ -10,15 +10,18 @@ import com.nwa.smartgym.R;
 import com.nwa.smartgym.api.CardioActivityAPI;
 import com.nwa.smartgym.api.GoogleFitService;
 import com.nwa.smartgym.api.ServiceGenerator;
+import com.nwa.smartgym.api.callbacks.Callback;
 import com.nwa.smartgym.lib.ErrorHelper;
 import com.nwa.smartgym.lib.SecretsHelper;
 import com.nwa.smartgym.models.CardioActivity;
+import com.nwa.smartgym.models.UserActivity;
 
-import java.util.UUID;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Response;
 
 public class SportActivity extends AppCompatActivity {
-
-    UUID activityId = UUID.fromString("a920093a-7fa5-440a-a257-93add88cf8f9");
 
     private GoogleFitService googleFitService;
     private CardioActivityAPI smartGymService;
@@ -47,8 +50,7 @@ public class SportActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (currentCardioActivity == null) {
-                        currentCardioActivity = new CardioActivity(activityId, activityType);
-                        googleFitService.addCardioActivity(currentCardioActivity);
+                        createNewCardioActivity(activityType);
                     } else {
                         ErrorHelper.raiseGenericError(getBaseContext());
                     }
@@ -63,5 +65,27 @@ public class SportActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void createNewCardioActivity(final String activityType) {
+        final Call<List<UserActivity>> userActivities = smartGymService.getUserActivities();
+        userActivities.enqueue(new Callback<List<UserActivity>>(this) {
+            @Override
+            public void onResponse(Call<List<UserActivity>> call, Response<List<UserActivity>> response) {
+                super.onResponse(call, response);
+
+                if (response.body().size() > 0) {
+                    for (UserActivity userActivity : response.body()) {
+                        if (userActivity.getEndDate() == null) {
+                            currentCardioActivity = new CardioActivity(userActivity.getId(), activityType);
+                            googleFitService.addCardioActivity(currentCardioActivity);
+                        }
+                    }
+
+                } else {
+                    super.onFailure(call, new Throwable("No active activity found"));
+                }
+            }
+        });
     }
 }
