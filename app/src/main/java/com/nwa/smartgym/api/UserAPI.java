@@ -25,6 +25,9 @@ public interface UserAPI {
     @GET("user/me")
     Call<User> getMe();
 
+    @GET("user/buddies/recommended")
+    Call<List<User>> listRecommendedBuddies();
+
     @GET("user")
     Call<List<User>> list(@Query("exclude") List<UUID> exclude);
 }

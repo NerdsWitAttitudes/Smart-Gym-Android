@@ -29,6 +29,19 @@
         android:layout_toRightOf="@id/logo_user_list_item"
         android:layout_toEndOf="@id/logo_user_list_item"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_recommended_buddy"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_marginTop="5dp"
+        android:text="@string/recommended_buddy"
+        android:textColor="@color/colorPrimary"
+        android:layout_below="@id/name_user_list_item"
+        android:layout_toRightOf="@id/logo_user_list_item"
+        android:layout_toEndOf="@id/logo_user_list_item"
+        android:visibility="invisible"/>
+
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"

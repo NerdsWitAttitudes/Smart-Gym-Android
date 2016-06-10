@@ -18,6 +18,7 @@ import com.nwa.smartgym.lib.SecretsHelper;
 import com.nwa.smartgym.models.User;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,6 +27,14 @@ import java.util.UUID;
  * Created by robin on 9-6-16.
  */
 public class UserAdapter extends ArrayAdapter {
+    ViewHolder holder;
+
+    static class ViewHolder {
+        TextView name;
+        View recommendedBuddy;
+        int position;
+    }
+
     private BuddyAPIInterface buddyAPIInterface;
     private OrmLiteBaseListActivity<DatabaseHelper> ormLiteBaseListActivity;
     private SecretsHelper secretsHelper;
@@ -53,19 +62,39 @@ public class UserAdapter extends ArrayAdapter {
         final UUID currentUserID = secretsHelper.getCurrentUserID();
 
         if (convertView == null) {
+            // only inflate if the view doesn't already exist
             convertView = View.inflate(getContext(), R.layout.user_list_item, null);
+
+            holder = new ViewHolder();
+            // declare views
+            holder.name = (TextView) convertView.findViewById(R.id.name_user_list_item);
+            holder.recommendedBuddy = convertView.findViewById(R.id.text_recommended_buddy);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
 
-        TextView name = (TextView) convertView.findViewById(R.id.name_user_list_item);
+        // The addBuddy ImageView always has to be found by ID because it's interacted with in the
+        // onClickListener.
         final ImageView addBuddy = (ImageView) convertView.findViewById(R.id.add_buddy_list_item);
+        holder.name.setText(user.getFullName());
 
-        name.setText(user.getFullName());
+        if (user.getRecommended()) {
+            // Recommended buddies should be represented as such
+
+            holder.recommendedBuddy.setVisibility(View.VISIBLE);
+        } else {
+            holder.recommendedBuddy.setVisibility(View.INVISIBLE);
+        }
 
         if (user.getBuddyIDs().contains(currentUserID)) {
             // Make it visually obvious that the user is a buddy and return early.
             addBuddy.setImageDrawable(getContext().getResources().getDrawable(R.drawable.checkmark));
             return convertView;
+        } else {
+            addBuddy.setImageDrawable(getContext().getResources().getDrawable(R.drawable.add_friend));
         }
+
 
         addBuddy.setOnClickListener(new View.OnClickListener() {
             @Override

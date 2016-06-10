@@ -58,15 +58,15 @@ public class UserAPIInterface {
         });
     }
 
-    public void list() {
+    public void list(List<UUID> exclude) {
         if (userAdapter == null) {
             return;
         }
 
         // We don't want to have the current logged in user show up in the results so we exclude
-        // him or her.
+        // him or her. We also want to exclude the users already retrieved when calling recommended
+        // buddies.
         SecretsHelper secretsHelper = new SecretsHelper(context);
-        List<UUID> exclude = new ArrayList<>();
         exclude.add(secretsHelper.getCurrentUserID());
 
         Call<List<User>> call = this.userService.list(exclude);
@@ -77,6 +77,33 @@ public class UserAPIInterface {
                 super.onResponse(call, response);
                 userAdapter.addAll(response.body());
                 userAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    public void listRecommendedBuddies() {
+        if (userAdapter == null) {
+            return;
+        }
+
+        Call<List<User>> call = this.userService.listRecommendedBuddies();
+
+        call.enqueue(new Callback<List<User>>(context) {
+            @Override
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                super.onResponse(call, response);
+
+                // Call list for the remaining users. Excluding the ones we just retrieved
+                // also add the users to the adapter
+                List<UUID> exclude = new ArrayList<UUID>();
+                for (User user : response.body()) {
+                    user.setRecommended(true);
+                    userAdapter.add(user);
+                    exclude.add(user.getId());
+                }
+
+                userAdapter.notifyDataSetChanged();
+                list(exclude);
             }
         });
     }

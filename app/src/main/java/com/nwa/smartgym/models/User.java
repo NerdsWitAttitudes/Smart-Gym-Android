@@ -44,6 +44,8 @@ public class User {
     @SerializedName("buddy_ids")
     private List<UUID> buddyIDs;
 
+    private Boolean recommended = false;
+
     // For ORMLite use
     User(){};
 
@@ -83,4 +85,8 @@ public class User {
     public List<UUID> getBuddyIDs() {
         return buddyIDs;
     }
+
+    public boolean getRecommended() { return recommended;}
+
+    public void setRecommended(Boolean recommended) { this.recommended = recommended;}
 }

@@ -71,4 +71,5 @@
 
     <!-- String realted to buddies -->
     <string name="buddies">Buddies</string>
+    <string name="recommended_buddy">Recommended buddy</string>
 </resources>

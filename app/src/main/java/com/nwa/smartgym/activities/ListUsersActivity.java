@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.j256.ormlite.android.apptools.OrmLiteBaseListActivity;
 import com.j256.ormlite.dao.Dao;
@@ -23,8 +24,6 @@ import java.util.UUID;
 
 public class ListUsersActivity extends OrmLiteBaseListActivity<DatabaseHelper> {
 
-    private UserAPIInterface userAPIInterface;
-    private UserAdapter userAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +31,10 @@ public class ListUsersActivity extends OrmLiteBaseListActivity<DatabaseHelper> {
         setContentView(R.layout.activity_list_users);
 
         UserAdapter userAdapter = new UserAdapter(this);
-        userAPIInterface = new UserAPIInterface(this, userAdapter);
-        userAPIInterface.list();
+        UserAPIInterface userAPIInterface = new UserAPIInterface(this, userAdapter);
+
+        //get recommended buddies first to show in the top list
+        userAPIInterface.listRecommendedBuddies();
 
         setListAdapter(userAdapter);
     }
