@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OrmLiteCursorAdapter;
 import com.nwa.smartgym.R;
-import com.nwa.smartgym.api.DeviceAPIInterface;
+import com.nwa.smartgym.api.interfaces.DeviceAPIInterface;
 import com.nwa.smartgym.models.Device;
 
 /**
