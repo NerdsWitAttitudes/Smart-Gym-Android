@@ -6,12 +6,14 @@ import com.j256.ormlite.dao.Dao;
 import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.api.UserAPI;
 import com.nwa.smartgym.api.callbacks.Callback;
+import com.nwa.smartgym.lib.AuthHelper;
 import com.nwa.smartgym.lib.SecretsHelper;
 import com.nwa.smartgym.lib.adapters.UserAdapter;
 import com.nwa.smartgym.models.HTTPResponse;
 import com.nwa.smartgym.models.Login;
 import com.nwa.smartgym.models.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,7 +63,13 @@ public class UserAPIInterface {
             return;
         }
 
-        Call<List<User>> call = this.userService.list();
+        // We don't want to have the current logged in user show up in the results so we exclude
+        // him or her.
+        SecretsHelper secretsHelper = new SecretsHelper(context);
+        List<UUID> exclude = new ArrayList<>();
+        exclude.add(secretsHelper.getCurrentUserID());
+
+        Call<List<User>> call = this.userService.list(exclude);
 
         call.enqueue(new Callback<List<User>>(context) {
             @Override

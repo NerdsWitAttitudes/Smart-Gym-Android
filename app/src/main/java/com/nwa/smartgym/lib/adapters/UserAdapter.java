@@ -52,10 +52,6 @@ public class UserAdapter extends ArrayAdapter {
         final User user = (User) getItem(position);
         final UUID currentUserID = secretsHelper.getCurrentUserID();
 
-        if (currentUserID == user.getId()) {
-            return null; // We don't want to show the user him or herself.
-        }
-
         if (convertView == null) {
             convertView = View.inflate(getContext(), R.layout.user_list_item, null);
         }
@@ -64,8 +60,6 @@ public class UserAdapter extends ArrayAdapter {
         final ImageView addBuddy = (ImageView) convertView.findViewById(R.id.add_buddy_list_item);
 
         name.setText(user.getFullName());
-        System.out.println(currentUserID);
-        System.out.println(user.getBuddyIDs());
 
         if (user.getBuddyIDs().contains(currentUserID)) {
             // Make it visually obvious that the user is a buddy and return early.
