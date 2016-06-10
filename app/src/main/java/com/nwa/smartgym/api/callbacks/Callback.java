@@ -14,6 +14,8 @@ import com.nwa.smartgym.lib.AuthHelper;
 import com.nwa.smartgym.lib.ErrorHelper;
 import com.nwa.smartgym.lib.SecretsHelper;
 
+import java.net.SocketTimeoutException;
+
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -40,8 +42,12 @@ public abstract class Callback<T> implements retrofit2.Callback<T> {
 
     @Override
     public void onFailure(Call<T> call, Throwable t) {
-        Log.e(this.getClass().getName(), t.toString());
-        ErrorHelper.raiseGenericError(context);
+        if (t instanceof SocketTimeoutException) {
+            ErrorHelper.showToastError(context, context.getString(R.string.timeout));
+        } else {
+            Log.e(this.getClass().getName(), t.toString());
+            ErrorHelper.raiseGenericError(context);
+        }
     }
 
     private void handleUnauthenticatedUser() {

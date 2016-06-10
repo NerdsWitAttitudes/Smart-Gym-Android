@@ -47,6 +47,7 @@
 
     <!-- Generic error messages -->
     <string name="server_500_message">Something went wrong, please try again later</string>
+    <string name="timeout">Not connected. Do you have an internet connection?</string>
 
     <!-- strings for in app use -->
     <string name="preference_file_key">com.nwa.smartgymandroid.secrets</string>
