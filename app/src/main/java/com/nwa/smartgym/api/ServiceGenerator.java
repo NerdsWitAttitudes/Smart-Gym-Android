@@ -29,7 +29,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ServiceGenerator {
 
-    public static final String baseURL = "http://localhost:6543/";
+
+    public static final String baseURL = "http://192.168.88.1:6543/";
     public static final String timePattern = "HH:mm:ssZ";
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();

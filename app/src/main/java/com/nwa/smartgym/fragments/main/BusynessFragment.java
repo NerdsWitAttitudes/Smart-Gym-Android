@@ -19,6 +19,8 @@ import com.jjoe64.graphview.series.DataPoint;
 import com.nwa.smartgym.R;
 import com.nwa.smartgym.api.AuthAPI;
 import com.nwa.smartgym.api.BusynessAPI;
+import com.nwa.smartgym.api.BusynessAPIInterface;
+import com.nwa.smartgym.api.DeviceAPIInterface;
 import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.models.HTTPResponse;
 import com.nwa.smartgym.models.Login;
@@ -52,15 +54,17 @@ public class BusynessFragment extends Fragment {
     private String myFormat = "yyyy-MM-dd";
     private Calendar calendar = Calendar.getInstance();
     private SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.ENGLISH);
-    private BusynessAPI busynessService = ServiceGenerator.createSmartGymService(BusynessAPI.class);
     private Date today;
+    private BusynessAPIInterface busynessAPIInterface;
     public static BusynessFragment newInstance() {
         return new BusynessFragment();
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        busynessAPIInterface = new BusynessAPIInterface(this);
         View rootView = inflater.inflate(R.layout.fragment_busyness, container, false);
         mBusynessGraph = (GraphView) rootView.findViewById(R.id.busyness_graph);
         mBusynessDate = (TextView) rootView.findViewById(R.id.busyness_date);
@@ -101,42 +105,41 @@ public class BusynessFragment extends Fragment {
     private void getBusynessData() {
         String busynessDateText = mBusynessDate.getText().toString();
         System.out.println(busynessDateText);
-        Call<ResponseBody> call;
         Date busynessDate = calendar.getTime();
         if(busynessDate.before(today)) {
-            call = busynessService.past(busynessDateText, "af425ccf-3eef-4f19-9e8d-8cb86867824e");
+             busynessAPIInterface.past(busynessDateText, "af425ccf-3eef-4f19-9e8d-8cb86867824e");
         } else if (busynessDate.after(today)) {
-            call = busynessService.predict(busynessDateText, "af425ccf-3eef-4f19-9e8d-8cb86867824e");
+            busynessAPIInterface.predict(busynessDateText, "af425ccf-3eef-4f19-9e8d-8cb86867824e");
         } else {
-            call = busynessService.today("af425ccf-3eef-4f19-9e8d-8cb86867824e");
+            busynessAPIInterface.today("af425ccf-3eef-4f19-9e8d-8cb86867824e");
         }
 
-        call.enqueue(new Callback<ResponseBody>() {
-
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    updateGraph(new JSONObject(response.body().string()));
-                } catch (IOException | JSONException e) {
-                    e.printStackTrace();
-                }
-                if (response.code() != 200) {
-                    System.out.println(response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-//             TODO failure ding maken
-            }
-
-
-
-        });
+//        call.enqueue(new Callback<ResponseBody>() {
+//
+//            @Override
+//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                try {
+//                    updateGraph(new JSONObject(response.body().string()));
+//                } catch (IOException | JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                if (response.code() != 200) {
+//                    System.out.println(response.code());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ResponseBody> call, Throwable t) {
+////             TODO failure ding maken
+//            }
+//
+//
+//
+//        });
 
     }
 
-    private void updateGraph(JSONObject busynessJSON) throws JSONException {
+    public void updateGraph(JSONObject busynessJSON) throws JSONException {
         mBusynessGraph.removeAllSeries();
 
         // this is the correct ISO format the API uses.

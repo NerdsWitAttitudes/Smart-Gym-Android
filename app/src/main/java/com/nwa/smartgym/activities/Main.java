@@ -16,6 +16,7 @@ import com.nwa.smartgym.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.nwa.smartgym.fragments.main.BusynessFragment;
 import  com.nwa.smartgym.lib.DefaultPageAdapter;
 import  com.nwa.smartgym.lib.NonSwipeableViewPager;
 import com.nwa.smartgym.lib.adapters.DrawerAdapter;
@@ -47,6 +48,7 @@ public class Main extends AppCompatActivity {
 
     private List<Fragment> listFragments() {
         List<Fragment> fragmentList = new ArrayList<Fragment>();
+        fragmentList.add(BusynessFragment.newInstance());
         return fragmentList;
     }
 
