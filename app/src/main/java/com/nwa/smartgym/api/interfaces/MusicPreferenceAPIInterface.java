@@ -53,16 +53,7 @@ public class MusicPreferenceAPIInterface {
                 if (response.code() == 200) {
                     List<com.nwa.smartgym.models.MusicPreference> musicPreferences = response.body();
 
-                    SportScheduleAdapter sportScheduleAdapter = new SportScheduleAdapter(SportSchedule.this, sportSchedules);
-                    listView.setAdapter(sportScheduleAdapter);
-
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            com.nwa.smartgym.models.SportSchedule sportSchedule = (com.nwa.smartgym.models.SportSchedule) parent.getItemAtPosition(position);
-                            startActivity(new Intent(SportSchedule.this, SportScheduleItem.class).putExtra("SportSchedule", (Serializable) sportSchedule));
-                        }
-                    });
+                    
                 }
             }
         });
