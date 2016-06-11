@@ -1,9 +1,12 @@
 package com.nwa.smartgym.api.callbacks;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.widget.Toast;
 
 import com.nwa.smartgym.R;
+import com.nwa.smartgym.activities.Welcome;
 import com.nwa.smartgym.api.DeviceAPI;
 import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.lib.ErrorHelper;
@@ -25,12 +28,22 @@ public abstract class Callback<T> implements retrofit2.Callback<T> {
     @Override
     public void onResponse(Call<T> call, Response<T> response) {
         if (!response.isSuccessful()) {
-            ErrorHelper.raiseGenericError(context);
+            if (response.code() == 401) {
+                handleUnauthenticatedUser();
+            } else {
+                ErrorHelper.raiseGenericError(context);
+            }
         }
     }
 
     @Override
     public void onFailure(Call<T> call, Throwable t) {
         ErrorHelper.raiseGenericError(context);
+    }
+
+    private void handleUnauthenticatedUser() {
+        Intent intent = new Intent(context, Welcome.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 }

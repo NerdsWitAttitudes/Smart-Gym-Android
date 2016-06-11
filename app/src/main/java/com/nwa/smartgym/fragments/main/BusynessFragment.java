@@ -20,7 +20,6 @@ import com.nwa.smartgym.R;
 import com.nwa.smartgym.api.AuthAPI;
 import com.nwa.smartgym.api.BusynessAPI;
 import com.nwa.smartgym.api.BusynessAPIInterface;
-import com.nwa.smartgym.api.DeviceAPIInterface;
 import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.models.HTTPResponse;
 import com.nwa.smartgym.models.Login;

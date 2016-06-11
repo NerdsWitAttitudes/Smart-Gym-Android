@@ -15,6 +15,7 @@
         completions."
     </string>
     <string name="log_in_failed">Password or email is incorrect</string>
+    <string name="logout">Logout</string>
 
     <!-- String related to signup -->
     <string name="prompt_first_name_sign_up">First name</string>

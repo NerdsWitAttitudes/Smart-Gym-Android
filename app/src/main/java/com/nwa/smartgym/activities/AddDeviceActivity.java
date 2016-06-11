@@ -1,16 +1,12 @@
 package com.nwa.smartgym.activities;
 
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.telecom.TelecomManager;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,7 +15,7 @@ import android.widget.ListView;
 import com.j256.ormlite.android.apptools.OrmLiteBaseListActivity;
 import com.j256.ormlite.dao.Dao;
 import com.nwa.smartgym.R;
-import com.nwa.smartgym.api.DeviceAPIInterface;
+import com.nwa.smartgym.api.interfaces.DeviceAPIInterface;
 import com.nwa.smartgym.lib.DatabaseHelper;
 import com.nwa.smartgym.lib.adapters.AddDeviceAdapter;
 import com.nwa.smartgym.models.Device;
