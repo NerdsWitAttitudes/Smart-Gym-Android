@@ -70,6 +70,9 @@
     <string name="action_next">Next</string>
     <string name="title_activity_main">Main</string>
 
+    <!-- music prefs -->
+    <string name="action_music_preference">Music preference</string>
+
     <!-- busyness -->
     <string name="busyness_header_message">Busyness</string>
     <string name="busyness_date">date</string>

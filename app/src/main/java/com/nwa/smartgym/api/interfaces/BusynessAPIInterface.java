@@ -1,8 +1,10 @@
-package com.nwa.smartgym.api;
+package com.nwa.smartgym.api.interfaces;
 
 import android.content.Context;
 import android.util.Log;
 
+import com.nwa.smartgym.api.BusynessAPI;
+import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.api.callbacks.Callback;
 import com.nwa.smartgym.fragments.main.BusynessFragment;
 import com.nwa.smartgym.lib.SecretsHelper;

@@ -51,6 +51,9 @@
             android:parentActivityName=".activities.Main"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activities.MusicPreference"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activities.SportScheduleItem"
             android:parentActivityName=".activities.SportSchedule"
             android:screenOrientation="portrait" />

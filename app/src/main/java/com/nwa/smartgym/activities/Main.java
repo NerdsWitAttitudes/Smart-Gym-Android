@@ -23,7 +23,7 @@ import  com.nwa.smartgym.lib.DefaultPageAdapter;
 import  com.nwa.smartgym.lib.NonSwipeableViewPager;
 import com.nwa.smartgym.lib.SecretsHelper;
 import com.nwa.smartgym.lib.adapters.DrawerAdapter;
-import com.nwa.smartgym.models.DrawerItem;
+import com.nwa.smartgym.models.*;
 
 public class Main extends AppCompatActivity {
 
@@ -69,6 +69,11 @@ public class Main extends AppCompatActivity {
                 getResources().getDrawable(R.drawable.bluetooth),
                 getString(R.string.action_persist_device),
                 new Intent(this, Devices.class)));
+
+        drawerItems.add(new DrawerItem(
+                getResources().getDrawable(R.drawable.music),
+                getString(R.string.action_music_preference),
+                new Intent(this, MusicPreference.class)));
 
         drawerItems.add(new DrawerItem(
                 getResources().getDrawable(R.drawable.ic_date_range_black_24dp),
