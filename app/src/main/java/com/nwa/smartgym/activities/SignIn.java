@@ -114,12 +114,7 @@ public class SignIn extends AppCompatActivity  {
     private boolean isEmailValid(String email) {
         return email.contains("@");
     }
-
-
-    public void launchMain() {
-        Intent intent = new Intent(this, Main.class);
-        startActivity(intent);
-    }
+    
 
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
