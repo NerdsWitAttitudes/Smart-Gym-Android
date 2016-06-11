@@ -276,7 +276,7 @@ public class SignUp extends FragmentActivity {
             getStartedButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (validateEmailData()) {
+                    if (validateEmailData(mEmailView.getText().toString())) {
                         mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1, true);
                     }
                 }
@@ -285,9 +285,7 @@ public class SignUp extends FragmentActivity {
             return rootView;
         }
 
-        public Boolean validateEmailData() {
-            String email = mEmailView.getText().toString();
-
+        public Boolean validateEmailData(String email) {
             if (email.isEmpty()) {
                 mEmailView.setError(getString(R.string.error_email_required));
             } else if (!email.contains("@")) {
