@@ -16,14 +16,8 @@ public class MusicPreference extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_music_preferences);
+        
 
-        UserAdapter userAdapter = new UserAdapter(this);
-        UserAPIInterface userAPIInterface = new UserAPIInterface(this, userAdapter);
-
-        //get recommended buddies first to show in the top list
-        userAPIInterface.listRecommendedBuddies();
-
-        setListAdapter(userAdapter);
     }
 
 }
