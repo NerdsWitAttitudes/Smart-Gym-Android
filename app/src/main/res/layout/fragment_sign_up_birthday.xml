@@ -14,8 +14,8 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/prompt_birthday_sign_up"
         android:id="@+id/birthday_sign_up_message"
-        android:layout_alignLeft="@+id/datePicker"
-        android:layout_alignStart="@+id/datePicker" />
+        android:layout_alignLeft="@+id/birthday_date_picker_sign_up"
+        android:layout_alignStart="@+id/birthday_date_picker_sign_up" />
 
     <Button
         android:layout_width="match_parent"

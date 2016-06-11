@@ -114,7 +114,7 @@ public class SignIn extends AppCompatActivity  {
     private boolean isEmailValid(String email) {
         return email.contains("@");
     }
-
+    
 
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -144,4 +144,3 @@ public class SignIn extends AppCompatActivity  {
         }
     }
 }
-
