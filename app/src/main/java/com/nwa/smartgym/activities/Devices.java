@@ -30,7 +30,6 @@ public class Devices extends OrmLiteBaseListActivity<DatabaseHelper>{
 
     private Context context;
     private OrmLiteCursorAdapter<Device, RelativeLayout> viewAdapter;
-    private LayoutInflater layoutInflater;
 
     private Dao<Device, UUID> deviceDao;
     private PreparedQuery<Device> preparedListQuery;

@@ -75,6 +75,11 @@ public class Main extends AppCompatActivity {
                 getString(R.string.action_sport_schedule),
                 new Intent(this, SportSchedule.class)
         ));
+        drawerItems.add(new DrawerItem(
+                getResources().getDrawable(R.drawable.buddies),
+                getString(R.string.buddies),
+                new Intent(this, Buddies.class)
+        ));
         drawerItems.add(getLoginDrawerItem());
 
 

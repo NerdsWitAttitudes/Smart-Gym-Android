@@ -31,6 +31,7 @@
     <!-- Strings related to devices -->
     <string name="action_persist_devices">Add devices</string>
     <string name="action_persist_device">Add device</string>
+    <string name="error_bluetooth_not_supported">Your device does not support bluetooth.</string>
 
     <!-- Sign up error messages -->
     <string name="error_email_required">Email is required.</string>
@@ -46,6 +47,7 @@
 
     <!-- Generic error messages -->
     <string name="server_500_message">Something went wrong, please try again later</string>
+    <string name="timeout">Not connected. Do you have an internet connection?</string>
 
     <!-- strings for in app use -->
     <string name="preference_file_key">com.nwa.smartgymandroid.secrets</string>
@@ -74,4 +76,8 @@
 
     <string name="action_cancel">Cancel</string>
     <string name="title_activity_devices">Devices</string>
+
+    <!-- String realted to buddies -->
+    <string name="buddies">Buddies</string>
+    <string name="recommended_buddy">Recommended buddy</string>
 </resources>
