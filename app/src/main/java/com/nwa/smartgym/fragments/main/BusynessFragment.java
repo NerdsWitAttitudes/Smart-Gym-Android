@@ -107,35 +107,12 @@ public class BusynessFragment extends Fragment {
         System.out.println(busynessDateText);
         Date busynessDate = calendar.getTime();
         if(busynessDate.before(today)) {
-             busynessAPIInterface.past(busynessDateText, "af425ccf-3eef-4f19-9e8d-8cb86867824e");
+             busynessAPIInterface.past(busynessDateText);
         } else if (busynessDate.after(today)) {
-            busynessAPIInterface.predict(busynessDateText, "af425ccf-3eef-4f19-9e8d-8cb86867824e");
+            busynessAPIInterface.predict(busynessDateText);
         } else {
-            busynessAPIInterface.today("af425ccf-3eef-4f19-9e8d-8cb86867824e");
+            busynessAPIInterface.today();
         }
-
-//        call.enqueue(new Callback<ResponseBody>() {
-//
-//            @Override
-//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                try {
-//                    updateGraph(new JSONObject(response.body().string()));
-//                } catch (IOException | JSONException e) {
-//                    e.printStackTrace();
-//                }
-//                if (response.code() != 200) {
-//                    System.out.println(response.code());
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ResponseBody> call, Throwable t) {
-////             TODO failure ding maken
-//            }
-//
-//
-//
-//        });
 
     }
 

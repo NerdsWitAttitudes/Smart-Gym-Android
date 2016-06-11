@@ -35,8 +35,8 @@ public class BusynessAPIInterface {
                 secretsHelper.getAuthToken());
     }
 
-    public void past(String date, String gym_id) {
-        Call<ResponseBody> call = busynessService.past(date, gym_id);
+    public void past(String date) {
+        Call<ResponseBody> call = busynessService.past(date);
         call.enqueue(new Callback<ResponseBody>(busynessFragment.getContext()) {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -52,8 +52,8 @@ public class BusynessAPIInterface {
         });
     }
 
-    public void today(String gym_id) {
-        Call<ResponseBody> call = busynessService.today(gym_id);
+    public void today() {
+        Call<ResponseBody> call = busynessService.today();
         call.enqueue(new Callback<ResponseBody>(busynessFragment.getContext()) {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -69,8 +69,8 @@ public class BusynessAPIInterface {
         });
     }
 
-    public void predict(String date, String gym_id) {
-        Call<ResponseBody> call = busynessService.predict(date, gym_id);
+    public void predict(String date) {
+        Call<ResponseBody> call = busynessService.predict(date);
         call.enqueue(new Callback<ResponseBody>(busynessFragment.getContext()) {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

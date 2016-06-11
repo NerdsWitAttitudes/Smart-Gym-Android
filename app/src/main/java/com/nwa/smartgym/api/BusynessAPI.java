@@ -18,18 +18,14 @@ import retrofit2.http.Query;
 public interface BusynessAPI {
     @GET("busyness/past")
     Call<ResponseBody> past(
-            @Query("date") String busynessDateText,
-            @Query("gym_id") String gym_id
+            @Query("date") String busynessDateText
     );
 
     @GET("busyness/today")
-    Call<ResponseBody> today(
-            @Query("gym_id") String gym_id
-    );
+    Call<ResponseBody> today();
 
     @GET("busyness/predict")
     Call<ResponseBody> predict(
-            @Query("date") String busynessDateText,
-            @Query("gym_id") String gym_id
+            @Query("date") String busynessDateText
     );
 }
