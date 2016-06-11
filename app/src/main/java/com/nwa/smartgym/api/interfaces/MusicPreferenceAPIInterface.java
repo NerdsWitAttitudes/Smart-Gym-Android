@@ -1,19 +1,27 @@
 package com.nwa.smartgym.api.interfaces;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.design.widget.Snackbar;
+import android.view.View;
+import android.widget.AdapterView;
 
+import com.nwa.smartgym.R;
+import com.nwa.smartgym.activities.SportScheduleItem;
 import com.nwa.smartgym.api.BusynessAPI;
 import com.nwa.smartgym.api.MusicPreferenceAPI;
 import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.api.UserAPI;
 import com.nwa.smartgym.api.callbacks.Callback;
 import com.nwa.smartgym.lib.SecretsHelper;
+import com.nwa.smartgym.lib.adapters.SportScheduleAdapter;
 import com.nwa.smartgym.models.MusicPreference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,7 +51,18 @@ public class MusicPreferenceAPIInterface {
             public void onResponse(Call<List<MusicPreference>> call, Response<List<MusicPreference>> response) {
                 super.onResponse(call, response);
                 if (response.code() == 200) {
+                    List<com.nwa.smartgym.models.MusicPreference> musicPreferences = response.body();
 
+                    SportScheduleAdapter sportScheduleAdapter = new SportScheduleAdapter(SportSchedule.this, sportSchedules);
+                    listView.setAdapter(sportScheduleAdapter);
+
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            com.nwa.smartgym.models.SportSchedule sportSchedule = (com.nwa.smartgym.models.SportSchedule) parent.getItemAtPosition(position);
+                            startActivity(new Intent(SportSchedule.this, SportScheduleItem.class).putExtra("SportSchedule", (Serializable) sportSchedule));
+                        }
+                    });
                 }
             }
         });
