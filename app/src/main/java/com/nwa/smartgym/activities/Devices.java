@@ -20,6 +20,7 @@ import com.j256.ormlite.stmt.PreparedQuery;
 import com.nwa.smartgym.R;
 import com.nwa.smartgym.api.interfaces.DeviceAPIInterface;
 import com.nwa.smartgym.lib.DatabaseHelper;
+import com.nwa.smartgym.lib.MessageHelper;
 import com.nwa.smartgym.lib.adapters.DeviceAdapter;
 import com.nwa.smartgym.models.Device;
 
@@ -64,6 +65,9 @@ public class Devices extends OrmLiteBaseListActivity<DatabaseHelper>{
             @Override
             public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
                 viewAdapter.changeCursor(cursor, ((OrmLiteCursorLoader<Device>) loader).getQuery());
+                if (viewAdapter.getCount() == 0) {
+                    MessageHelper.showLongTermSnackbar(getListView(), getString(R.string.no_devices));
+                }
             }
 
             @Override

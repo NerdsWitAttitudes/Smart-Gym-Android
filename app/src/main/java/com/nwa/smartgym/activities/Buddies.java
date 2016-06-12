@@ -16,6 +16,7 @@ import com.j256.ormlite.dao.Dao;
 import com.nwa.smartgym.R;
 import com.nwa.smartgym.api.interfaces.BuddyAPIInterface;
 import com.nwa.smartgym.lib.DatabaseHelper;
+import com.nwa.smartgym.lib.MessageHelper;
 import com.nwa.smartgym.lib.adapters.BuddyAdapter;
 import com.nwa.smartgym.models.Buddy;
 
@@ -53,6 +54,9 @@ public class Buddies extends OrmLiteBaseListActivity<DatabaseHelper> {
             @Override
             public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
                 viewAdapter.changeCursor(cursor, ((OrmLiteCursorLoader<Buddy>) loader).getQuery());
+                if (viewAdapter.getCount() == 0) {
+                    MessageHelper.showLongTermSnackbar(getListView(), getString(R.string.no_buddies));
+                }
             }
 
             @Override
