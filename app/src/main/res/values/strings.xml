@@ -1,2 +1,89 @@
 <resources>
+    <string name="app_name">SmartGym</string>
+
+    <!-- Strings related to welcome -->
+    <string name="action_sign_up_welcome">Sign up using email</string>
+    <string name="action_log_in_welcome">Or log in instead!</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_log_in">Log in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="log_in_failed">Password or email is incorrect</string>
+    <string name="logout">Logout</string>
+
+    <!-- String related to signup -->
+    <string name="prompt_first_name_sign_up">First name</string>
+    <string name="prompt_last_name_sign_up">Last name</string>
+    <string name="prompt_country_sign_up">Country of residence</string>
+    <string name="prompt_birthday_sign_up">Pick your birthday</string>
+    <string name="prompt_password_confirm_sign_up">Confirm password</string>
+    <string name="action_sign_up">Sign up</string>
+    <string name="action_get_started">Get started</string>
+    <string name="text_terms_of_use">By signing up you agree to our terms of use. You also agree
+    to these other legal things I don\'t really know about because I\'m just a programmer.</string>
+
+    <!-- Strings related to devices -->
+    <string name="action_persist_devices">Add devices</string>
+    <string name="action_persist_device">Add device</string>
+    <string name="error_bluetooth_not_supported">Your device does not support bluetooth.</string>
+
+    <!-- Sign up error messages -->
+    <string name="error_email_required">Email is required.</string>
+    <string name="error_email_invalid">Please enter a valid email address.</string>
+    <string name="error_first_name_required">First name is required.</string>
+    <string name="error_last_name_required">First name is required.</string>
+    <string name="error_pasword_required">Pasword is required.</string>
+    <string name="error_passwords_do_not_match">Password\'s do not match.</string>
+    <string name="error_password_no_letters">Your password must contain at least one letter.</string>
+    <string name="error_password_no_numbers">Your password must contain at least one number.</string>
+    <string name="error_password_contains_spaces">Your password may not contain any whitespaces.</string>
+    <string name="error_password_too_short">Your password must be at least 8 characters long.</string>
+
+    <!-- Generic error messages -->
+    <string name="server_500_message">Something went wrong, please try again later</string>
+    <string name="timeout">Not connected. Do you have an internet connection?</string>
+
+    <!-- strings for in app use -->
+    <string name="preference_file_key">com.nwa.smartgymandroid.secrets</string>
+    <string name="auth_tkt">auth_tkt</string>
+    <string name="loading">Loading</string>
+
+    <!-- Strings related to Sport Schedule -->
+    <string name="action_sport_schedule">Manage Sport Schedules</string>
+    <string name="sport_schedule_loading">Loading Sport Schedules</string>
+    <string name="title_activity_sport_schedule">Sport Schedule</string>
+    <string name="reminder">Reminder</string>
+    <string name="prompt_sport_schedule_name">Sport Schedule Name</string>
+    <string name="prompt_reminder_minutes">Reminder in minutes</string>
+    <string name="save_sport_schedule">Save sport schedule</string>
+    <string name="sport_schedule_changed">Sport schedule notifications changed</string>
+    <string name="sport_schedule_make_one">You don\'t have any sport schedules, make one!</string>
+
+    <string name="title_activity_sign_up">SignUp</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_next">Next</string>
+    <string name="title_activity_main">Main</string>
+
+    <!-- busyness -->
+    <string name="busyness_header_message">Busyness</string>
+    <string name="busyness_date">date</string>
+
+    <string name="action_cancel">Cancel</string>
+    <string name="title_activity_devices">Devices</string>
+
+    <!-- Strings related to cardio activity -->
+    <string name="cardio_activity_stopped_successfully">Started activity successfully</string>
+    <string name="sport_activity_start_session">Start a session</string>
+    <string name="sport_activity_stop_session">Stop a session</string>
+    <string name="activity_activities_name">Activities</string>
+
+    <!-- String realted to buddies -->
+    <string name="buddies">Buddies</string>
+    <string name="recommended_buddy">Recommended buddy</string>
 </resources>
