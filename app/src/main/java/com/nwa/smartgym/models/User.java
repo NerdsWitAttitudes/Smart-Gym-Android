@@ -37,6 +37,10 @@ public class User {
     @SerializedName("buddy_ids")
     private List<UUID> buddyIDs;
 
+    @SerializedName("date_of_birth")
+    private String dateOfBirth;
+    private String country;
+
     private Boolean recommended = false;
 
     // For ORMLite use
@@ -53,8 +57,8 @@ public class User {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        String country1 = country;
-        String dateOfBirth1 = formatDate(dateOfBirth);
+        this.country = country;
+        this.dateOfBirth = formatDate(dateOfBirth);
         this.buddyIDs = buddyIDs;
     }
     private String formatDate(DateTime date) {
