@@ -1,16 +1,12 @@
 package com.nwa.smartgym.activities;
 
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.telecom.TelecomManager;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,8 +15,9 @@ import android.widget.ListView;
 import com.j256.ormlite.android.apptools.OrmLiteBaseListActivity;
 import com.j256.ormlite.dao.Dao;
 import com.nwa.smartgym.R;
-import com.nwa.smartgym.api.DeviceAPIInterface;
+import com.nwa.smartgym.api.interfaces.DeviceAPIInterface;
 import com.nwa.smartgym.lib.DatabaseHelper;
+import com.nwa.smartgym.lib.ErrorHelper;
 import com.nwa.smartgym.lib.adapters.AddDeviceAdapter;
 import com.nwa.smartgym.models.Device;
 
@@ -57,7 +54,11 @@ public class AddDeviceActivity extends OrmLiteBaseListActivity<DatabaseHelper> {
             Log.e(this.getLocalClassName(), "Unable to access database", e);
         }
         bluetoothAdapter = getBluetoothAdapter();
-        deviceAPIInterface = new DeviceAPIInterface(this, deviceDao);
+        if (bluetoothAdapter == null) {
+            ErrorHelper.showToastError(this, getString(R.string.error_bluetooth_not_supported));
+        } else {
+            deviceAPIInterface = new DeviceAPIInterface(this, deviceDao);
+        }
 
         Button createButton = (Button) findViewById(R.id.persist_devices_button);
         deviceAdapter = new AddDeviceAdapter(this, createButton);
@@ -69,6 +70,9 @@ public class AddDeviceActivity extends OrmLiteBaseListActivity<DatabaseHelper> {
     @Override
     public void onPause() {
         super.onPause();
+        if (bluetoothAdapter == null) {
+            return; // return early
+        }
         bluetoothAdapter.cancelDiscovery();
         this.unregisterReceiver(broadcastReceiver);
     }
@@ -76,6 +80,9 @@ public class AddDeviceActivity extends OrmLiteBaseListActivity<DatabaseHelper> {
     @Override
     public void onResume() {
         super.onResume();
+        if (bluetoothAdapter == null) {
+            return; // return early
+        }
         deviceAdapter.clear();
         findDevices();
         this.registerReceiver(broadcastReceiver, broadcastFilter);

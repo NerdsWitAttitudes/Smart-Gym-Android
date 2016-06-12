@@ -1,28 +1,16 @@
 package com.nwa.smartgym.activities;
 
-import android.app.ListActivity;
 import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SimpleCursorAdapter;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.j256.ormlite.android.apptools.OrmLiteBaseListActivity;
 import com.j256.ormlite.android.apptools.OrmLiteCursorAdapter;
@@ -30,30 +18,18 @@ import com.j256.ormlite.android.apptools.OrmLiteCursorLoader;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.nwa.smartgym.R;
-import com.nwa.smartgym.api.DeviceAPI;
-import com.nwa.smartgym.api.DeviceAPIInterface;
-import com.nwa.smartgym.api.ServiceGenerator;
+import com.nwa.smartgym.api.interfaces.DeviceAPIInterface;
 import com.nwa.smartgym.lib.DatabaseHelper;
-import com.nwa.smartgym.lib.SecretsHelper;
 import com.nwa.smartgym.lib.adapters.DeviceAdapter;
 import com.nwa.smartgym.models.Device;
-import com.nwa.smartgym.models.HTTPResponse;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.Callable;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class Devices extends OrmLiteBaseListActivity<DatabaseHelper>{
 
     private Context context;
     private OrmLiteCursorAdapter<Device, RelativeLayout> viewAdapter;
-    private LayoutInflater layoutInflater;
 
     private Dao<Device, UUID> deviceDao;
     private PreparedQuery<Device> preparedListQuery;

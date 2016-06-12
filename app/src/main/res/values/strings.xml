@@ -15,6 +15,7 @@
         completions."
     </string>
     <string name="log_in_failed">Password or email is incorrect</string>
+    <string name="logout">Logout</string>
 
     <!-- String related to signup -->
     <string name="prompt_first_name_sign_up">First name</string>
@@ -30,6 +31,7 @@
     <!-- Strings related to devices -->
     <string name="action_persist_devices">Add devices</string>
     <string name="action_persist_device">Add device</string>
+    <string name="error_bluetooth_not_supported">Your device does not support bluetooth.</string>
 
     <!-- Sign up error messages -->
     <string name="error_email_required">Email is required.</string>
@@ -45,6 +47,7 @@
 
     <!-- Generic error messages -->
     <string name="server_500_message">Something went wrong, please try again later</string>
+    <string name="timeout">Not connected. Do you have an internet connection?</string>
 
     <!-- strings for in app use -->
     <string name="preference_file_key">com.nwa.smartgymandroid.secrets</string>
@@ -65,6 +68,16 @@
     <string name="title_activity_sign_up">SignUp</string>
     <string name="action_settings">Settings</string>
     <string name="action_next">Next</string>
+    <string name="title_activity_main">Main</string>
+
+    <!-- busyness -->
+    <string name="busyness_header_message">Busyness</string>
+    <string name="busyness_date">date</string>
+
     <string name="action_cancel">Cancel</string>
     <string name="title_activity_devices">Devices</string>
+
+    <!-- String realted to buddies -->
+    <string name="buddies">Buddies</string>
+    <string name="recommended_buddy">Recommended buddy</string>
 </resources>

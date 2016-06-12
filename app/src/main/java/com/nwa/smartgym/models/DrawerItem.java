@@ -1,5 +1,6 @@
 package com.nwa.smartgym.models;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 
@@ -17,6 +18,11 @@ public class DrawerItem {
         this.intent = intent;
     }
 
+    public DrawerItem(Drawable icon, String name) {
+        this.icon = icon;
+        this.name = name;
+    }
+
     public Intent getIntent() {
         return this.intent;
     }
@@ -27,5 +33,9 @@ public class DrawerItem {
 
     public String getName() {
         return name;
+    }
+
+    public void executeDrawerAction(Context context) {
+        context.startActivity(this.intent);
     }
 }

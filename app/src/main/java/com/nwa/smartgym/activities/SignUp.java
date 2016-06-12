@@ -26,11 +26,12 @@ import java.util.Locale;
 
 import com.nwa.smartgym.api.AuthAPI;
 import  com.nwa.smartgym.api.ServiceGenerator;
+import com.nwa.smartgym.api.interfaces.UserAPIInterface;
 import  com.nwa.smartgym.lib.DefaultPageAdapter;
 import  com.nwa.smartgym.lib.LocaleHelper;
 import  com.nwa.smartgym.lib.NonSwipeableViewPager;
 import  com.nwa.smartgym.models.HTTPResponse;
-import  com.nwa.smartgym.models.SignUpData;
+import com.nwa.smartgym.models.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -250,7 +251,6 @@ public class SignUp extends FragmentActivity {
         }
 
         private DateTime getBirthday() {
-            // To get the correct year you should always substract 1900. This is according to the Android DatePicker documentation.
             birthday = new DateTime(
                     mBirthdayView.getYear(),
                     mBirthdayView.getMonth(),
@@ -305,40 +305,13 @@ public class SignUp extends FragmentActivity {
     public static class SignUpTask extends AsyncTask<Void, Void, Boolean> {
         @Override
         protected Boolean doInBackground(Void... params) {
-            SignUpData signUpData = gatherSignUpData();
-            AuthAPI signUpService = ServiceGenerator.createSmartGymService(AuthAPI.class);
-            Call<HTTPResponse> call = signUpService.signUp(signUpData);
-
-            call.enqueue(new Callback<HTTPResponse>() {
-
-                @Override
-                public void onResponse(Call<HTTPResponse> call, Response<HTTPResponse> response) {
-                    System.out.println(response.code());
-                    if (response.code() == 200) {
-                        return;
-                    } else {
-                        System.out.println(response.code());
-                        raiseGenericError();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<HTTPResponse> call, Throwable t) {
-                    raiseGenericError();
-                }
-
-                private void raiseGenericError() {
-
-                    Toast toast = Toast.makeText(context,
-                            context.getResources().getString(R.string.server_500_message),
-                            Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-            });
+            User user = gatherSignUpData();
+            UserAPIInterface userAPIInterface = new UserAPIInterface(context);
+            userAPIInterface.post(user);
             return true;
         }
 
-        private SignUpData gatherSignUpData() {
+        private User gatherSignUpData() {
             mPasswordView.getText();
 
             String password = mPasswordView.getText().toString();
@@ -348,7 +321,7 @@ public class SignUp extends FragmentActivity {
             String lastName = mLastNameView.getText().toString();
             String country = mCountryView.getSelectedItem().toString();
 
-            return new SignUpData(password, passwordConfirm, email, firstName, lastName, country,
+            return new User(password, passwordConfirm, email, firstName, lastName, country,
                     birthday);
         }
     }

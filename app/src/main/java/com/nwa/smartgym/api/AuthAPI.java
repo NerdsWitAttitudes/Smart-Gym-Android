@@ -2,9 +2,10 @@ package com.nwa.smartgym.api;
 
 import com.nwa.smartgym.models.HTTPResponse;
 import com.nwa.smartgym.models.Login;
-import com.nwa.smartgym.models.SignUpData;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 
@@ -17,8 +18,6 @@ public interface AuthAPI {
             @Body Login login
     );
 
-    @POST("user")
-    Call<HTTPResponse> signUp(
-            @Body SignUpData signUpData
-    );
+    @GET("auth/logout")
+    Call<HTTPResponse> logOut();
 }

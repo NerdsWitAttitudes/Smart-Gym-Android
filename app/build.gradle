@@ -22,6 +22,8 @@ android {
     lintOptions {
         abortOnError false
     }
+
+
 }
 
 repositories {
@@ -39,4 +41,5 @@ dependencies {
     compile 'com.j256.ormlite:ormlite-core:4.49-SNAPSHOT'
     compile 'com.j256.ormlite:ormlite-android:4.49-SNAPSHOT'
     compile 'joda-time:joda-time:2.9.2'
+    compile 'com.jjoe64:graphview:4.0.1'
 }
