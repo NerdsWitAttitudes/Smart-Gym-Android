@@ -82,6 +82,12 @@ public class Main extends AppCompatActivity {
         drawerItems.add(getLoginDrawerItem());
 
 
+        drawerItems.add(new DrawerItem(
+                getResources().getDrawable(R.mipmap.ic_smartgym),
+                getString(R.string.activity_activities_name),
+                new Intent(this, SportActivity.class)
+        ));
+
         return drawerItems;
     }
 
