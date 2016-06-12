@@ -23,7 +23,7 @@ public class Device {
     private int device_class;
 
     // For ORMLite use
-    Device(){};
+    Device(){}
 
     public Device(UUID id, String device_address, String name, int device_class) {
         this.id = id;

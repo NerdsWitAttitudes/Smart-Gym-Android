@@ -12,7 +12,7 @@ import java.util.UUID;
  */
 public class Buddy extends User {
     // For ORMLite use
-    Buddy(){};
+    Buddy(){}
 
     public Buddy(UUID id, String email, String firstName, String lastName, String country,
                  DateTime dateOfBirth, List<UUID> buddyIDS) {

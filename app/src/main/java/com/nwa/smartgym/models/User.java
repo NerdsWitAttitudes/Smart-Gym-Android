@@ -34,20 +34,13 @@ public class User {
     @SerializedName("last_name")
     private String lastName;
 
-    @DatabaseField
-    private String country;
-
-    @DatabaseField
-    @SerializedName("date_of_birth")
-    private String dateOfBirth;
-
     @SerializedName("buddy_ids")
     private List<UUID> buddyIDs;
 
     private Boolean recommended = false;
 
     // For ORMLite use
-    User(){};
+    User(){}
 
     public User(String password, String passwordConfirm, String email, String firstName, String lastName, String country, DateTime dateOfBirth) {
         this(null, email, firstName, lastName, country, dateOfBirth, null);
@@ -60,8 +53,8 @@ public class User {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.country = country;
-        this.dateOfBirth = formatDate(dateOfBirth);
+        String country1 = country;
+        String dateOfBirth1 = formatDate(dateOfBirth);
         this.buddyIDs = buddyIDs;
     }
     private String formatDate(DateTime date) {

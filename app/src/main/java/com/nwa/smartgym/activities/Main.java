@@ -26,13 +26,10 @@ import com.nwa.smartgym.models.DrawerItem;
 
 public class Main extends AppCompatActivity {
 
-    private static NonSwipeableViewPager mViewPager;
-    private DefaultPageAdapter mPageAdapter;
-    private ListView menuDrawerList;
-
     private static Context context;
 
     // UI references.
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +38,13 @@ public class Main extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         List<Fragment> fragments = listFragments();
-        mPageAdapter = new DefaultPageAdapter(getSupportFragmentManager(), fragments);
+        DefaultPageAdapter mPageAdapter = new DefaultPageAdapter(getSupportFragmentManager(), fragments);
         Main.context = getApplicationContext();
 
-        mViewPager = (NonSwipeableViewPager) findViewById(R.id.main_container);
-        mViewPager.setAdapter(mPageAdapter);
+        NonSwipeableViewPager mViewPager = (NonSwipeableViewPager) findViewById(R.id.main_container);
+        if (mViewPager != null) {
+            mViewPager.setAdapter(mPageAdapter);
+        }
 
         setupDrawer();
     }
@@ -57,9 +56,11 @@ public class Main extends AppCompatActivity {
     }
 
     private void setupDrawer() {
-        menuDrawerList = (ListView) findViewById(R.id.menu_drawer_list);
+        ListView menuDrawerList = (ListView) findViewById(R.id.menu_drawer_list);
         DrawerAdapter drawerAdapter = new DrawerAdapter(this, getDrawerItems());
-        menuDrawerList.setAdapter(drawerAdapter);
+        if (menuDrawerList != null) {
+            menuDrawerList.setAdapter(drawerAdapter);
+        }
     }
 
     private List<DrawerItem> getDrawerItems() {
@@ -92,16 +93,15 @@ public class Main extends AppCompatActivity {
     }
 
     private DrawerItem getLoginDrawerItem() {
-       DrawerItem loginDrawerItem = new DrawerItem(
-                getResources().getDrawable(R.drawable.logout),
-                getString(R.string.logout)) {
-            @Override
-            public void executeDrawerAction(Context context) {
-                AuthAPIInterface authAPIInterface = new AuthAPIInterface(context);
-                authAPIInterface.logout();
-            }
-        };
-        return loginDrawerItem;
+        return new DrawerItem(
+                 getResources().getDrawable(R.drawable.logout),
+                 getString(R.string.logout)) {
+             @Override
+             public void executeDrawerAction(Context context1) {
+                 AuthAPIInterface authAPIInterface = new AuthAPIInterface(context1);
+                 authAPIInterface.logout();
+             }
+         };
     }
 
     private void checkAuthCookieExists() {
