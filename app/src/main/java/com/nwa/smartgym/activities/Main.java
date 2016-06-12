@@ -2,17 +2,16 @@ package com.nwa.smartgym.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
-
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.nwa.smartgym.R;
+import com.nwa.smartgym.lib.DefaultPageAdapter;
+import com.nwa.smartgym.lib.NonSwipeableViewPager;
+import com.nwa.smartgym.lib.adapters.DrawerAdapter;
+import com.nwa.smartgym.models.DrawerItem;
 
 import java.util.ArrayList;
 import java.util.List;
