@@ -71,7 +71,7 @@ public class Main extends AppCompatActivity {
 
         drawerItems.add(new DrawerItem(
                 getResources().getDrawable(R.mipmap.ic_smartgym),
-                "Activities",
+                getString(R.string.activity_activities_name),
                 new Intent(this, SportActivity.class)
         ));
 
