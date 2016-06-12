@@ -14,6 +14,7 @@ import com.nwa.smartgym.R;
 import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.api.SportScheduleAPI;
 import com.nwa.smartgym.api.callbacks.Callback;
+import com.nwa.smartgym.lib.NotificationService;
 import com.nwa.smartgym.lib.SecretsHelper;
 import com.nwa.smartgym.lib.adapters.SportScheduleAdapter;
 
@@ -26,6 +27,7 @@ import retrofit2.Response;
 public class SportSchedule extends AppCompatActivity {
 
     private ListView listView;
+    private NotificationService notificationService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,8 @@ public class SportSchedule extends AppCompatActivity {
         setContentView(R.layout.activity_sport_schedule);
 
         listView = (ListView) findViewById(R.id.listView);
+
+        notificationService = new NotificationService(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add_sport_schedule);
         if (fab != null) {
@@ -64,6 +68,8 @@ public class SportSchedule extends AppCompatActivity {
 
                     if (sportSchedules.isEmpty()) {
                         Snackbar.make(listView, R.string.sport_schedule_make_one, Snackbar.LENGTH_INDEFINITE).show();
+                    } else {
+                        setNotifications(sportSchedules);
                     }
 
                     SportScheduleAdapter sportScheduleAdapter = new SportScheduleAdapter(SportSchedule.this, sportSchedules);
@@ -81,5 +87,15 @@ public class SportSchedule extends AppCompatActivity {
         });
 
         progressDialog.dismiss();
+    }
+
+    private void setNotifications(List<com.nwa.smartgym.models.SportSchedule> sportSchedules) {
+        notificationService.cancelScheduledNotifications();
+
+        for (com.nwa.smartgym.models.SportSchedule sportSchedule : sportSchedules) {
+            if (sportSchedule.isActive()) {
+                notificationService.scheduleNotifications(sportSchedule);
+            }
+        }
     }
 }
