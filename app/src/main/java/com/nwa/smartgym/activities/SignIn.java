@@ -24,6 +24,7 @@ import com.nwa.smartgym.R;
 import okhttp3.Headers;
 import com.nwa.smartgym.api.AuthAPI;
 import com.nwa.smartgym.api.ServiceGenerator;
+import com.nwa.smartgym.api.interfaces.AuthAPIInterface;
 import com.nwa.smartgym.models.HTTPResponse;
 import com.nwa.smartgym.models.Login;
 import retrofit2.Call;
@@ -34,6 +35,7 @@ import retrofit2.Response;
 public class SignIn extends AppCompatActivity  {
 
     private UserLoginTask mAuthTask = null;
+    private AuthAPIInterface authAPIInterface;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -70,6 +72,8 @@ public class SignIn extends AppCompatActivity  {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        authAPIInterface = new AuthAPIInterface(this);
     }
 
     private void attemptLogin() {
@@ -110,12 +114,7 @@ public class SignIn extends AppCompatActivity  {
     private boolean isEmailValid(String email) {
         return email.contains("@");
     }
-
-    public void launchMain() {
-                Intent intent = new Intent(this, Main.class);
-                startActivity(intent);
-    }
-
+    
 
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -129,49 +128,7 @@ public class SignIn extends AppCompatActivity  {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            AuthAPI loginService = ServiceGenerator.createSmartGymService(AuthAPI.class);
-            Call<HTTPResponse> call = loginService.logIn(new Login(mEmail, mPassword));
-
-            call.enqueue(new Callback<HTTPResponse>() {
-
-                @Override
-                public void onResponse(Call<HTTPResponse> call, Response<HTTPResponse> response){
-                    System.out.println(response.code());
-                    if (response.code() == 200){
-                        Headers headers = response.headers();
-                        String token = headers.get("Set-Cookie");
-                        storeSecurityHeader(token);
-                        launchMain();
-                    } else if (response.code() == 400){
-                        mPasswordView.setError(getString(R.string.log_in_failed));
-                        mPasswordView.requestFocus();
-                    } else {
-                        System.out.println(response.code());
-                        raiseGenericError();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<HTTPResponse> call, Throwable t){
-                    raiseGenericError();
-                }
-
-                private void raiseGenericError(){
-                    Toast toast = Toast.makeText(getApplicationContext(),
-                            getString(R.string.server_500_message),
-                            Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-
-                private void storeSecurityHeader(String auth_tkt){
-                    SharedPreferences secrets = getApplicationContext().getSharedPreferences(
-                            getString(R.string.preference_file_key), Context.MODE_PRIVATE
-                    );
-                    SharedPreferences.Editor editor = secrets.edit();
-                    editor.putString(getString(R.string.auth_tkt), auth_tkt);
-                    editor.apply();
-                }
-            });
+            authAPIInterface.login(new Login(mEmail, mPassword), mPasswordView);
 
             return false;
         }
@@ -187,4 +144,3 @@ public class SignIn extends AppCompatActivity  {
         }
     }
 }
-

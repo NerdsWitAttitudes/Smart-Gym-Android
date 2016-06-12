@@ -30,7 +30,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ServiceGenerator {
 
-    public static final String baseURL = "http://192.168.1.226:6543/";
+    public static final String baseURL = "http://192.168.88.1:6543/";
+
     public static final String timePattern = "HH:mm:ssZ";
     public static final String dateTimePattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ";
 
@@ -77,7 +78,7 @@ public class ServiceGenerator {
 
     private static Retrofit.Builder builder =
             new Retrofit.Builder()
-                .baseUrl(baseURL)
+                    .baseUrl(baseURL)
                     .addConverterFactory(GsonConverterFactory.create(gson));
 
     public static <S> S createSmartGymService(Class<S> serviceClass){

@@ -1,4 +1,4 @@
-package com.nwa.smartgym.api;
+package com.nwa.smartgym.api.interfaces;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteConstraintException;
@@ -9,6 +9,8 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.misc.SqlExceptionUtil;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
+import com.nwa.smartgym.api.DeviceAPI;
+import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.api.callbacks.Callback;
 import com.nwa.smartgym.lib.ErrorHelper;
 import com.nwa.smartgym.lib.SecretsHelper;
@@ -50,7 +52,9 @@ public class DeviceAPIInterface {
                 if (response.code() == 200) {
                     for (Device device : response.body()) {
                         try {
-                            deviceDao.create(device);
+                            if (!deviceDao.idExists(device.getId())) {
+                                deviceDao.create(device);
+                            }
                         } catch (SQLException e) {
                             Log.e(context.getClass().getName(), "Unable to persist device", e);
                         }

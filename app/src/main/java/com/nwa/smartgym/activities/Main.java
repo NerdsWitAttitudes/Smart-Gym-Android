@@ -16,8 +16,12 @@ import com.nwa.smartgym.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.nwa.smartgym.fragments.main.BusynessFragment;
+
+import com.nwa.smartgym.api.interfaces.AuthAPIInterface;
 import  com.nwa.smartgym.lib.DefaultPageAdapter;
 import  com.nwa.smartgym.lib.NonSwipeableViewPager;
+import com.nwa.smartgym.lib.SecretsHelper;
 import com.nwa.smartgym.lib.adapters.DrawerAdapter;
 import com.nwa.smartgym.models.DrawerItem;
 
@@ -34,6 +38,8 @@ public class Main extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        checkAuthCookieExists();
+
         setContentView(R.layout.activity_main);
         List<Fragment> fragments = listFragments();
         mPageAdapter = new DefaultPageAdapter(getSupportFragmentManager(), fragments);
@@ -47,6 +53,7 @@ public class Main extends AppCompatActivity {
 
     private List<Fragment> listFragments() {
         List<Fragment> fragmentList = new ArrayList<Fragment>();
+        fragmentList.add(BusynessFragment.newInstance());
         return fragmentList;
     }
 
@@ -68,6 +75,13 @@ public class Main extends AppCompatActivity {
                 getString(R.string.action_sport_schedule),
                 new Intent(this, SportSchedule.class)
         ));
+        drawerItems.add(new DrawerItem(
+                getResources().getDrawable(R.drawable.buddies),
+                getString(R.string.buddies),
+                new Intent(this, Buddies.class)
+        ));
+        drawerItems.add(getLoginDrawerItem());
+
 
         drawerItems.add(new DrawerItem(
                 getResources().getDrawable(R.mipmap.ic_smartgym),
@@ -76,5 +90,27 @@ public class Main extends AppCompatActivity {
         ));
 
         return drawerItems;
+    }
+
+    private DrawerItem getLoginDrawerItem() {
+       DrawerItem loginDrawerItem = new DrawerItem(
+                getResources().getDrawable(R.drawable.logout),
+                getString(R.string.logout)) {
+            @Override
+            public void executeDrawerAction(Context context) {
+                AuthAPIInterface authAPIInterface = new AuthAPIInterface(context);
+                authAPIInterface.logout();
+            }
+        };
+        return loginDrawerItem;
+    }
+
+    private void checkAuthCookieExists() {
+        SecretsHelper secretsHelper = new SecretsHelper(this);
+        if (secretsHelper.getAuthToken() == null) {
+            Intent intent = new Intent(this, Welcome.class);
+            startActivity(intent);
+            finish(); // Finish to prevent the user simply backing into this activity again.
+        }
     }
 }
