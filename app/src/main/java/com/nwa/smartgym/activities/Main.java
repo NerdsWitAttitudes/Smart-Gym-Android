@@ -4,7 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 
 import com.nwa.smartgym.R;
@@ -29,7 +33,8 @@ public class Main extends AppCompatActivity {
     private static Context context;
 
     // UI references.
-
+    ActionBarDrawerToggle drawerToggle;
+    DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +66,18 @@ public class Main extends AppCompatActivity {
         if (menuDrawerList != null) {
             menuDrawerList.setAdapter(drawerAdapter);
         }
+
+        // Make sure we got a drawer toggle for usability purposes.
+        drawerLayout = (DrawerLayout) findViewById(R.id.menu_drawer);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
+                R.string.app_name, R.string.app_name);
+
+        drawerToggle.setDrawerIndicatorEnabled(true);
+        drawerLayout.setDrawerListener(drawerToggle);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_drawer);
     }
 
     private List<DrawerItem> getDrawerItems() {
@@ -80,14 +97,15 @@ public class Main extends AppCompatActivity {
                 getString(R.string.buddies),
                 new Intent(this, Buddies.class)
         ));
-        drawerItems.add(getLoginDrawerItem());
-
 
         drawerItems.add(new DrawerItem(
                 getResources().getDrawable(R.mipmap.ic_smartgym),
                 getString(R.string.activity_activities_name),
                 new Intent(this, SportActivity.class)
         ));
+
+        // Logout should, logically, be the bottom item
+        drawerItems.add(getLoginDrawerItem());
 
         return drawerItems;
     }
@@ -111,5 +129,15 @@ public class Main extends AppCompatActivity {
             startActivity(intent);
             finish(); // Finish to prevent the user simply backing into this activity again.
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Activate the navigation drawer toggle
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -87,5 +87,5 @@
     <!-- String related to buddies -->
     <string name="buddies">Buddies</string>
     <string name="recommended_buddy">Recommended buddy</string>
-    <string name="no_buddies">You don't have any buddies. Find one!</string>
+    <string name="no_buddies">You don\'t have any buddies. Find one!</string>
 </resources>
