@@ -7,6 +7,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -35,10 +36,13 @@ public class Devices extends OrmLiteBaseListActivity<DatabaseHelper>{
     private PreparedQuery<Device> preparedListQuery;
     private DeviceAPIInterface deviceAPIInterface;
 
+    private Snackbar noneFoundSnackbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_devices);
+        noneFoundSnackbar = MessageHelper.getIndefiniteSnackbar(getListView(), getString(R.string.no_devices));
         context = this;
         setFabListener();
 
@@ -65,7 +69,9 @@ public class Devices extends OrmLiteBaseListActivity<DatabaseHelper>{
             public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
                 viewAdapter.changeCursor(cursor, ((OrmLiteCursorLoader<Device>) loader).getQuery());
                 if (viewAdapter.getCount() == 0) {
-                    MessageHelper.showLongTermSnackbar(getListView(), getString(R.string.no_devices));
+                    noneFoundSnackbar.show();
+                } else {
+                    noneFoundSnackbar.dismiss();
                 }
             }
 

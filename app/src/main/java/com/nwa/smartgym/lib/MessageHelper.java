@@ -1,8 +1,10 @@
 package com.nwa.smartgym.lib;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nwa.smartgym.R;
@@ -20,7 +22,14 @@ public class MessageHelper {
         toast.show();
     }
 
-    public static void showLongTermSnackbar(View view, String message) {
+    public static void showIndefiniteSnackbar(View view, String message) {
         Snackbar.make(view, message, Snackbar.LENGTH_INDEFINITE).show();
+    }
+
+    public static Snackbar getIndefiniteSnackbar(View view, String message) {
+        Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_INDEFINITE);
+        TextView textView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.WHITE);
+        return snackbar;
     }
 }

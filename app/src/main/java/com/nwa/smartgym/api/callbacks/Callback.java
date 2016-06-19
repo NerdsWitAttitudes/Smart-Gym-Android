@@ -7,6 +7,7 @@ import com.nwa.smartgym.R;
 import com.nwa.smartgym.lib.AuthHelper;
 import com.nwa.smartgym.lib.MessageHelper;
 
+import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 
 import retrofit2.Call;
@@ -35,7 +36,7 @@ public abstract class Callback<T> implements retrofit2.Callback<T> {
 
     @Override
     public void onFailure(Call<T> call, Throwable t) {
-        if (t instanceof SocketTimeoutException) {
+        if (t instanceof SocketTimeoutException || t instanceof ConnectException) {
             MessageHelper.showToastError(context, context.getString(R.string.timeout));
         } else {
             Log.e(this.getClass().getName(), t.toString());

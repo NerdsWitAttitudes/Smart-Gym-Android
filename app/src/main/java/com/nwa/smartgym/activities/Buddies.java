@@ -5,6 +5,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -30,10 +31,15 @@ public class Buddies extends OrmLiteBaseListActivity<DatabaseHelper> {
     private OrmLiteCursorAdapter<Buddy, RelativeLayout> viewAdapter;
     private BuddyAPIInterface buddyAPIInterface;
 
+    private Snackbar noneFoundSnackbar;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buddies);
+
+        // Snackbar that shows a message when no buddies are found.
+        noneFoundSnackbar = MessageHelper.getIndefiniteSnackbar(getListView(), getString(R.string.no_buddies));
         setFabListener();
 
         try {
@@ -57,7 +63,9 @@ public class Buddies extends OrmLiteBaseListActivity<DatabaseHelper> {
             public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
                 viewAdapter.changeCursor(cursor, ((OrmLiteCursorLoader<Buddy>) loader).getQuery());
                 if (viewAdapter.getCount() == 0) {
-                    MessageHelper.showLongTermSnackbar(getListView(), getString(R.string.no_buddies));
+                    noneFoundSnackbar.show();
+                } else {
+                    noneFoundSnackbar.dismiss();
                 }
             }
 
