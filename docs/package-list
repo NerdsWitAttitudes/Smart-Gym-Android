@@ -1,0 +1,8 @@
+com.nwa.smartgym.activities
+com.nwa.smartgym.api
+com.nwa.smartgym.api.callbacks
+com.nwa.smartgym.api.interfaces
+com.nwa.smartgym.fragments.main
+com.nwa.smartgym.lib
+com.nwa.smartgym.lib.adapters
+com.nwa.smartgym.models

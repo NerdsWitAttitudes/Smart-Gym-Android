@@ -39,7 +39,6 @@ public class AddDeviceActivity extends OrmLiteBaseListActivity<DatabaseHelper> {
     private BroadcastReceiver broadcastReceiver;
     private IntentFilter broadcastFilter;
 
-    private List<Device> deviceList;
     private AddDeviceAdapter deviceAdapter;
 
     @Override
@@ -91,7 +90,7 @@ public class AddDeviceActivity extends OrmLiteBaseListActivity<DatabaseHelper> {
     private BluetoothAdapter getBluetoothAdapter() {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
-            // no bluetooth possible
+            ErrorHelper.showToastError(this, getString(R.string.error_bluetooth_not_supported));
         } else if (!bluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_BLUETOOTH);
@@ -100,7 +99,7 @@ public class AddDeviceActivity extends OrmLiteBaseListActivity<DatabaseHelper> {
     }
 
     private void findDevices() {
-        deviceList = new ArrayList<Device>();
+        List<Device> deviceList = new ArrayList<Device>();
         getCurrentDevice();
         findPairedDevices();
         scanForDevices();

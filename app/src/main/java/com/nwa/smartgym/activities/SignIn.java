@@ -40,8 +40,6 @@ public class SignIn extends AppCompatActivity  {
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
-    private View mProgressView;
-    private View mLoginFormView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +68,8 @@ public class SignIn extends AppCompatActivity  {
             }
         });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+        View mLoginFormView = findViewById(R.id.login_form);
+        View mProgressView = findViewById(R.id.login_progress);
 
         authAPIInterface = new AuthAPIInterface(this);
     }

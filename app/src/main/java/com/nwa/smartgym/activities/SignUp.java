@@ -39,7 +39,6 @@ import retrofit2.Response;
 public class SignUp extends FragmentActivity {
 
     private static NonSwipeableViewPager mViewPager;
-    private DefaultPageAdapter mPageAdapter;
 
     private static SignUpTask mSignUpTask;
     private static Context context;
@@ -60,7 +59,7 @@ public class SignUp extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         List<Fragment> fragments = listFragments();
-        mPageAdapter = new DefaultPageAdapter(getSupportFragmentManager(), fragments);
+        DefaultPageAdapter mPageAdapter = new DefaultPageAdapter(getSupportFragmentManager(), fragments);
         SignUp.context = getApplicationContext();
 
         mViewPager = (NonSwipeableViewPager) findViewById(R.id.container);
@@ -277,7 +276,7 @@ public class SignUp extends FragmentActivity {
             getStartedButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (validateEmailData()) {
+                    if (validateEmailData(mEmailView.getText().toString())) {
                         mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1, true);
                     }
                 }
@@ -286,9 +285,7 @@ public class SignUp extends FragmentActivity {
             return rootView;
         }
 
-        private Boolean validateEmailData() {
-            String email = mEmailView.getText().toString();
-
+        public Boolean validateEmailData(String email) {
             if (email.isEmpty()) {
                 mEmailView.setError(getString(R.string.error_email_required));
             } else if (!email.contains("@")) {

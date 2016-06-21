@@ -10,6 +10,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
@@ -29,9 +30,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ServiceGenerator {
 
-    public static final String baseURL = "http://192.168.88.1:6543/";
+    public static final String baseURL = "http://82.196.12.80:6543/";
 
     public static final String timePattern = "HH:mm:ssZ";
+    public static final String dateTimePattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ";
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
@@ -59,7 +61,20 @@ public class ServiceGenerator {
                 public JsonElement serialize(LocalDate.Property src, Type typeOfSrc, JsonSerializationContext context) {
                     return new JsonPrimitive(src.getLocalDate().getDayOfWeek());
                 }
-            }).create();
+            })
+            .registerTypeAdapter(DateTime.class, new JsonDeserializer<DateTime>() {
+                @Override
+                public DateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return DateTimeFormat.forPattern(dateTimePattern).parseDateTime(json.getAsString()).minusHours(2);
+                }
+            })
+            .registerTypeAdapter(DateTime.class, new JsonSerializer<DateTime>() {
+                @Override
+                public JsonElement serialize(DateTime src, Type typeOfSrc, JsonSerializationContext context) {
+                    return new JsonPrimitive(DateTimeFormat.forPattern(dateTimePattern).print(src));
+                }
+            })
+            .create();
 
     private static Retrofit.Builder builder =
             new Retrofit.Builder()

@@ -34,20 +34,17 @@ public class User {
     @SerializedName("last_name")
     private String lastName;
 
-    @DatabaseField
-    private String country;
-
-    @DatabaseField
-    @SerializedName("date_of_birth")
-    private String dateOfBirth;
-
     @SerializedName("buddy_ids")
     private List<UUID> buddyIDs;
+
+    @SerializedName("date_of_birth")
+    private String dateOfBirth;
+    private String country;
 
     private Boolean recommended = false;
 
     // For ORMLite use
-    User(){};
+    User(){}
 
     public User(String password, String passwordConfirm, String email, String firstName, String lastName, String country, DateTime dateOfBirth) {
         this(null, email, firstName, lastName, country, dateOfBirth, null);

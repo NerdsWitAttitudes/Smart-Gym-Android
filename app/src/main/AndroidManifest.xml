@@ -61,6 +61,12 @@
             android:name=".activities.Buddies"
             android:screenOrientation="portrait" />
         <activity android:name=".activities.ListUsersActivity"></activity>
+        <activity
+            android:name=".activities.SportActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activities.Main" />
+        <receiver
+            android:name=".lib.NotificationService" />
     </application>
 
 </manifest>
