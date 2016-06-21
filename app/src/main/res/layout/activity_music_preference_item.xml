@@ -18,7 +18,7 @@
         tools:context="com.nwa.smartgym.activities.MusicPreferenceItem">
 
         <Spinner
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/spGenres"
             android:layout_alignParentStart="true" />

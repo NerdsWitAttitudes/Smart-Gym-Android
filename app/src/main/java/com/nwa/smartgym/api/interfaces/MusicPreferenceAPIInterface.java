@@ -47,29 +47,12 @@ public class MusicPreferenceAPIInterface {
                 secretsHelper.getAuthToken());
     }
 
-    public void list() {
-        Call<List<MusicPreference>> call = musicPreferenceService.listMusicPreference();
-        call.enqueue(new Callback<List<MusicPreference>>(context) {
-            @Override
-            public void onResponse(Call<List<MusicPreference>> call, Response<List<MusicPreference>> response) {
-                super.onResponse(call, response);
-                if (response.code() == 200) {
-                    List<com.nwa.smartgym.models.MusicPreference> musicPreferences = response.body();
-
-
-                    
-                }
-            }
-        });
-    }
-
     public void post(MusicPreference musicPreference) {
         Call<MusicPreference> call = musicPreferenceService.createMusicPreference(musicPreference);
         call.enqueue(new Callback<MusicPreference>(context) {
             @Override
             public void onResponse(Call<MusicPreference> call, Response<MusicPreference> response) {
                 super.onResponse(call, response);
-
             }
         });
     }
