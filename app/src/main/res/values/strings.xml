@@ -89,4 +89,5 @@
     <!-- String realted to buddies -->
     <string name="buddies">Buddies</string>
     <string name="recommended_buddy">Recommended buddy</string>
+    <string name="save_music_preference">save music preference</string>
 </resources>
