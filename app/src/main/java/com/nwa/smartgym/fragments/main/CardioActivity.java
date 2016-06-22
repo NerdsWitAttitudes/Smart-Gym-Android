@@ -19,7 +19,7 @@ import com.nwa.smartgym.api.CardioActivityAPI;
 import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.api.callbacks.Callback;
 import com.nwa.smartgym.lib.DefaultPageAdapter;
-import com.nwa.smartgym.lib.ErrorHelper;
+import com.nwa.smartgym.lib.MessageHelper;
 import com.nwa.smartgym.lib.SecretsHelper;
 
 import org.joda.time.Duration;
@@ -73,7 +73,7 @@ public class CardioActivity extends Fragment {
                 super.onResponse(call, response);
 
                 if (response.body() == null) {
-                    ErrorHelper.raiseGenericError(getContext());
+                    MessageHelper.raiseGenericError(getContext());
                 } else {
                     sessions = response.body();
                     plotGraph();
