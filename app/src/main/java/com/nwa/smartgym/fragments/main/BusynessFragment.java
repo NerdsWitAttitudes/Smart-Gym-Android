@@ -100,10 +100,9 @@ public class BusynessFragment extends Fragment {
 
     public void updateGraph(JSONObject busynessJSON) throws JSONException {
         mBusynessGraph.removeAllSeries();
-
         // this is the correct ISO format the API uses.
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        Date date = new Date();
+        Date date = calendar.getTime();
         date.setMinutes(0);
         date.setSeconds(0);
 
@@ -111,12 +110,16 @@ public class BusynessFragment extends Fragment {
         for(int i =0; i < dataPointArray.length; i++) {
             try {
                 date.setHours(i);
+                System.out.println(df.format(date));
                 dataPointArray[i] = new DataPoint(i, (int) busynessJSON.get((df.format(date))));
             } catch (JSONException e) {
                 dataPointArray[i] = new DataPoint(i, 0);
             }
         }
-
+        for (DataPoint aDataPointArray : dataPointArray) {
+            System.out.println(aDataPointArray);
+        }
+        System.out.println(dataPointArray.length);
         BarGraphSeries<DataPoint> series = new BarGraphSeries<>(dataPointArray);
         mBusynessGraph.addSeries(series);
         mBusynessGraph.getViewport().setXAxisBoundsManual(true);

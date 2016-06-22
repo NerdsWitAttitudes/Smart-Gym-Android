@@ -13,10 +13,15 @@ import com.nwa.smartgym.api.MusicPreferenceAPI;
 import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.api.SportScheduleAPI;
 import com.nwa.smartgym.api.interfaces.MusicPreferenceAPIInterface;
+import com.nwa.smartgym.api.interfaces.SpotifyAPIInterface;
 import com.nwa.smartgym.lib.SecretsHelper;
 import com.nwa.smartgym.lib.adapters.MusicPreferenceAdapter;
 import com.nwa.smartgym.models.*;
 import com.nwa.smartgym.models.MusicPreference;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,22 +34,20 @@ public class MusicPreferenceItem extends AppCompatActivity {
     private SecretsHelper secretsHelper;
     private Spinner spGenres;
     private MusicPreferenceAPIInterface musicPreferenceService;
+    private com.nwa.smartgym.activities.MusicPreference musicPreferenceActivity;
+    private SpotifyAPIInterface spotifyService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         musicPreference = (MusicPreference) getIntent().getSerializableExtra("MusicPreference");
+        spotifyService = new SpotifyAPIInterface(this);
         setContentView(R.layout.activity_music_preference_item);
         spGenres = (Spinner) findViewById(R.id.spGenres);
-        List<String> list = new ArrayList<String>();
-        list.add("list 1");
-        list.add("list 2");
-        list.add("list 3");
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spGenres.setAdapter(dataAdapter);
+        System.out.println("getting genres");
+        spotifyService.getGenres();
+        System.out.println("got genres");
+
         MusicPreferenceAdapter musicPreferenceAdapter = new MusicPreferenceAdapter(this);
         musicPreferenceService = new MusicPreferenceAPIInterface(this, musicPreferenceAdapter);
 
@@ -53,13 +56,26 @@ public class MusicPreferenceItem extends AppCompatActivity {
             save.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    System.out.println("saving");
                     musicPreferenceService.post(new MusicPreference(
                             spGenres.getSelectedItem().toString()
                     ));
                 }
             });
         }
+    }
+
+    public void fillGenreSpinner(JSONObject genresJSON) throws JSONException {
+        System.out.println("kak");
+        JSONArray genresArray = genresJSON.getJSONArray("genres");
+        List<String> genres = new ArrayList<String>();
+        for (int i=0;i<genresArray.length();i++){
+            genres.add(genresArray.get(i).toString());
+        }
+        System.out.println(genres);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, genres);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spGenres.setAdapter(dataAdapter);
     }
 
 

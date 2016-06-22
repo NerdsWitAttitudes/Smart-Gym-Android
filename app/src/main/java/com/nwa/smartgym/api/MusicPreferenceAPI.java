@@ -5,6 +5,7 @@ import com.nwa.smartgym.models.MusicPreference;
 import java.util.List;
 import java.util.UUID;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
