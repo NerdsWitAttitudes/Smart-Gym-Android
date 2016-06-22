@@ -86,4 +86,5 @@
     <!-- String realted to buddies -->
     <string name="buddies">Buddies</string>
     <string name="recommended_buddy">Recommended buddy</string>
+    <string name="user_activity_no_active">No active activity found</string>
 </resources>

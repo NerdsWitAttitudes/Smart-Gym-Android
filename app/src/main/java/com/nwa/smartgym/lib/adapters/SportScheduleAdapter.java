@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +48,27 @@ public class SportScheduleAdapter extends ArrayAdapter<SportSchedule> {
         TextView tvDateTime = (TextView) convertView.findViewById(R.id.tvSportScheduleDateTime);
         TextView tvDaysOfWeek = (TextView) convertView.findViewById(R.id.tvDaysOfWeek);
         final Switch switchActive = (Switch) convertView.findViewById(R.id.switchActive);
+        ImageView delete = (ImageView) convertView.findViewById(R.id.delete_sport_schedule);
+
+        final SportScheduleAPI smartGymService = ServiceGenerator.createSmartGymService(SportScheduleAPI.class, new SecretsHelper(getContext()).getAuthToken());
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Call<SportSchedule> sportScheduleCall = smartGymService.deleteSportSchedule(sportSchedule.getId());
+                sportScheduleCall.enqueue(new Callback<SportSchedule>(getContext()) {
+                    @Override
+                    public void onResponse(Call<SportSchedule> call, Response<SportSchedule> response) {
+                        super.onResponse(call, response);
+                    }
+
+                    @Override
+                    public void onFailure(Call<SportSchedule> call, Throwable t) {
+                        super.onFailure(call, t);
+                    }
+                });
+            }
+        });
 
         tvName.setText(sportSchedule.getName());
 
@@ -68,7 +90,7 @@ public class SportScheduleAdapter extends ArrayAdapter<SportSchedule> {
                 if (sportSchedule.isActive() != isChecked) {
                     sportSchedule.setIsActive(isChecked);
 
-                    Call<SportSchedule> sportScheduleCall = ServiceGenerator.createSmartGymService(SportScheduleAPI.class, new SecretsHelper(getContext()).getAuthToken())
+                    Call<SportSchedule> sportScheduleCall = smartGymService
                             .updateSportSchedule(sportSchedule.getId(), sportSchedule);
 
                     sportScheduleCall.enqueue(new Callback<SportSchedule>(getContext()) {
