@@ -8,28 +8,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 
 import com.nwa.smartgym.R;
+import com.nwa.smartgym.api.interfaces.AuthAPIInterface;
+import com.nwa.smartgym.fragments.main.BusynessFragment;
+import com.nwa.smartgym.fragments.main.CardioActivity;
 import com.nwa.smartgym.lib.DefaultPageAdapter;
 import com.nwa.smartgym.lib.NonSwipeableViewPager;
+import com.nwa.smartgym.lib.SecretsHelper;
 import com.nwa.smartgym.lib.adapters.DrawerAdapter;
 import com.nwa.smartgym.models.DrawerItem;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.nwa.smartgym.fragments.main.BusynessFragment;
-
-import com.nwa.smartgym.api.interfaces.AuthAPIInterface;
-import  com.nwa.smartgym.lib.DefaultPageAdapter;
-import  com.nwa.smartgym.lib.NonSwipeableViewPager;
-import com.nwa.smartgym.lib.SecretsHelper;
-import com.nwa.smartgym.lib.adapters.DrawerAdapter;
-import com.nwa.smartgym.models.DrawerItem;
 
 public class Main extends AppCompatActivity {
 
     private static Context context;
-
-    // UI references.
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +43,9 @@ public class Main extends AppCompatActivity {
     }
 
     private List<Fragment> listFragments() {
-        List<Fragment> fragmentList = new ArrayList<Fragment>();
+        List<Fragment> fragmentList = new ArrayList<>();
         fragmentList.add(BusynessFragment.newInstance());
+        fragmentList.add(CardioActivity.newInstance());
         return fragmentList;
     }
 
@@ -80,14 +74,12 @@ public class Main extends AppCompatActivity {
                 getString(R.string.buddies),
                 new Intent(this, Buddies.class)
         ));
-        drawerItems.add(getLoginDrawerItem());
-
-
         drawerItems.add(new DrawerItem(
                 getResources().getDrawable(R.mipmap.ic_smartgym),
                 getString(R.string.activity_activities_name),
                 new Intent(this, SportActivity.class)
         ));
+        drawerItems.add(getLoginDrawerItem());
 
         return drawerItems;
     }
