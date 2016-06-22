@@ -1,19 +1,13 @@
 package com.nwa.smartgym.api.callbacks;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.nwa.smartgym.R;
-import com.nwa.smartgym.activities.Welcome;
-import com.nwa.smartgym.api.DeviceAPI;
-import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.lib.AuthHelper;
-import com.nwa.smartgym.lib.ErrorHelper;
-import com.nwa.smartgym.lib.SecretsHelper;
+import com.nwa.smartgym.lib.MessageHelper;
 
+import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 
 import retrofit2.Call;
@@ -35,18 +29,18 @@ public abstract class Callback<T> implements retrofit2.Callback<T> {
             if (response.code() == 401) {
                 handleUnauthenticatedUser();
             } else {
-                ErrorHelper.raiseGenericError(context);
+                MessageHelper.raiseGenericError(context);
             }
         }
     }
 
     @Override
     public void onFailure(Call<T> call, Throwable t) {
-        if (t instanceof SocketTimeoutException) {
-            ErrorHelper.showToastError(context, context.getString(R.string.timeout));
+        if (t instanceof SocketTimeoutException || t instanceof ConnectException) {
+            MessageHelper.showToastError(context, context.getString(R.string.timeout));
         } else {
             Log.e(this.getClass().getName(), t.toString());
-            ErrorHelper.raiseGenericError(context);
+            MessageHelper.raiseGenericError(context);
         }
     }
 

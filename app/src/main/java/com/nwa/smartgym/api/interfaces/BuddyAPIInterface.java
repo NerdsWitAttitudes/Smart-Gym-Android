@@ -2,23 +2,16 @@ package com.nwa.smartgym.api.interfaces;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Adapter;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.PreparedQuery;
-import com.nwa.smartgym.api.AuthAPI;
 import com.nwa.smartgym.api.BuddyAPI;
 import com.nwa.smartgym.api.ServiceGenerator;
-import com.nwa.smartgym.api.UserAPI;
 import com.nwa.smartgym.api.callbacks.Callback;
-import com.nwa.smartgym.lib.ErrorHelper;
+import com.nwa.smartgym.lib.MessageHelper;
 import com.nwa.smartgym.lib.SecretsHelper;
 import com.nwa.smartgym.models.Buddy;
 import com.nwa.smartgym.models.HTTPResponse;
-import com.nwa.smartgym.models.Login;
-import com.nwa.smartgym.models.User;
-
-import org.json.JSONObject;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -115,7 +108,7 @@ public class BuddyAPIInterface {
             preparedListQuery = buddyDao.queryBuilder().prepare();
         } catch (SQLException e) {
             Log.e(context.getPackageName(), e.getMessage());
-            ErrorHelper.raiseGenericError(context);
+            MessageHelper.raiseGenericError(context);
         }
     }
 
