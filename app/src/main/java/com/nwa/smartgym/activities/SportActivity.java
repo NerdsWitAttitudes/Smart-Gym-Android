@@ -74,16 +74,22 @@ public class SportActivity extends AppCompatActivity {
             public void onResponse(Call<List<UserActivity>> call, Response<List<UserActivity>> response) {
                 super.onResponse(call, response);
 
-                if (response.body().size() > 0) {
+                List<UserActivity> body = response.body();
+                if (body == null) {
+                    super.onFailure(call, new Throwable(getBaseContext().getString(R.string.server_500_message)));
+                }
+
+                if (body.size() > 0) {
                     for (UserActivity userActivity : response.body()) {
                         if (userActivity.getEndDate() == null) {
                             currentCardioActivity = new CardioActivity(userActivity.getId(), activityType);
                             googleFitService.addCardioActivity(currentCardioActivity);
+                        } else {
+                            super.onFailure(call, new Throwable(getString(R.string.user_activity_no_active)));
                         }
                     }
-
                 } else {
-                    super.onFailure(call, new Throwable("No active activity found"));
+                    super.onFailure(call, new Throwable(getString(R.string.user_activity_no_active)));
                 }
             }
         });
