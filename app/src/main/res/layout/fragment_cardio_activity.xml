@@ -15,11 +15,11 @@
         android:text="@string/cardio_activity_header"
         android:id="@+id/cardio_activity_header" />
 
-    <!--<com.jjoe64.graphview.GraphView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="300dip"-->
-        <!--android:id="@+id/busyness_graph"-->
-        <!--android:layout_marginTop="20dp"-->
-        <!--android:layout_below="@id/busyness_date" />-->
+    <com.jjoe64.graphview.GraphView
+        android:layout_width="match_parent"
+        android:layout_height="300dip"
+        android:id="@+id/cardio_activity_graph"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/cardio_activity_header" />
 
 </RelativeLayout>
