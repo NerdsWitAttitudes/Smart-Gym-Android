@@ -1,5 +1,6 @@
 package com.nwa.smartgym.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -44,11 +45,9 @@ public class MusicPreferenceItem extends AppCompatActivity {
         spotifyService = new SpotifyAPIInterface(this);
         setContentView(R.layout.activity_music_preference_item);
         spGenres = (Spinner) findViewById(R.id.spGenres);
-        System.out.println("getting genres");
         spotifyService.getGenres();
-        System.out.println("got genres");
 
-        MusicPreferenceAdapter musicPreferenceAdapter = new MusicPreferenceAdapter(this);
+        final MusicPreferenceAdapter musicPreferenceAdapter = new MusicPreferenceAdapter(this);
         musicPreferenceService = new MusicPreferenceAPIInterface(this, musicPreferenceAdapter);
 
         Button save = (Button) findViewById(R.id.btn_save_music_preference);
@@ -59,19 +58,18 @@ public class MusicPreferenceItem extends AppCompatActivity {
                     musicPreferenceService.post(new MusicPreference(
                             spGenres.getSelectedItem().toString()
                     ));
+                    startActivity(new Intent(getBaseContext(), com.nwa.smartgym.activities.MusicPreference.class));
                 }
             });
         }
     }
 
     public void fillGenreSpinner(JSONObject genresJSON) throws JSONException {
-        System.out.println("kak");
         JSONArray genresArray = genresJSON.getJSONArray("genres");
         List<String> genres = new ArrayList<String>();
         for (int i=0;i<genresArray.length();i++){
             genres.add(genresArray.get(i).toString());
         }
-        System.out.println(genres);
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, genres);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

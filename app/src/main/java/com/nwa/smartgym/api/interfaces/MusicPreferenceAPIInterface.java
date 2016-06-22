@@ -48,23 +48,24 @@ public class MusicPreferenceAPIInterface {
     }
 
     public void post(MusicPreference musicPreference) {
-        Call<MusicPreference> call = musicPreferenceService.createMusicPreference(musicPreference);
-        call.enqueue(new Callback<MusicPreference>(context) {
+        Call<ResponseBody> call = musicPreferenceService.createMusicPreference(musicPreference);
+        call.enqueue(new Callback<ResponseBody>(context) {
             @Override
-            public void onResponse(Call<MusicPreference> call, Response<MusicPreference> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 super.onResponse(call, response);
+
 
             }
         });
     }
 
-    public void delete() {
-        Call<MusicPreference> call = musicPreferenceService.deleteMusicPreference();
-        call.enqueue(new Callback<MusicPreference>(context) {
+    public void delete(MusicPreference musicPreference) {
+        Call<ResponseBody> call = musicPreferenceService.deleteMusicPreference(musicPreference.getId());
+        call.enqueue(new Callback<ResponseBody>(context) {
             @Override
-            public void onResponse(Call<MusicPreference> call, Response<MusicPreference> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 super.onResponse(call, response);
-
+                musicPreferenceAdapter.notifyDataSetChanged();
             }
         });
     }

@@ -22,9 +22,9 @@ public interface MusicPreferenceAPI {
     Call<List<MusicPreference>> listMusicPreference();
 
     @POST("/music_preference")
-    Call<MusicPreference> createMusicPreference(@Body MusicPreference musicPreference);
+    Call<ResponseBody> createMusicPreference(@Body MusicPreference musicPreference);
 
     @DELETE("/music_preference/{id}")
-    Call<MusicPreference> deleteMusicPreference();
+    Call<ResponseBody> deleteMusicPreference(@Path("id") UUID musicPreferenceId);
 
 }

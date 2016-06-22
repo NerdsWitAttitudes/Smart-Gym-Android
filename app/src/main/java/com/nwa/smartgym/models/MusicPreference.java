@@ -10,9 +10,14 @@ import java.util.UUID;
  * Created by rikvanderwerf on 11-6-16.
  */
 public class MusicPreference {
-
+    private UUID id;
     @SerializedName("genre")
     private String genre;
+
+    public MusicPreference(String genre, UUID id) {
+        this.id = id;
+        this.genre = genre;
+    }
 
     public MusicPreference(String genre) {
         this.genre = genre;
@@ -22,8 +27,8 @@ public class MusicPreference {
     public String getGenre() {
         return genre;
     }
-
-    public void setGenre(String genre) {
-        this.genre = genre;
+    public UUID getId() {
+        return id;
     }
+
 }
