@@ -13,9 +13,8 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.nwa.smartgym.R;
-import com.nwa.smartgym.api.BusynessAPIInterface;
-import com.nwa.smartgym.lib.DefaultPageAdapter;
 import com.nwa.smartgym.api.interfaces.BusynessAPIInterface;
+import com.nwa.smartgym.lib.DefaultPageAdapter;
 
 import org.joda.time.DateTime;
 import org.json.JSONException;
