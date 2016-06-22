@@ -1,46 +1,29 @@
 package com.nwa.smartgym.fragments.main;
 
 import android.app.DatePickerDialog;
-import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.ValueDependentColor;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.nwa.smartgym.R;
-import com.nwa.smartgym.api.AuthAPI;
-import com.nwa.smartgym.api.BusynessAPI;
-import com.nwa.smartgym.api.BusynessAPIInterface;
-import com.nwa.smartgym.api.ServiceGenerator;
-import com.nwa.smartgym.models.HTTPResponse;
-import com.nwa.smartgym.models.Login;
+import com.nwa.smartgym.api.interfaces.BusynessAPIInterface;
 
 import org.joda.time.DateTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.http.Path;
 
 /**
  * Created by rikvanderwerf on 11-5-16.
@@ -117,10 +100,9 @@ public class BusynessFragment extends Fragment {
 
     public void updateGraph(JSONObject busynessJSON) throws JSONException {
         mBusynessGraph.removeAllSeries();
-
         // this is the correct ISO format the API uses.
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        Date date = new Date();
+        Date date = calendar.getTime();
         date.setMinutes(0);
         date.setSeconds(0);
 
@@ -128,12 +110,16 @@ public class BusynessFragment extends Fragment {
         for(int i =0; i < dataPointArray.length; i++) {
             try {
                 date.setHours(i);
+                System.out.println(df.format(date));
                 dataPointArray[i] = new DataPoint(i, (int) busynessJSON.get((df.format(date))));
             } catch (JSONException e) {
                 dataPointArray[i] = new DataPoint(i, 0);
             }
         }
-
+        for (DataPoint aDataPointArray : dataPointArray) {
+            System.out.println(aDataPointArray);
+        }
+        System.out.println(dataPointArray.length);
         BarGraphSeries<DataPoint> series = new BarGraphSeries<>(dataPointArray);
         mBusynessGraph.addSeries(series);
         mBusynessGraph.getViewport().setXAxisBoundsManual(true);
