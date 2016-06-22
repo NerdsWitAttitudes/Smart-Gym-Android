@@ -5,6 +5,9 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -16,6 +19,7 @@ import com.j256.ormlite.dao.Dao;
 import com.nwa.smartgym.R;
 import com.nwa.smartgym.api.interfaces.BuddyAPIInterface;
 import com.nwa.smartgym.lib.DatabaseHelper;
+import com.nwa.smartgym.lib.MessageHelper;
 import com.nwa.smartgym.lib.adapters.BuddyAdapter;
 import com.nwa.smartgym.models.Buddy;
 
@@ -27,10 +31,15 @@ public class Buddies extends OrmLiteBaseListActivity<DatabaseHelper> {
     private OrmLiteCursorAdapter<Buddy, RelativeLayout> viewAdapter;
     private BuddyAPIInterface buddyAPIInterface;
 
+    private Snackbar noneFoundSnackbar;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buddies);
+
+        // Snackbar that shows a message when no buddies are found.
+        noneFoundSnackbar = MessageHelper.getIndefiniteSnackbar(getListView(), getString(R.string.no_buddies));
         setFabListener();
 
         try {
@@ -53,6 +62,11 @@ public class Buddies extends OrmLiteBaseListActivity<DatabaseHelper> {
             @Override
             public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
                 viewAdapter.changeCursor(cursor, ((OrmLiteCursorLoader<Buddy>) loader).getQuery());
+                if (viewAdapter.getCount() == 0) {
+                    noneFoundSnackbar.show();
+                } else {
+                    noneFoundSnackbar.dismiss();
+                }
             }
 
             @Override

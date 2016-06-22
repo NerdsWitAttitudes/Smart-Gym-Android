@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.ResultCallback;
-import com.nwa.smartgym.lib.ErrorHelper;
+import com.nwa.smartgym.lib.MessageHelper;
 
 public abstract class GoogleFitCallback<S extends Result> implements ResultCallback<S> {
     private static Context context;
@@ -17,7 +17,7 @@ public abstract class GoogleFitCallback<S extends Result> implements ResultCallb
     @Override
     public void onResult(@NonNull S result) {
         if (!result.getStatus().isSuccess()) {
-            ErrorHelper.raiseGenericError(context);
+            MessageHelper.raiseGenericError(context);
         }
     }
 }

@@ -32,6 +32,7 @@
     <string name="action_persist_devices">Add devices</string>
     <string name="action_persist_device">Add device</string>
     <string name="error_bluetooth_not_supported">Your device does not support bluetooth.</string>
+    <string name="no_devices">You have no devices added to this user. Go add one!</string>
 
     <!-- Sign up error messages -->
     <string name="error_email_required">Email is required.</string>
@@ -86,12 +87,13 @@
     <string name="activity_activities_name">Activities</string>
 
     <string-array name="graph_types">
-        <item>Calories</item>
+    <item>Calories</item>
         <item>Duration</item>
     </string-array>
 
     <!-- String realted to buddies -->
     <string name="buddies">Buddies</string>
     <string name="recommended_buddy">Recommended buddy</string>
+    <string name="no_buddies">You don\'t have any buddies. Find one!</string>
     <string name="user_activity_no_active">No active activity found</string>
 </resources>

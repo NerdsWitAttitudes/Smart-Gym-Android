@@ -1,6 +1,5 @@
 package com.nwa.smartgym.lib.adapters;
 
-import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,16 +8,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OrmLiteBaseListActivity;
-import com.j256.ormlite.dao.Dao;
 import com.nwa.smartgym.R;
 import com.nwa.smartgym.api.interfaces.BuddyAPIInterface;
 import com.nwa.smartgym.lib.DatabaseHelper;
-import com.nwa.smartgym.lib.ErrorHelper;
+import com.nwa.smartgym.lib.MessageHelper;
 import com.nwa.smartgym.lib.SecretsHelper;
 import com.nwa.smartgym.models.User;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -105,7 +102,7 @@ public class UserAdapter extends ArrayAdapter {
                     setBuddyAPIInterface();
 
                     if (buddyAPIInterface == null) {
-                        ErrorHelper.raiseGenericError(ormLiteBaseListActivity);
+                        MessageHelper.raiseGenericError(ormLiteBaseListActivity);
                         return;
                     }
                 }
