@@ -1,30 +1,20 @@
 package com.nwa.smartgym.api.interfaces;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 
-import com.j256.ormlite.dao.Dao;
 import com.nwa.smartgym.R;
 import com.nwa.smartgym.activities.Main;
-import com.nwa.smartgym.activities.Welcome;
 import com.nwa.smartgym.api.AuthAPI;
 import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.api.callbacks.Callback;
 import com.nwa.smartgym.lib.AuthHelper;
-import com.nwa.smartgym.lib.DatabaseHelper;
-import com.nwa.smartgym.lib.ErrorHelper;
-import com.nwa.smartgym.lib.SecretsHelper;
+import com.nwa.smartgym.lib.MessageHelper;
 import com.nwa.smartgym.models.HTTPResponse;
 import com.nwa.smartgym.models.Login;
-import com.nwa.smartgym.models.User;
-
-import java.sql.SQLException;
-import java.util.UUID;
 
 import okhttp3.Headers;
 import retrofit2.Call;
@@ -80,7 +70,7 @@ public class AuthAPIInterface {
                     passwordView.setError(context.getString(R.string.log_in_failed));
                     passwordView.requestFocus();
                 } else {
-                    ErrorHelper.raiseGenericError(context);
+                    MessageHelper.raiseGenericError(context);
                 }
             }
 

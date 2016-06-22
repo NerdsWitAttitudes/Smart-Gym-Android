@@ -15,7 +15,7 @@ import com.nwa.smartgym.R;
 import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.api.SportScheduleAPI;
 import com.nwa.smartgym.api.callbacks.Callback;
-import com.nwa.smartgym.lib.ErrorHelper;
+import com.nwa.smartgym.lib.MessageHelper;
 import com.nwa.smartgym.lib.SecretsHelper;
 import com.nwa.smartgym.models.SportSchedule;
 
@@ -84,14 +84,14 @@ public class SportScheduleAdapter extends ArrayAdapter<SportSchedule> {
                                         .show();
                             } else {
                                 sportSchedule.setIsActive(!isChecked);
-                                ErrorHelper.raiseGenericError(getContext());
+                                MessageHelper.raiseGenericError(getContext());
                             }
                         }
 
                         @Override
                         public void onFailure(Call<SportSchedule> call, Throwable t) {
                             sportSchedule.setIsActive(!isChecked);
-                            ErrorHelper.raiseGenericError(getContext());
+                            MessageHelper.raiseGenericError(getContext());
                         }
                     });
                 }

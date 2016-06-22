@@ -11,7 +11,7 @@ import com.nwa.smartgym.api.CardioActivityAPI;
 import com.nwa.smartgym.api.GoogleFitService;
 import com.nwa.smartgym.api.ServiceGenerator;
 import com.nwa.smartgym.api.callbacks.Callback;
-import com.nwa.smartgym.lib.ErrorHelper;
+import com.nwa.smartgym.lib.MessageHelper;
 import com.nwa.smartgym.lib.SecretsHelper;
 import com.nwa.smartgym.models.CardioActivity;
 import com.nwa.smartgym.models.UserActivity;
@@ -52,7 +52,7 @@ public class SportActivity extends AppCompatActivity {
                     if (currentCardioActivity == null) {
                         createNewCardioActivity(activityType);
                     } else {
-                        ErrorHelper.raiseGenericError(getBaseContext());
+                        MessageHelper.raiseGenericError(getBaseContext());
                     }
                 }
             });

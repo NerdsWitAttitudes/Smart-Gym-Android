@@ -23,7 +23,7 @@ import com.google.android.gms.fitness.result.SessionReadResult;
 import com.google.android.gms.fitness.result.SessionStopResult;
 import com.nwa.smartgym.R;
 import com.nwa.smartgym.api.callbacks.GoogleFitCallback;
-import com.nwa.smartgym.lib.ErrorHelper;
+import com.nwa.smartgym.lib.MessageHelper;
 import com.nwa.smartgym.models.CardioActivity;
 
 import java.util.HashMap;
@@ -86,7 +86,7 @@ public class GoogleFitService implements GoogleApiClient.ConnectionCallbacks, Go
                 if (response.code() == 201) {
                     currentCardioActivity = response.body();
                     startGoogleFitSession(currentCardioActivity, cardioActivity.getCardioType());
-                    ErrorHelper.showToastError(context, "Started " + cardioActivity.getCardioType() + " activity successfully");
+                    MessageHelper.showToastError(context, "Started " + cardioActivity.getCardioType() + " activity successfully");
                 }
             }
         });
@@ -113,7 +113,7 @@ public class GoogleFitService implements GoogleApiClient.ConnectionCallbacks, Go
 
     public void stopSession() {
         if (currentCardioActivity == null || currentSession == null) {
-            ErrorHelper.raiseGenericError(context);
+            MessageHelper.raiseGenericError(context);
             return;
         }
 
@@ -128,7 +128,7 @@ public class GoogleFitService implements GoogleApiClient.ConnectionCallbacks, Go
                     try {
                         setSessionResult(dataType);
                     } catch (Exception e) {
-                        ErrorHelper.raiseGenericError(context);
+                        MessageHelper.raiseGenericError(context);
                     }
                 }
             }
@@ -186,7 +186,7 @@ public class GoogleFitService implements GoogleApiClient.ConnectionCallbacks, Go
             @Override
             public void onResponse(Call<CardioActivity> call, Response<CardioActivity> response) {
                 super.onResponse(call, response);
-                ErrorHelper.showToastError(context, context.getResources().getString(R.string.cardio_activity_stopped_successfully));
+                MessageHelper.showToastError(context, context.getResources().getString(R.string.cardio_activity_stopped_successfully));
             }
         });
     }

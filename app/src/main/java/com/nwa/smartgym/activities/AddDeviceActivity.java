@@ -17,7 +17,7 @@ import com.j256.ormlite.dao.Dao;
 import com.nwa.smartgym.R;
 import com.nwa.smartgym.api.interfaces.DeviceAPIInterface;
 import com.nwa.smartgym.lib.DatabaseHelper;
-import com.nwa.smartgym.lib.ErrorHelper;
+import com.nwa.smartgym.lib.MessageHelper;
 import com.nwa.smartgym.lib.adapters.AddDeviceAdapter;
 import com.nwa.smartgym.models.Device;
 
@@ -54,7 +54,7 @@ public class AddDeviceActivity extends OrmLiteBaseListActivity<DatabaseHelper> {
         }
         bluetoothAdapter = getBluetoothAdapter();
         if (bluetoothAdapter == null) {
-            ErrorHelper.showToastError(this, getString(R.string.error_bluetooth_not_supported));
+            MessageHelper.showToastError(this, getString(R.string.error_bluetooth_not_supported));
         } else {
             deviceAPIInterface = new DeviceAPIInterface(this, deviceDao);
         }
@@ -90,7 +90,7 @@ public class AddDeviceActivity extends OrmLiteBaseListActivity<DatabaseHelper> {
     private BluetoothAdapter getBluetoothAdapter() {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
-            ErrorHelper.showToastError(this, getString(R.string.error_bluetooth_not_supported));
+            MessageHelper.showToastError(this, getString(R.string.error_bluetooth_not_supported));
         } else if (!bluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_BLUETOOTH);
