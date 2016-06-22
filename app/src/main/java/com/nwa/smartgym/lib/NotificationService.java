@@ -57,13 +57,13 @@ public class NotificationService extends BroadcastReceiver {
 
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, NotificationService.REQUEST_CODE, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            DateTime scheduleDateTime = new DateTime()
+            long scheduledMillis = new DateTime()
                     .withDate(weekday.getLocalDate())
                     .withTime(sportSchedule.getTime())
-                    .minusMinutes(sportSchedule.getReminderMinutes());
+                    .minusMinutes(sportSchedule.getReminderMinutes()).getMillis();
 
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
-                    scheduleDateTime.getMillis(),
+                    scheduledMillis,
                     AlarmManager.INTERVAL_DAY * DateTimeConstants.DAYS_PER_WEEK,
                     pendingIntent
             );
@@ -77,6 +77,7 @@ public class NotificationService extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.i("NWA", "Notify user");
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Notification notification = intent.getParcelableExtra(NOTIFICATION);

@@ -12,14 +12,17 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.nwa.smartgym.R;
+import com.nwa.smartgym.api.interfaces.AuthAPIInterface;
+import com.nwa.smartgym.fragments.main.BusynessFragment;
+import com.nwa.smartgym.fragments.main.CardioActivity;
 import com.nwa.smartgym.lib.DefaultPageAdapter;
 import com.nwa.smartgym.lib.NonSwipeableViewPager;
+import com.nwa.smartgym.lib.SecretsHelper;
 import com.nwa.smartgym.lib.adapters.DrawerAdapter;
 import com.nwa.smartgym.models.DrawerItem;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.nwa.smartgym.fragments.main.BusynessFragment;
 
 import com.nwa.smartgym.api.interfaces.AuthAPIInterface;
 import  com.nwa.smartgym.lib.DefaultPageAdapter;
@@ -55,8 +58,9 @@ public class Main extends AppCompatActivity {
     }
 
     private List<Fragment> listFragments() {
-        List<Fragment> fragmentList = new ArrayList<Fragment>();
+        List<Fragment> fragmentList = new ArrayList<>();
         fragmentList.add(BusynessFragment.newInstance());
+        fragmentList.add(CardioActivity.newInstance());
         return fragmentList;
     }
 

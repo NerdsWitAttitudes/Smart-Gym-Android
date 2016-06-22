@@ -1,8 +1,8 @@
 package com.nwa.smartgym.fragments.main;
 
 import android.app.DatePickerDialog;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +14,7 @@ import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.nwa.smartgym.R;
 import com.nwa.smartgym.api.interfaces.BusynessAPIInterface;
+import com.nwa.smartgym.lib.DefaultPageAdapter;
 
 import org.joda.time.DateTime;
 import org.json.JSONException;
@@ -39,7 +40,11 @@ public class BusynessFragment extends Fragment {
     private Date today;
     private BusynessAPIInterface busynessAPIInterface;
     public static BusynessFragment newInstance() {
-        return new BusynessFragment();
+        BusynessFragment busynessFragment = new BusynessFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(DefaultPageAdapter.TAB_NAME, "Busyness");
+        busynessFragment.setArguments(bundle);
+        return busynessFragment;
     }
 
 
