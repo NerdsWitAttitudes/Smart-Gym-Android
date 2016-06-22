@@ -77,6 +77,7 @@ public class SportActivity extends AppCompatActivity {
                 List<UserActivity> body = response.body();
                 if (body == null) {
                     super.onFailure(call, new Throwable(getBaseContext().getString(R.string.server_500_message)));
+                    return;
                 }
 
                 if (body.size() > 0) {
