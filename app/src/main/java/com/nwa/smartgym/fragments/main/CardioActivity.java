@@ -14,7 +14,7 @@ public class CardioActivity extends Fragment {
     public static CardioActivity newInstance() {
         CardioActivity cardioActivity = new CardioActivity();
         Bundle bundle = new Bundle();
-        bundle.putString(DefaultPageAdapter.TAB_NAME, "Cardio progressie");
+        bundle.putString(DefaultPageAdapter.TAB_NAME, "Cardio progression");
         cardioActivity.setArguments(bundle);
         return cardioActivity;
     }
