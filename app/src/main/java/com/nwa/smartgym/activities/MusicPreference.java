@@ -67,7 +67,6 @@ public class MusicPreference extends AppCompatActivity {
                 alert.setNegativeButton("Cancel", null);
                 alert.setPositiveButton("Ok", new AlertDialog.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        System.out.println("removing music");
                         musicPreferenceAPIInterface.delete(musicPreference);
                     }
                 });
