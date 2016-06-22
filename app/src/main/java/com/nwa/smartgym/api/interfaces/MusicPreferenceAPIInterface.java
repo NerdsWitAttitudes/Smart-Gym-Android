@@ -53,8 +53,6 @@ public class MusicPreferenceAPIInterface {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 super.onResponse(call, response);
-
-
             }
         });
     }
@@ -65,6 +63,8 @@ public class MusicPreferenceAPIInterface {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 super.onResponse(call, response);
+                musicPreferenceAdapter.clear();
+                listMusicPreferences();
                 musicPreferenceAdapter.notifyDataSetChanged();
             }
         });

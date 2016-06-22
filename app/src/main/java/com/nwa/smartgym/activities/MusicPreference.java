@@ -50,18 +50,18 @@ public class MusicPreference extends AppCompatActivity {
 
         MusicPreferenceAdapter musicPreferenceAdapter = new MusicPreferenceAdapter(this);
         final MusicPreferenceAPIInterface musicPreferenceAPIInterface = new MusicPreferenceAPIInterface(this, musicPreferenceAdapter);
-        musicPreferenceAPIInterface.listMusicPreferences();
+
         listView.setAdapter(musicPreferenceAdapter);
+        musicPreferenceAdapter.clear();
+        musicPreferenceAPIInterface.listMusicPreferences();
         musicPreferenceAdapter.notifyDataSetChanged();
 
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println("click");
                 final com.nwa.smartgym.models.MusicPreference musicPreference = (com.nwa.smartgym.models.MusicPreference) parent.getItemAtPosition(position);
                 AlertDialog.Builder alert = new AlertDialog.Builder(MusicPreference.this);
-                System.out.println(musicPreference.getId());
                 alert.setTitle("Delete..");
                 alert.setMessage("Are you sure you want to remove " + musicPreference.getGenre());
                 alert.setNegativeButton("Cancel", null);
