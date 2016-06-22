@@ -64,6 +64,7 @@
     <string name="save_sport_schedule">Save sport schedule</string>
     <string name="sport_schedule_changed">Sport schedule notifications changed</string>
     <string name="sport_schedule_make_one">You don\'t have any sport schedules, make one!</string>
+    <string name="sport_schedule_get_sporting">Get sporting!</string>
 
     <string name="title_activity_sign_up">SignUp</string>
     <string name="action_settings">Settings</string>
@@ -83,6 +84,11 @@
     <string name="sport_activity_start_session">Start a session</string>
     <string name="sport_activity_stop_session">Stop a session</string>
     <string name="activity_activities_name">Activities</string>
+
+    <string-array name="graph_types">
+        <item>Calories</item>
+        <item>Duration</item>
+    </string-array>
 
     <!-- String realted to buddies -->
     <string name="buddies">Buddies</string>
