@@ -81,14 +81,20 @@ public class SportActivity extends AppCompatActivity {
                 }
 
                 if (body.size() > 0) {
+                    boolean started = false;
+
                     for (UserActivity userActivity : response.body()) {
                         if (userActivity.getEndDate() == null) {
+                            started = true;
                             currentCardioActivity = new CardioActivity(userActivity.getId(), activityType);
                             googleFitService.addCardioActivity(currentCardioActivity);
-                        } else {
-                            super.onFailure(call, new Throwable(getString(R.string.user_activity_no_active)));
                         }
                     }
+
+                    if (!started) {
+                        super.onFailure(call, new Throwable(getString(R.string.user_activity_no_active)));
+                    }
+
                 } else {
                     super.onFailure(call, new Throwable(getString(R.string.user_activity_no_active)));
                 }
